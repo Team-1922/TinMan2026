@@ -4,10 +4,27 @@
 
 package frc.robot.tuning;
 
+import frc.robot.generated.TunerConstants;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.Elastic;
+import static edu.wpi.first.units.Units.*;
+
+import edu.wpi.first.networktables.NetworkTableEntry;
+import edu.wpi.first.networktables.NetworkTableInstance;
+
 /** Add your docs here. */
 public class Tuner {
+    double speed = TunerConstants.kSpeedAt12Volts.in(MetersPerSecond);
+    private final NetworkTableEntry metersPerSecond;
 
     public Tuner() {
-
+        var table = NetworkTableInstance.getDefault().getTable("Tuner");
+        metersPerSecond = table.getEntry("MetersPerSecond");
+        metersPerSecond.setDouble(0);
+    }
+    
+    public void periodic(){
+        SmartDashboard.putNumber("Speed", speed);
+      
     }
 }
