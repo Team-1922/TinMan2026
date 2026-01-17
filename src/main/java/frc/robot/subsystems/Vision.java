@@ -14,26 +14,29 @@ import frc.robot.LimelightHelpers.RawFiducial;
 
 public class Vision extends SubsystemBase {
   /** Creates a new Limelight. */
-  public Vision() {}
+  public Vision() {
+  }
+
   double dist = 0;
   public double tx = 0;
   public int id = 0;
+
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-   RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
-   for (RawFiducial fiducial : fiducials) {
+    RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("");
+    for (RawFiducial fiducial : fiducials) {
 
-    id = fiducial.id;
-    tx = LimelightHelpers.getTX("");
-    dist = fiducial.distToCamera;
-  
-    SmartDashboard.putNumberArray("distToCamera", new Double[] {(double)id, dist});
-   }
-  
+      id = fiducial.id;
+      tx = LimelightHelpers.getTX("");
+      dist = fiducial.distToCamera;
+
+      SmartDashboard.putNumberArray("distToCamera", new Double[] { (double) id, dist });
+    }
+
   }
 
-  public double getDist(){
-   return dist;
+  public double getDist() {
+    return dist;
   }
 }
