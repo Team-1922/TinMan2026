@@ -37,7 +37,7 @@ public class MoveSwerveCommand extends Command {
                 .withVelocityY(yVelocity.getAsDouble())
                 .withRotationalRate(rotationalRate.getAsDouble());
 
-        drivetrain.applyRequest(() -> swerveRequest);
+        drivetrain.setControl(swerveRequest);
     }
 
     @Override

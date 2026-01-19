@@ -5,11 +5,10 @@
 package frc.robot.subsystems.vision;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-import frc.robot.subsystems.vision.VisionIO.VisionIOInputs;
 
 public class Vision extends SubsystemBase {
-  private final VisionIO io;
-    private final VisionIOInputs inputs = new VisionIOInputs();
+    private final VisionIO io;
+    private final VisionIOInputsAutoLogged inputs = new VisionIOInputsAutoLogged();
 
     public Vision(VisionIO io) {
         this.io = io;
@@ -21,7 +20,13 @@ public class Vision extends SubsystemBase {
     }
 
     // Accessors for commands
-    public boolean hasTag() { return inputs.hasTag; }
+    public boolean hasTag() {
+        return inputs.hasTag;
+    }
+
+    public double getTx() {
+        return inputs.tx;
+    }
 
     public Double getDistanceToTag(int targetId) {
         for (int i = 0; i < inputs.tagIds.length; i++) {
@@ -32,10 +37,10 @@ public class Vision extends SubsystemBase {
         return 0.0;
     }
 
-    public Double getTxToTag(int targetId) {
+    public Double getTxncForTag(int targetId) {
         for (int i = 0; i < inputs.tagIds.length; i++) {
             if (inputs.tagIds[i] == targetId) {
-                return inputs.tagTxs[i];
+                return inputs.tagTxncs[i];
             }
         }
         return 0.0;

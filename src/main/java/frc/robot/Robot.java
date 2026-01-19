@@ -46,6 +46,7 @@ public class Robot extends LoggedRobot{
     @Override
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
+        m_robotContainer.vision.periodic();
         CommandScheduler.getInstance().run();
     }
 

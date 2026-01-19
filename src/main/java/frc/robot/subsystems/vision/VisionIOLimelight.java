@@ -16,15 +16,17 @@ public class VisionIOLimelight implements VisionIO {
         if (fiducials.length > 0) {
             inputs.tagIds = new int[fiducials.length];
             inputs.tagDistances = new double[fiducials.length];
-            inputs.tagTxs = new double[fiducials.length];
+            inputs.tagTxncs = new double[fiducials.length];
             for (int i = 0; i < fiducials.length; i++) {
                 inputs.tagIds[i] = fiducials[i].id;
                 inputs.tagDistances[i] = fiducials[i].distToCamera;
-                inputs.tagTxs[i] = fiducials[i].txnc;
+                inputs.tagTxncs[i] = fiducials[i].txnc;
             }
             inputs.hasTag = true;
         } else {
             inputs = new VisionIOInputs(); // Reset inputs if no fiducial is detected
         }
+
+        inputs.tx = LimelightHelpers.getTX(limelightName);
     }
 }

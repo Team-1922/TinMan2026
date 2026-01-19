@@ -41,6 +41,7 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
+    public final ApproachAndFaceTagCommand approachAndFaceTagCommand = new ApproachAndFaceTagCommand(drivetrain, vision, 27, 1, MaxSpeed, MaxAngularRate);
 
     public RobotContainer() {
         configureBindings();
@@ -70,7 +71,7 @@ public class RobotContainer {
             point.withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))
         ));
         DriverController.x().whileTrue(autoAlign);
-        DriverController.y().whileTrue(new ApproachAndFaceTagCommand(drivetrain, vision, 27, 3));
+        DriverController.y().whileTrue(approachAndFaceTagCommand);
 
 
         // Run SysId routines when holding back/start and X/Y.

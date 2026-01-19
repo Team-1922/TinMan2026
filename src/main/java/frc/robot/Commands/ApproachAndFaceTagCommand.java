@@ -1,6 +1,7 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.Vision;
 import java.util.function.DoubleSupplier;
@@ -10,24 +11,35 @@ public class ApproachAndFaceTagCommand extends Command {
     private final Vision vision;
     private final double targetDistanceMeters;
     private final int targetTagId;
+    private final double maxSpeed;
+    private final double maxAngularRate;
 
-    public ApproachAndFaceTagCommand(CommandSwerveDrivetrain drivetrain, Vision vision, int targetTagId,
-            double targetDistanceMeters) {
+    public ApproachAndFaceTagCommand(CommandSwerveDrivetrain drivetrain,
+            Vision vision, int targetTagId,
+            double targetDistanceInMeters,
+            double maxSpeed,
+            double maxAngularRate) {
         this.vision = vision;
-        this.targetDistanceMeters = targetDistanceMeters;
+        this.targetDistanceMeters = targetDistanceInMeters;
         this.targetTagId = targetTagId;
+        this.maxSpeed = maxSpeed;
+        this.maxAngularRate = maxAngularRate;
 
         DoubleSupplier forwardSpeed = () -> {
-            if (vision.getDistanceToTag(targetTagId) == 0.0)
+            double distanceToTag = vision.getDistanceToTag(targetTagId);
+            if (distanceToTag == 0.0){
                 return 0.0;
-            double error = vision.getDistanceToTag(targetTagId) - targetDistanceMeters;
-            return Math.max(Math.min(error * 0.5, 1.0), -1.0);
+            }
+            double error = distanceToTag - targetDistanceInMeters;
+            return Math.max(Math.min(error * 1, 1.0), -1.0) * maxSpeed;
         };
 
         DoubleSupplier rotationalRate = () -> {
-            if (vision.getTxToTag(targetTagId)== 0.0)
-                return 0.2; // Spin slowly
-            return -vision.getTxToTag(targetTagId) * 0.02;
+            double horizontalOffsetToTag = vision.getTxncForTag(targetTagId);
+            if (horizontalOffsetToTag == 0.0){
+                return maxAngularRate;
+            }                
+            return -horizontalOffsetToTag * 0.02 *maxAngularRate;
         };
 
         this.moveCommand = new MoveSwerveCommand(
@@ -47,13 +59,14 @@ public class ApproachAndFaceTagCommand extends Command {
 
     @Override
     public void execute() {
+        LimelightHelpers.SetFiducialIDFiltersOverride(getName(), new int[] {targetTagId});
         moveCommand.execute();
     }
 
     @Override
     public boolean isFinished() {
         return Math.abs(vision.getDistanceToTag(targetTagId) - targetDistanceMeters) < 0.05
-                && Math.abs(vision.getTxToTag(targetTagId)) < 2.0;
+                && Math.abs(vision.getTxncForTag(targetTagId)) < 2.0;
     }
 
     @Override

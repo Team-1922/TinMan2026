@@ -7,7 +7,8 @@ public interface VisionIO {
     public class VisionIOInputs {
         public int[] tagIds = new int[0];
         public double[] tagDistances = new double[0];
-        public double[] tagTxs = new double[0];
+        public double[] tagTxncs = new double[0];
+        public double tx = 0.0;
         public boolean hasTag = false;
     }
 

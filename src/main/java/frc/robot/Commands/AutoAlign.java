@@ -34,8 +34,8 @@ public class AutoAlign extends Command {
     if(dist <= .95 || dist >= 1.05 ){
       speed = (dist - 1) * 3;
     }
-    if(vision.getTxToTag(1) <= -.08 || vision.getTxToTag(1) >= .08){
-      rotationRate = -vision.getTxToTag(1)  * .15;
+    if(vision.getTxncForTag(1) <= -.08 || vision.getTxncForTag(1) >= .08){
+      rotationRate = -vision.getTxncForTag(1)  * .15;
     }
     drivetrain.Move(speed,0,rotationRate);
   }
