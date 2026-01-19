@@ -5,9 +5,9 @@
 package frc.robot.Commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Vision;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.vision.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlign extends Command {
@@ -27,16 +27,15 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int[] ids = new int[]{1};
-    LimelightHelpers.SetFiducialIDFiltersOverride("", ids);
-    double dist = vision.getDist();
+
+    double dist = vision.getDistanceToTag(1);
     double speed = 0;
     double rotationRate = 0;
     if(dist <= .95 || dist >= 1.05 ){
       speed = (dist - 1) * 3;
     }
-    if(vision.tx <= -.08 || vision.tx >= .08){
-      rotationRate = -vision.tx * .15;
+    if(vision.getTxToTag(1) <= -.08 || vision.getTxToTag(1) >= .08){
+      rotationRate = -vision.getTxToTag(1)  * .15;
     }
     drivetrain.Move(speed,0,rotationRate);
   }
