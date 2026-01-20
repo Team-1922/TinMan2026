@@ -11,6 +11,7 @@ import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.RobotBase;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -22,9 +23,10 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.vision.Vision;
 import frc.robot.subsystems.vision.VisionIOLimelight;
+import frc.robot.subsystems.vision.VisionIOSim;
 
 public class RobotContainer {
-    public final Vision vision = new Vision(new VisionIOLimelight("limelight"));
+    public Vision vision;
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second max angular velocity
 
@@ -40,10 +42,18 @@ public class RobotContainer {
     private final CommandXboxController DriverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
-    public final ApproachAndFaceTagCommand approachAndFaceTagCommand = new ApproachAndFaceTagCommand(drivetrain, vision, 27, 1, MaxSpeed, MaxAngularRate);
+    public AutoAlign autoAlign;
+    public ApproachAndFaceTagCommand approachAndFaceTagCommand;
 
     public RobotContainer() {
+        if(RobotBase.isReal()){
+            vision = new Vision(new VisionIOLimelight("limelight"));
+        } else {
+            vision = new Vision(new VisionIOSim(drivetrain));
+        }
+
+        autoAlign = new AutoAlign(vision, drivetrain);
+        approachAndFaceTagCommand = new ApproachAndFaceTagCommand(drivetrain, vision, 26, 1, MaxSpeed, MaxAngularRate);
         configureBindings();
     }
 

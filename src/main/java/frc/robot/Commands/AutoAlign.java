@@ -4,6 +4,8 @@
 
 package frc.robot.Commands;
 
+import java.util.OptionalDouble;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -28,14 +30,16 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
 
-    double dist = vision.getDistanceToTag(1);
+    OptionalDouble dist = vision.getDistanceToTag(1);
     double speed = 0;
     double rotationRate = 0;
-    if(dist <= .95 || dist >= 1.05 ){
-      speed = (dist - 1) * 3;
+    if(dist.isPresent() && (dist.getAsDouble() <= .95 || dist.getAsDouble() >= 1.05) ){
+      speed = (dist.getAsDouble() - 1) * 3;
     }
-    if(vision.getTxncForTag(1) <= -.08 || vision.getTxncForTag(1) >= .08){
-      rotationRate = -vision.getTxncForTag(1)  * .15;
+    
+    OptionalDouble horizontalOffset = vision.getTxncForTag(1);
+    if(horizontalOffset.isPresent() && (horizontalOffset.getAsDouble() <= -.08 || horizontalOffset.getAsDouble() >= .08)){
+      rotationRate = -horizontalOffset.getAsDouble()  * .15;
     }
     drivetrain.Move(speed,0,rotationRate);
   }

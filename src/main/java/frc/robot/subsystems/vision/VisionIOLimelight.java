@@ -1,5 +1,7 @@
 package frc.robot.subsystems.vision;
 
+import java.util.HashSet;
+
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.RawFiducial;
 
@@ -17,10 +19,14 @@ public class VisionIOLimelight implements VisionIO {
             inputs.tagIds = new int[fiducials.length];
             inputs.tagDistances = new double[fiducials.length];
             inputs.tagTxncs = new double[fiducials.length];
+
+            HashSet<Integer> seenIds = new HashSet<Integer>();
             for (int i = 0; i < fiducials.length; i++) {
-                inputs.tagIds[i] = fiducials[i].id;
-                inputs.tagDistances[i] = fiducials[i].distToCamera;
-                inputs.tagTxncs[i] = fiducials[i].txnc;
+                if (seenIds.add(fiducials[i].id)) {
+                    inputs.tagIds[i] = fiducials[i].id;
+                    inputs.tagDistances[i] = fiducials[i].distToCamera;
+                    inputs.tagTxncs[i] = fiducials[i].txnc;
+                }
             }
             inputs.hasTag = true;
         } else {
