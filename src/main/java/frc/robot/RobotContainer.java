@@ -17,8 +17,10 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Commands.AutoAlign;
+import frc.robot.Commands.Shoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
@@ -39,6 +41,8 @@ public class RobotContainer {
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
+    public final Shooter shooter = new Shooter();
+    public final Shoot shoot = new Shoot(shooter);
 
     public RobotContainer() {
         configureBindings();
@@ -68,6 +72,7 @@ public class RobotContainer {
             point.withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))
         ));
         DriverController.x().whileTrue(autoAlign);
+        DriverController.rightTrigger().whileTrue(shoot);
 
 
         // Run SysId routines when holding back/start and X/Y.

@@ -1,0 +1,26 @@
+// Copyright (c) FIRST and other WPILib contributors.
+// Open Source Software; you can modify and/or share it under the terms of
+// the WPILib BSD license file in the root directory of this project.
+
+package frc.robot.subsystems;
+
+import com.ctre.phoenix6.hardware.TalonFX;
+
+import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
+public class Shooter extends SubsystemBase {
+  public TalonFX m_leftShooter = new TalonFX(1); // change id numbers if necessary
+  public TalonFX m_rightShooter = new TalonFX(2);
+  /** Creates a new Shooter. */
+  public Shooter() {}
+
+  public void Shoot(double speed){
+    m_leftShooter.set(-speed);
+    m_rightShooter.set(-speed);
+  }
+  
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run
+  }
+}
