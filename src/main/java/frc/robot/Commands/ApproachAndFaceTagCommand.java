@@ -11,6 +11,7 @@ import java.util.function.DoubleSupplier;
 
 public class ApproachAndFaceTagCommand extends Command {
     private static final double X_VELOCITY_KP = 1.0;
+    private static final double Y_VELOCITY_KP = 1.0;
     private static final double ROTATION_KP = 0.02;
     private static final double MIN_NORMALIZED_SPEED = -1.0;
     private static final double MAX_NORMALIZED_SPEED = 1.0;
