@@ -11,7 +11,8 @@ import frc.robot.subsystems.Shooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
   public final Shooter m_shooter;
-  public double m_speed = .5;
+  public double m_tSpeed = .5;
+  public double m_bSpeed = .5;
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -21,14 +22,16 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Shooting Speed", m_speed);
+    SmartDashboard.putNumber("Top Shooting Speed", m_tSpeed);
+    SmartDashboard.putNumber("Bottom Shooting Speed", m_bSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_speed = SmartDashboard.getNumber("Shooting Speed", m_speed);
-    m_shooter.Shoot(m_speed);
+    m_tSpeed = SmartDashboard.getNumber("Top Shooting Speed", m_tSpeed);
+    m_bSpeed = SmartDashboard.getNumber("Bottom Shooting Speed", m_bSpeed);
+    m_shooter.Shoot(m_tSpeed, m_bSpeed);
   }
 
   // Called once the command ends or is interrupted.
