@@ -10,6 +10,7 @@ import frc.robot.subsystems.Shooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class StopShooter extends Command {
   Shooter m_shooter;
+
   /** Creates a new StopShooter. */
   public StopShooter(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -18,17 +19,19 @@ public class StopShooter extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.Shoot(0,0);
+    m_shooter.Shoot(0, 0);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override

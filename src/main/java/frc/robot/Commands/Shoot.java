@@ -13,6 +13,7 @@ public class Shoot extends Command {
   public final Shooter m_shooter;
   public double m_tSpeed = .5;
   public double m_bSpeed = .5;
+
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -36,7 +37,8 @@ public class Shoot extends Command {
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
