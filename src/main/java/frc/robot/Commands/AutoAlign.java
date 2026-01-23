@@ -13,6 +13,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class AutoAlign extends Command {
   Vision vision;
   CommandSwerveDrivetrain drivetrain;
+
   /** Creates a new AutoAlign. */
   public AutoAlign(Vision m_vision, CommandSwerveDrivetrain m_Drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -22,29 +23,30 @@ public class AutoAlign extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int[] ids = new int[]{1};
+    int[] ids = new int[] { 1 };
     LimelightHelpers.SetFiducialIDFiltersOverride("", ids);
     double dist = vision.getDist();
     double speed = 0;
     double rotationRate = 0;
-    if(dist <= .95 || dist >= 1.05 ){
+    if (dist <= .95 || dist >= 1.05) {
       speed = (dist - 1) * 3;
     }
-    if(vision.tx <= -.08 || vision.tx >= .08){
+    if (vision.tx <= -.08 || vision.tx >= .08) {
       rotationRate = -vision.tx * .15;
     }
-    drivetrain.Move(speed,0,rotationRate);
+    drivetrain.Move(speed, 0, rotationRate);
   }
-
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+  }
 
   // Returns true when the command should end.
   @Override
