@@ -4,31 +4,26 @@
 
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Shooter;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Shoot extends Command {
-  public final Shooter m_shooter;
-  public double m_speed = .5;
-  /** Creates a new Shoot. */
-  public Shoot(Shooter shooter) {
+public class StopShooter extends Command {
+  Shooter m_shooter;
+  /** Creates a new StopShooter. */
+  public StopShooter(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    SmartDashboard.putNumber("Shooting Speed", m_speed);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_speed = SmartDashboard.getNumber("Shooting Speed", m_speed);
-    m_shooter.Shoot(m_speed);
+    m_shooter.Shoot(0);
   }
 
   // Called once the command ends or is interrupted.
