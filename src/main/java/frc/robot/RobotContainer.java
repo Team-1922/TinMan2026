@@ -17,10 +17,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Commands.AutoAlign;
+import frc.robot.Commands.LoadShooter;
 import frc.robot.Commands.Shoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
 
 public class RobotContainer {
@@ -43,6 +45,8 @@ public class RobotContainer {
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
     public final Shooter shooter = new Shooter();
     public final Shoot shoot = new Shoot(shooter);
+    public final Spindexer spindexer = new Spindexer();
+    public final LoadShooter loadShooter = new LoadShooter(spindexer);
 
     public RobotContainer() {
         configureBindings();
