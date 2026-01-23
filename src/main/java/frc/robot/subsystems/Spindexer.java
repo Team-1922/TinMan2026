@@ -11,10 +11,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Spindexer extends SubsystemBase {
   public TalonFX m_Spindexer = new TalonFX(3);
+  public TalonFX m_Spindexershoot = new TalonFX(4);
   public double speed = .2;
+  public double shotSpeed = .2;
   /** Creates a new Spindexer. */
   public Spindexer() {
     SmartDashboard.putNumber("Spindexer Speed", speed);
+    SmartDashboard.putNumber("Shot Speed",shotSpeed);
   }
 
   @Override
@@ -22,11 +25,12 @@ public class Spindexer extends SubsystemBase {
     // This method will be called once per scheduler run
     
     speed = SmartDashboard.getNumber("Spindexer Speed", speed);
-    SmartDashboard.putNumber("Speed", speed);
+    shotSpeed = SmartDashboard.getNumber("Shot Speed", shotSpeed);
   }
 
   public void loadShooter(){
     m_Spindexer.set(speed);
+    m_Spindexershoot.set(shotSpeed);
   }
 
 }
