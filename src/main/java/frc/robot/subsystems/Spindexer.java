@@ -10,9 +10,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Spindexer extends SubsystemBase {
-  TalonFX m_Spindexer = new TalonFX(3);
-  TalonFX m_loadShooter = new TalonFX(4);
-  double m_speed = .2;
+  TalonFX m_Spindexer = new TalonFX(16, "Drivebase");
+  TalonFX m_loadShooter = new TalonFX(14, "Drivebase");
+  double m_speed = 1;
   public double m_feedSpeed = .2;
   /** Creates a new Spindexer. */
   public Spindexer() {
