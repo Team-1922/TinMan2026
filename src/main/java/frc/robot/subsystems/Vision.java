@@ -4,12 +4,9 @@
 
 package frc.robot.subsystems;
 
-import com.ctre.phoenix6.hardware.DeviceIdentifier;
-
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-import frc.robot.LimelightHelpers.RawDetection;
 import frc.robot.LimelightHelpers.RawFiducial;
 
 public class Vision extends SubsystemBase {
