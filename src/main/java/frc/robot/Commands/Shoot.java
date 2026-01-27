@@ -11,8 +11,8 @@ import frc.robot.subsystems.Shooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
   public final Shooter m_shooter;
-  public double m_tSpeed = .75;
-  public double m_bSpeed = 1;
+  double m_tSpeed = .75;
+  double m_bSpeed = 1;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter) {

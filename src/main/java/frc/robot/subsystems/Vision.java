@@ -4,9 +4,12 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.hardware.DeviceIdentifier;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
+import frc.robot.LimelightHelpers.RawDetection;
 import frc.robot.LimelightHelpers.RawFiducial;
 
 public class Vision extends SubsystemBase {
@@ -15,8 +18,8 @@ public class Vision extends SubsystemBase {
   }
 
   double dist = 0;
-  public double tx = 0;
-  public int id = 0;
+  double tx = 0;
+  int id = 0;
 
   @Override
   public void periodic() {
@@ -35,5 +38,13 @@ public class Vision extends SubsystemBase {
 
   public double getDist() {
     return dist;
+  }
+
+  public double getTx(){
+    return tx;
+  }
+
+  public double getId(){
+    return id;
   }
 }

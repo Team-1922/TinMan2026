@@ -13,7 +13,7 @@ public class Spindexer extends SubsystemBase {
   TalonFX m_Spindexer = new TalonFX(16, "Drivebase");
   TalonFX m_loadShooter = new TalonFX(14, "Drivebase");
   double m_speed = 1;
-  public double m_feedSpeed = .2;
+  double m_feedSpeed = .2;
   /** Creates a new Spindexer. */
   public Spindexer() {
     SmartDashboard.putNumber("Spindexer Speed", m_speed);
