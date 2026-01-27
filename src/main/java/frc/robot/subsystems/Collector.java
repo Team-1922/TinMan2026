@@ -9,12 +9,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Collector extends SubsystemBase {
-  public TalonFX m_collector1 = new TalonFX(5);
-  public TalonFX m_collector2 = new TalonFX(6);
-  public TalonFX m_collector3 = new TalonFX(7);
-  public TalonFX m_collector4 = new TalonFX(8);
+  TalonFX m_collector1 = new TalonFX(5);
+  TalonFX m_collector2 = new TalonFX(6);
+  TalonFX m_collector3 = new TalonFX(7);
+  TalonFX m_collector4 = new TalonFX(8);
 
-  public double collectorSpeed = 2;
+  double collectorSpeed = 2;
 
   /** Creates a new Collector. */
   public Collector() {
