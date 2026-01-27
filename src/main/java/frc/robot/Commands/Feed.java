@@ -4,41 +4,32 @@
 
 package frc.robot.Commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Spindexer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Shoot extends Command {
-  Shooter m_shooter;
-  double m_tSpeed = .75;
-  double m_bSpeed = 1;
-
-  /** Creates a new Shoot. */
-  public Shoot(Shooter shooter) {
+public class Feed extends Command {
+  Spindexer m_spindexer;
+  /** Creates a new Feeder. */
+  public Feed(Spindexer spindexer) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_shooter = shooter;
+    m_spindexer = spindexer;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    SmartDashboard.putNumber("FlyWheel Speed", m_tSpeed);
-    SmartDashboard.putNumber("Hood Wheel Speed", m_bSpeed);
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_tSpeed = SmartDashboard.getNumber("FlyWheel Speed", m_tSpeed);
-    m_bSpeed = SmartDashboard.getNumber("Hood Wheel Speed", m_bSpeed);
-    m_shooter.Shoot(m_tSpeed, m_bSpeed);
+    m_spindexer.loadShooter();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.Shoot(0, 0);
+    m_spindexer.stopShooter();
   }
 
   // Returns true when the command should end.
