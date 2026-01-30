@@ -2,7 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
@@ -19,10 +18,13 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import com.ctre.phoenix6.swerve.SwerveRequest.RobotCentric;
+import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
 
 public class DriveSubsystem extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
-  SwerveRequest.RobotCentric m_drive = new RobotCentric();
+  SwerveRequest.RobotCentric m_driveRobotCentric = new RobotCentric();
+  SwerveRequest.FieldCentric m_driveFieldCentric = new FieldCentric();
+
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
@@ -32,7 +34,7 @@ public class DriveSubsystem extends SubsystemBase {
     // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
     RobotConfig config = null;
-    try{
+    try {
       config = RobotConfig.fromGUISettings();
     } catch (Exception e) {
       // Handle exception as needed
@@ -41,46 +43,59 @@ public class DriveSubsystem extends SubsystemBase {
 
     // Configure AutoBuilder last
     AutoBuilder.configure(
-            this::getPose, // Robot pose supplier
-            this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
-            this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds. Also optionally outputs individual module feedforwards
-            new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic drive trains
-                    new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
-                    new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
-            ),
-            config, // The robot configuration
-            () -> {
-              // Boolean supplier that controls when the path will be mirrored for the red alliance
-              // This will flip the path being followed to the red side of the field.
-              // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+        this::getPose, // Robot pose supplier
+        this::resetPose, // Method to reset odometry (will be called if your auto has a starting pose)
+        this::getRobotRelativeSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        (speeds, feedforwards) -> driveRobotRelative(speeds), // Method that will drive the robot given ROBOT RELATIVE
+                                                              // ChassisSpeeds. Also optionally outputs individual
+                                                              // module feedforwards
+        new PPHolonomicDriveController( // PPHolonomicController is the built in path following controller for holonomic
+                                        // drive trains
+            new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+            new PIDConstants(5.0, 0.0, 0.0) // Rotation PID constants
+        ),
+        config, // The robot configuration
+        () -> {
+          // Boolean supplier that controls when the path will be mirrored for the red
+          // alliance
+          // This will flip the path being followed to the red side of the field.
+          // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
 
-              var alliance = DriverStation.getAlliance();
-              if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
-              }
-              return false;
-            },
-            this // Reference to this subsystem to set requirements
+          var alliance = DriverStation.getAlliance();
+          if (alliance.isPresent()) {
+            return alliance.get() == DriverStation.Alliance.Red;
+          }
+          return false;
+        },
+        this // Reference to this subsystem to set requirements
     );
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds) {
-    m_drivetrain.applyRequest(() -> m_drive
-                        .withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
-                        .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
-                        .withRotationalRate(speeds.omegaRadiansPerSecond) // Drive counterclockwise with negative X (left)
-                );
+    m_drivetrain.applyRequest(() -> m_driveRobotCentric
+        .withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
+        .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
+        .withRotationalRate(speeds.omegaRadiansPerSecond) // Drive counterclockwise with negative X (left)
+    );
+  }
+
+  public void driveFieldRelative(double xSpeed, double ySpeed, double rotationalRate) {
+    m_drivetrain.applyRequest(() -> m_driveFieldCentric
+        .withVelocityX(xSpeed) // Drive forward with negative Y (forward)
+        .withVelocityY(ySpeed) // Drive left with negative X (left)
+        .withRotationalRate(rotationalRate) // Drive counterclockwise with negative X (left)
+    );
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
     return m_drivetrain.getState().Speeds;
   }
 
-  public Pose2d getPose(){
+  public Pose2d getPose() {
     return m_drivetrain.getState().Pose;
   }
-  public void resetPose(Pose2d pose){
+
+  public void resetPose(Pose2d pose) {
     m_drivetrain.resetPose(pose);
   }
 

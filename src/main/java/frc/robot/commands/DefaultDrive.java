@@ -5,16 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.DriveSubsystem;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Feed extends Command {
-  Spindexer m_spindexer;
+public class DefaultDrive extends Command {
+  DriveSubsystem m_driveSubsystem;
+  double m_xSpeed;
+  double m_ySpeed;
+  double m_RotationalRate;
 
-  /** Creates a new Feeder. */
-  public Feed(Spindexer spindexer) {
+  /** Creates a new DefaultDrive. */
+  public DefaultDrive(DriveSubsystem driveSubsystem, double xSpeed, double ySpeed, double RotationalRate) {
+    m_driveSubsystem = driveSubsystem;
     // Use addRequirements() here to declare subsystem dependencies.
-    m_spindexer = spindexer;
   }
 
   // Called when the command is initially scheduled.
@@ -25,13 +28,12 @@ public class Feed extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_spindexer.loadShooter();
+    m_driveSubsystem.driveFieldRelative(m_xSpeed, m_ySpeed, m_RotationalRate);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_spindexer.stopShooter();
   }
 
   // Returns true when the command should end.

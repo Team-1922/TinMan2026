@@ -14,6 +14,7 @@ public class Spindexer extends SubsystemBase {
   TalonFX m_loadShooter = new TalonFX(14, "Drivebase");
   double m_speed = 1;
   double m_feedSpeed = .2;
+
   /** Creates a new Spindexer. */
   public Spindexer() {
     SmartDashboard.putNumber("Spindexer Speed", m_speed);
@@ -23,17 +24,17 @@ public class Spindexer extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
+
     m_speed = SmartDashboard.getNumber("Spindexer Speed", m_speed);
     m_feedSpeed = SmartDashboard.getNumber("Load Shooter", m_feedSpeed);
   }
 
-  public void loadShooter(){
+  public void loadShooter() {
     m_Spindexer.set(m_speed);
     m_loadShooter.set(m_feedSpeed);
   }
 
-  public void stopShooter(){
+  public void stopShooter() {
     m_Spindexer.set(0);
     m_loadShooter.set(0);
   }
