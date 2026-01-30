@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import java.lang.reflect.Array;
+
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
 import frc.robot.LimelightHelpers;
@@ -11,14 +14,15 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlign extends Command {
-  Vision vision;
-  CommandSwerveDrivetrain drivetrain;
+  Vision m_vision;
+  CommandSwerveDrivetrain m_Drivetrain;
+
 
   /** Creates a new AutoAlign. */
-  public AutoAlign(Vision m_vision, CommandSwerveDrivetrain m_Drivetrain) {
+  public AutoAlign(Vision vision, CommandSwerveDrivetrain drivetrain) {
     // Use addRequirements() here to declare subsystem dependencies.
-    vision = m_vision;
-    drivetrain = m_Drivetrain;
+    m_vision = vision;
+    m_Drivetrain = drivetrain; 
   }
 
   // Called when the command is initially scheduled.
@@ -29,25 +33,26 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int[] ids = new int[] { 27 };
-    LimelightHelpers.SetFiducialIDFiltersOverride("", ids);
-    double dist = vision.getDist();
     double speed = 0;
     double rotationRate = 0;
+    
+    LimelightHelpers.SetFiducialIDFiltersOverride("",new int[]{26, 10});
+    double dist = m_vision.getDist();
     if (dist <= 2.69 || dist >= 2.71) {
       speed = (dist - 2.7) * 3;
     }
-    if (vision.getTx() <= -.08 || vision.getTx() >= .08) {
-      rotationRate = -vision.getTx() * .15;
+    if (m_vision.getTx() <= -.08 || m_vision.getTx() >= .08) {
+      rotationRate = -m_vision.getTx() * .15;
     }
-    drivetrain.Move(speed, 0, rotationRate);
+    m_Drivetrain.Move(speed, 0, rotationRate);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  
-  }
+  LimelightHelpers.SetFiducialIDFiltersOverride("", new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32});
+  m_Drivetrain.Move(0, 0, 0);
+}
 
   // Returns true when the command should end.
   @Override
