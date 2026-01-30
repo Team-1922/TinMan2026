@@ -29,13 +29,13 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    int[] ids = new int[] { 1 };
+    int[] ids = new int[] { 27 };
     LimelightHelpers.SetFiducialIDFiltersOverride("", ids);
     double dist = vision.getDist();
     double speed = 0;
     double rotationRate = 0;
-    if (dist <= .95 || dist >= 1.05) {
-      speed = (dist - 1) * 3;
+    if (dist <= 2.69 || dist >= 2.71) {
+      speed = (dist - 2.7) * 3;
     }
     if (vision.getTx() <= -.08 || vision.getTx() >= .08) {
       rotationRate = -vision.getTx() * .15;
@@ -46,6 +46,7 @@ public class AutoAlign extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+  
   }
 
   // Returns true when the command should end.

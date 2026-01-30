@@ -324,7 +324,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void Move(double xVelocity, double yVelocity, double rotationalRate) {
-        applyRequest(() -> new SwerveRequest.FieldCentric()
+        applyRequest(() -> new SwerveRequest.RobotCentric()
                 .withVelocityX(xVelocity)
                 .withVelocityY(yVelocity)
                 .withRotationalRate(rotationalRate)).execute();
