@@ -9,8 +9,12 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 
 import com.ctre.phoenix6.swerve.SwerveRequest;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -24,6 +28,7 @@ import frc.robot.commands.Shoot;
 import frc.robot.commands.StopShooter;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
@@ -47,6 +52,7 @@ public class RobotContainer {
     private final CommandXboxController DriverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final DriveSubsystem driveSubsystem = new DriveSubsystem(drivetrain);
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
     public final Shooter shooter = new Shooter();
     public final Shoot shoot = new Shoot(shooter);
@@ -64,14 +70,10 @@ public class RobotContainer {
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
-                drivetrain.applyRequest(() -> drive.withVelocityX(-DriverController.getLeftY() * MaxSpeed) // Drive
-                                                                                                           // forward
-                                                                                                           // with
-                                                                                                           // negative Y
-                                                                                                           // (forward)
+                drivetrain.applyRequest(() -> drive
+                        .withVelocityX(-DriverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-DriverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-DriverController.getRightX() * MaxAngularRate) // Drive counterclockwise
-                                                                                            // with negative X (left)
+                        .withRotationalRate(-DriverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
         // Idle while the robot is disabled. This ensures the configured
@@ -86,7 +88,7 @@ public class RobotContainer {
         DriverController.x().whileTrue(autoAlign);
         DriverController.rightTrigger().whileTrue(shoot).whileFalse(stopShooter);
         DriverController.leftTrigger().whileTrue(feed);
-        DriverController.rightBumper().whileTrue( new ParallelCommandGroup(feed, shoot));
+        DriverController.rightBumper().whileTrue(new ParallelCommandGroup(feed, shoot));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
@@ -102,18 +104,18 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        // Simple drive forward auton
-        final var idle = new SwerveRequest.Idle();
-        return Commands.sequence(
-                // Reset our field centric heading to match the robot
-                // facing away from our alliance station wall (0 deg).
-                drivetrain.runOnce(() -> drivetrain.seedFieldCentric(Rotation2d.kZero)),
-                // Then slowly drive forward (away from us) for 5 seconds.
-                drivetrain.applyRequest(() -> drive.withVelocityX(0.5)
-                        .withVelocityY(0)
-                        .withRotationalRate(0))
-                        .withTimeout(5.0),
-                // Finally idle for the rest of auton
-                drivetrain.applyRequest(() -> idle));
+        return new PathPlannerAuto("Square");
+        /* 
+        try {
+            // Load the path you want to follow using its name in the GUI
+            PathPlannerPath path = PathPlannerPath.fromPathFile("Path 1");
+            // Create a path following command using AutoBuilder. This will also trigger
+            // event markers.
+            return AutoBuilder.followPath(path);
+        } catch (Exception e) {
+            DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+            return Commands.none();
+        }
+            */
     }
 }
