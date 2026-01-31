@@ -32,7 +32,6 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
-import frc.robot.commands.DefaultDrive;
 
 public class RobotContainer {
     public final Vision vision = new Vision();
@@ -63,21 +62,26 @@ public class RobotContainer {
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
     public final Feed feed = new Feed(spindexer);
 
-    public RobotContainer() {
-        configureBindings();
-    }
 
-    private void configureBindings() {
-        // Note that X is defined as forward according to WPILib convention,
+    public void teleopInit() {
+          // Note that X is defined as forward according to WPILib convention,
         // and Y is defined as to the left according to WPILib convention.
         drivetrain.setDefaultCommand(
                 // Drivetrain will execute this command periodically
+
                 drivetrain.applyRequest(() -> drive
                         .withVelocityX(-DriverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-DriverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-DriverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
                 ));
 
+    }
+    public RobotContainer() {
+        configureBindings();
+    }
+
+    
+    private void configureBindings() {
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
@@ -104,6 +108,8 @@ public class RobotContainer {
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
+
+    
 
     public Command getAutonomousCommand() {
         //return autoChooser.getSelected();

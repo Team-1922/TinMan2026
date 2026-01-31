@@ -69,7 +69,8 @@ public class DriveSubsystem extends SubsystemBase {
           }
           return false;
         },
-        this // Reference to this subsystem to set requirements
+       // this // Reference to this subsystem to set requirements
+        this.m_drivetrain
     );
   }
 
@@ -79,6 +80,7 @@ public class DriveSubsystem extends SubsystemBase {
       .withVelocityY(speeds.vyMetersPerSecond)
       .withRotationalRate(speeds.omegaRadiansPerSecond)
     );
+    System.out.println(speeds.vxMetersPerSecond + " " + speeds.vyMetersPerSecond + " " + speeds.omegaRadiansPerSecond);
   }
 
   public ChassisSpeeds getRobotRelativeSpeeds() {
