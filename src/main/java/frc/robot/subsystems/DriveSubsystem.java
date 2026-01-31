@@ -18,12 +18,14 @@ import com.pathplanner.lib.config.RobotConfig;
 import com.pathplanner.lib.controllers.PPHolonomicDriveController;
 import edu.wpi.first.math.geometry.Pose2d;
 import com.ctre.phoenix6.swerve.SwerveRequest.RobotCentric;
+import com.ctre.phoenix6.swerve.utility.WheelForceCalculator;
+import com.ctre.phoenix6.swerve.utility.WheelForceCalculator.Feedforwards;
 import com.ctre.phoenix6.swerve.SwerveRequest.FieldCentric;
+import com.pathplanner.lib.util.DriveFeedforwards;
 
 public class DriveSubsystem extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
   SwerveRequest.RobotCentric m_driveRobotCentric = new RobotCentric();
-  SwerveRequest.FieldCentric m_driveFieldCentric = new FieldCentric();
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem(CommandSwerveDrivetrain drivetrain) {
@@ -72,18 +74,10 @@ public class DriveSubsystem extends SubsystemBase {
   }
 
   public void driveRobotRelative(ChassisSpeeds speeds) {
-    m_drivetrain.applyRequest(() -> m_driveRobotCentric
-        .withVelocityX(speeds.vxMetersPerSecond) // Drive forward with negative Y (forward)
-        .withVelocityY(speeds.vyMetersPerSecond) // Drive left with negative X (left)
-        .withRotationalRate(speeds.omegaRadiansPerSecond) // Drive counterclockwise with negative X (left)
-    );
-  }
-
-  public void driveFieldRelative(double xSpeed, double ySpeed, double rotationalRate) {
-    m_drivetrain.applyRequest(() -> m_driveFieldCentric
-        .withVelocityX(xSpeed) // Drive forward with negative Y (forward)
-        .withVelocityY(ySpeed) // Drive left with negative X (left)
-        .withRotationalRate(rotationalRate) // Drive counterclockwise with negative X (left)
+    m_drivetrain.setControl(m_driveRobotCentric
+      .withVelocityX(speeds.vxMetersPerSecond)
+      .withVelocityY(speeds.vyMetersPerSecond)
+      .withRotationalRate(speeds.omegaRadiansPerSecond)
     );
   }
 

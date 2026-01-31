@@ -28,7 +28,7 @@ public class DefaultDrive extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_driveSubsystem.driveFieldRelative(m_xSpeed, m_ySpeed, m_RotationalRate);
+    //m_driveSubsystem.driveFieldRelative(m_xSpeed, m_ySpeed, m_RotationalRate);
   }
 
   // Called once the command ends or is interrupted.

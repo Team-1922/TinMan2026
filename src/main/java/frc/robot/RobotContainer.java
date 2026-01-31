@@ -32,6 +32,7 @@ import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
+import frc.robot.commands.DefaultDrive;
 
 public class RobotContainer {
     public final Vision vision = new Vision();
@@ -55,9 +56,10 @@ public class RobotContainer {
     public final DriveSubsystem driveSubsystem = new DriveSubsystem(drivetrain);
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
     public final Shooter shooter = new Shooter();
+    public final Spindexer spindexer = new Spindexer();
+
     public final Shoot shoot = new Shoot(shooter);
     public final StopShooter stopShooter = new StopShooter(shooter);
-    public final Spindexer spindexer = new Spindexer();
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
     public final Feed feed = new Feed(spindexer);
 
@@ -104,11 +106,12 @@ public class RobotContainer {
     }
 
     public Command getAutonomousCommand() {
-        return new PathPlannerAuto("Square");
-        /* 
+        //return autoChooser.getSelected();
+        return new PathPlannerAuto("Straight Auto");
+        /*
         try {
             // Load the path you want to follow using its name in the GUI
-            PathPlannerPath path = PathPlannerPath.fromPathFile("Path 1");
+            PathPlannerPath path = PathPlannerPath.fromPathFile("Straight Path");
             // Create a path following command using AutoBuilder. This will also trigger
             // event markers.
             return AutoBuilder.followPath(path);
@@ -116,6 +119,6 @@ public class RobotContainer {
             DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
             return Commands.none();
         }
-            */
+        */
     }
 }
