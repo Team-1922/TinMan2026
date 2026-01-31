@@ -36,12 +36,12 @@ public class AutoAlign extends Command {
     double speed = 0;
     double rotationRate = 0;
     
-    LimelightHelpers.SetFiducialIDFiltersOverride("front",new int[]{26, 10});
+    LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front",new int[]{26, 10});
     double dist = m_vision.getDist();
-    if (dist <= 2.69 || dist >= 2.71) {
-      speed = (dist - 2.7) * 3;
+    if (dist <= 2.65 || dist >= 2.75) {
+      speed = (dist - 2.7) * 1.5; //1.5 is in per meters
     }
-    if (m_vision.getTx() <= -.08 || m_vision.getTx() >= .08) {
+    if (m_vision.getTx() <= -1.5 || m_vision.getTx() >= 1.5) { // 1.5 is a percent that the crosshair is off of the april tag
       rotationRate = -m_vision.getTx() * .15;
     }
     m_Drivetrain.Move(speed, 0, rotationRate);
@@ -50,7 +50,7 @@ public class AutoAlign extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  LimelightHelpers.SetFiducialIDFiltersOverride("front", new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32});
+  LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32});
   m_Drivetrain.Move(0, 0, 0);
 }
 
