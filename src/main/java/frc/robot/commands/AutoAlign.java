@@ -36,7 +36,7 @@ public class AutoAlign extends Command {
     double speed = 0;
     double rotationRate = 0;
     
-    LimelightHelpers.SetFiducialIDFiltersOverride("",new int[]{26, 10});
+    LimelightHelpers.SetFiducialIDFiltersOverride("front",new int[]{26, 10});
     double dist = m_vision.getDist();
     if (dist <= 2.69 || dist >= 2.71) {
       speed = (dist - 2.7) * 3;
@@ -50,7 +50,7 @@ public class AutoAlign extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  LimelightHelpers.SetFiducialIDFiltersOverride("", new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32});
+  LimelightHelpers.SetFiducialIDFiltersOverride("front", new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32});
   m_Drivetrain.Move(0, 0, 0);
 }
 
