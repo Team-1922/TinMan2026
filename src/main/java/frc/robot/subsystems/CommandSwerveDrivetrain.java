@@ -202,7 +202,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         if (Utils.isSimulation()) {
             startSimThread();
         }
-
     }
 
     /**
@@ -237,9 +236,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     public Command sysIdDynamic(SysIdRoutine.Direction direction) {
         return m_sysIdRoutineToApply.dynamic(direction);
     }
-
-
-    
 
     @Override
     public void periodic() {
@@ -334,11 +330,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         return super.samplePoseAt(Utils.fpgaToCurrentTime(timestampSeconds));
     }
 
-      public void driveRobotRelative(ChassisSpeeds speeds) {
+    public void driveRobotRelative(ChassisSpeeds speeds) {
         setControl( new SwerveRequest.RobotCentric()
-      .withVelocityX(speeds.vxMetersPerSecond)
-      .withVelocityY(speeds.vyMetersPerSecond)
-      .withRotationalRate(speeds.omegaRadiansPerSecond)
+            .withVelocityX(speeds.vxMetersPerSecond)
+            .withVelocityY(speeds.vyMetersPerSecond)
+            .withRotationalRate(speeds.omegaRadiansPerSecond)
     );
     System.out.println(speeds.vxMetersPerSecond + " " + speeds.vyMetersPerSecond + " " + speeds.omegaRadiansPerSecond);
   }
@@ -359,8 +355,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         setControl(m_swerveRequest); 
     }
 
-    private void autoBuildConfig() {
-            // Load the RobotConfig from the GUI settings. You should probably
+private void autoBuildConfig() {
+    // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
     RobotConfig config = null;
     try {
