@@ -40,11 +40,11 @@ public class Vision extends SubsystemBase {
     return dist;
   }
 
-  public double getTx(){
+  public double getTx() {
     return tx;
   }
 
-  public double getId(){
+  public double getId() {
     return id;
   }
 }
