@@ -60,12 +60,9 @@ public class RobotContainer {
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
     public final Feed feed = new Feed(spindexer);
 
-
-
     public RobotContainer() {
         configureBindings();
     }
-
     
     private void configureBindings() {
         // Note that X is defined as forward according to WPILib convention,
