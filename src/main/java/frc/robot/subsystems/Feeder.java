@@ -22,7 +22,6 @@ public class Feeder extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     m_feedSpeed = SmartDashboard.getNumber("Load Shooter", m_feedSpeed);
-
   }
 
   public void feed() {
