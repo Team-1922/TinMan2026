@@ -42,7 +42,8 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private static final double kSimLoopPeriod = 0.004; // 4 ms
     private Notifier m_simNotifier = null;
     private double m_lastSimTime;
-    public SwerveRequest.FieldCentric m_swerveRequest = new SwerveRequest.FieldCentric(); 
+    public SwerveRequest.FieldCentric m_fieldCentricSwerveRequest = new SwerveRequest.FieldCentric(); 
+    public SwerveRequest.RobotCentric m_robotCentricSwerveRequest = new SwerveRequest.RobotCentric(); 
 
     /* Blue alliance sees forward as 0 degrees (toward red alliance wall) */
     private static final Rotation2d kBlueAlliancePerspectiveRotation = Rotation2d.kZero;
@@ -331,7 +332,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     }
 
     public void driveRobotRelative(ChassisSpeeds speeds) {
-        setControl( new SwerveRequest.RobotCentric()
+        setControl( m_robotCentricSwerveRequest
             .withVelocityX(speeds.vxMetersPerSecond)
             .withVelocityY(speeds.vyMetersPerSecond)
             .withRotationalRate(speeds.omegaRadiansPerSecond)
@@ -348,11 +349,11 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
   
     public void Move(double xVelocity, double yVelocity, double rotationalRate) {
-        m_swerveRequest
+        m_fieldCentricSwerveRequest
             .withVelocityX(xVelocity)
             .withVelocityY(yVelocity)
             .withRotationalRate(rotationalRate);
-        setControl(m_swerveRequest); 
+        setControl(m_fieldCentricSwerveRequest); 
     }
 
 private void autoBuildConfig() {
