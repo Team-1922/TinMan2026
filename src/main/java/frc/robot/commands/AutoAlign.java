@@ -4,8 +4,11 @@
 
 package frc.robot.commands;
 
+import static edu.wpi.first.units.Units.*;
+
 import java.lang.reflect.Array;
 
+import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
@@ -16,6 +19,13 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class AutoAlign extends Command {
   Vision m_vision;
   CommandSwerveDrivetrain m_Drivetrain;
+   double m_offsetInMeters = Meters.of(.5).in(Meters);
+    double m_targetDistanceToTag = Meters.of(2.7).in(Meters);
+    double m_percentXOffsetToTag = 1.5;
+    int m_blueHubMiddleTag = 10;
+    int  m_redHubMiddleTag = 26;
+    double m_proportionalXSpeed = 1.5;
+    double m_proportionalRotatinalRate = .15;
 
 
   /** Creates a new AutoAlign. */
@@ -33,24 +43,18 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = 0;
-    double rotationRate = 0;
-    
-    LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front",new int[]{26, 10});
-    double dist = m_vision.getDist();
-    if (dist <= 2.65 || dist >= 2.75) {
-      speed = (dist - 2.7) * 1.5; //1.5 is in per meters
-    }
-    if (m_vision.getTx() <= -1.5 || m_vision.getTx() >= 1.5) { // 1.5 is a percent that the crosshair is off of the april tag
-      rotationRate = -m_vision.getTx() * .15;
-    }
+    LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{m_redHubMiddleTag, m_blueHubMiddleTag});
+
+    double speed = calculateSpeed();
+    double rotationRate = calculateRotatinalRate();
+
     m_Drivetrain.Move(speed, 0, rotationRate);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32});
+  LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{});
   m_Drivetrain.Move(0, 0, 0);
 }
 
@@ -58,5 +62,26 @@ public class AutoAlign extends Command {
   @Override
   public boolean isFinished() {
     return false;
+  }
+
+  private double calculateSpeed() {
+    double speed = 0;
+
+    double distFromTag = m_vision.getDist();
+      if (distFromTag <= m_targetDistanceToTag - m_offsetInMeters || distFromTag >= m_targetDistanceToTag + m_offsetInMeters) {
+        speed = (distFromTag - m_targetDistanceToTag) * m_proportionalXSpeed; 
+    }
+
+    return speed;
+  }
+
+  private double calculateRotatinalRate() {
+    double rotationalRate = 0;
+    
+    if (m_vision.getTx() <= -m_percentXOffsetToTag || m_vision.getTx() >= m_percentXOffsetToTag) {
+      rotationalRate = -m_vision.getTx() * m_proportionalRotatinalRate;
+    }
+
+    return rotationalRate;
   }
 }
