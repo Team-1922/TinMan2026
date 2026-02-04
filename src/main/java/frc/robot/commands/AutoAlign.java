@@ -12,7 +12,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
-import frc.robot.Constents;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -67,8 +67,8 @@ public class AutoAlign extends Command {
     double speed = 0;
 
     double distFromTag = m_vision.getDist();
-    if (distFromTag <= Constents.targetDistanceToTag - Constents.offsetInMeters || distFromTag >= Constents.targetDistanceToTag + Constents.offsetInMeters) {
-        speed = (distFromTag - Constents.targetDistanceToTag) * m_proportionalXSpeed; 
+    if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters) {
+        speed = (distFromTag - Constants.targetDistanceToTag) * m_proportionalXSpeed; 
     }
 
     return speed;
