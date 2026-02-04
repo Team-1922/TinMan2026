@@ -55,7 +55,7 @@ public class RobotContainer {
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
 
-    public final Shoot shoot = new Shoot(shooter);
+    public final Shoot shoot = new Shoot(shooter, vision);
     public final StopShooter stopShooter = new StopShooter(shooter);
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
     public final Feed feed = new Feed(spindexer);
@@ -88,7 +88,7 @@ public class RobotContainer {
         DriverController.x().whileTrue(autoAlign);
         DriverController.rightTrigger().whileTrue(shoot).whileFalse(stopShooter);
         DriverController.leftTrigger().whileTrue(feed);
-        DriverController.rightBumper().whileTrue(new ParallelCommandGroup(feed, shoot));
+        DriverController.rightBumper().whileTrue( new ParallelCommandGroup(autoAlign, shoot));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
