@@ -29,6 +29,6 @@ public class Feeder extends SubsystemBase {
   }
 
   public void stopFeed() {
-    m_loadShooter.set(m_feedSpeed);
+    m_loadShooter.set(0);
   }
 }
