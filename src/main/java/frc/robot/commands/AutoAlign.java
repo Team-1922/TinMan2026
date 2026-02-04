@@ -38,13 +38,12 @@ public class AutoAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+    LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{m_redHubMiddleTag, m_blueHubMiddleTag});
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{m_redHubMiddleTag, m_blueHubMiddleTag});
-
     double speed = calculateSpeed();
     double rotationRate = calculateRotatinalRate();
 
