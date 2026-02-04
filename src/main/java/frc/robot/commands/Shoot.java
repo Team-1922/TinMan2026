@@ -6,6 +6,7 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constents;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Vision;
@@ -14,8 +15,8 @@ import frc.robot.subsystems.Vision;
 public class Shoot extends Command {
   Shooter m_shooter;
   Vision m_vision;
-  double m_flywheel = .75;
-  double m_hoodWheel = 1;
+  double m_flywheelSpeed = .75;
+  double m_hoodWheelSpeed = 1;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Vision vision) {
@@ -27,18 +28,18 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("FlyWheel Speed", m_flywheel);
-    SmartDashboard.putNumber("Hood Wheel Speed", m_hoodWheel);
+    SmartDashboard.putNumber("FlyWheel Speed", m_flywheelSpeed);
+    SmartDashboard.putNumber("Hood Wheel Speed", m_hoodWheelSpeed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    if (m_vision.getDist() >= 2.65 || m_vision.getDist() <= 2.75){
-    m_flywheel = SmartDashboard.getNumber("FlyWheel Speed", m_flywheel);
-    m_hoodWheel = SmartDashboard.getNumber("Hood Wheel Speed", m_hoodWheel);
-    m_shooter.Shoot(m_flywheel, m_hoodWheel);
+    double distFromTag = m_vision.getDist();
+    if (distFromTag <= Constents.targetDistanceToTag - Constents.offsetInMeters || distFromTag >= Constents.targetDistanceToTag + Constents.offsetInMeters){
+    m_flywheelSpeed = SmartDashboard.getNumber("FlyWheel Speed", m_flywheelSpeed);
+    m_hoodWheelSpeed = SmartDashboard.getNumber("Hood Wheel Speed", m_hoodWheelSpeed);
+    m_shooter.Shoot(m_flywheelSpeed, m_hoodWheelSpeed);
   }
 }
 

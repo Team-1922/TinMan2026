@@ -12,6 +12,7 @@ import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
+import frc.robot.Constents;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 
@@ -19,8 +20,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 public class AutoAlign extends Command {
   Vision m_vision;
   CommandSwerveDrivetrain m_Drivetrain;
-   double m_offsetInMeters = Meters.of(.5).in(Meters);
-    double m_targetDistanceToTag = Meters.of(2.7).in(Meters);
+   
     double m_percentXOffsetToTag = 1.5;
     int m_blueHubMiddleTag = 10;
     int  m_redHubMiddleTag = 26;
@@ -67,8 +67,8 @@ public class AutoAlign extends Command {
     double speed = 0;
 
     double distFromTag = m_vision.getDist();
-    if (distFromTag <= m_targetDistanceToTag - m_offsetInMeters || distFromTag >= m_targetDistanceToTag + m_offsetInMeters) {
-        speed = (distFromTag - m_targetDistanceToTag) * m_proportionalXSpeed; 
+    if (distFromTag <= Constents.targetDistanceToTag - Constents.offsetInMeters || distFromTag >= Constents.targetDistanceToTag + Constents.offsetInMeters) {
+        speed = (distFromTag - Constents.targetDistanceToTag) * m_proportionalXSpeed; 
     }
 
     return speed;
