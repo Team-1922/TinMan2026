@@ -25,11 +25,11 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    RawFiducial[] fiducials = LimelightHelpers.getRawFiducials(Constants.middleLimeLight);
+    RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("limelight-front");
     for (RawFiducial fiducial : fiducials) {
 
       id = fiducial.id;
-      tx = LimelightHelpers.getTX(Constants.middleLimeLight);
+      tx = LimelightHelpers.getTX("limelight-front");
       dist = fiducial.distToCamera;
       
       SmartDashboard.putNumberArray("distToCamera", new Double[] { (double) id, dist });

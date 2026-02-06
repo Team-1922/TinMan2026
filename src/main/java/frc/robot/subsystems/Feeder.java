@@ -12,7 +12,7 @@ import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
-  TalonFX m_loadShooter = new TalonFX(14, Constants.canbus);
+  TalonFX m_loadShooter = new TalonFX(14, "Drivebase");
   double m_feedSpeed = .2;
 
   public Feeder() {

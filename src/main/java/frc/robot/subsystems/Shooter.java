@@ -10,8 +10,8 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
-  TalonFX m_leftShooter = new TalonFX(17, Constants.canbus); // Flywheel
-  TalonFX m_rightShooter = new TalonFX(15,Constants.canbus); // HoodWeel
+  TalonFX m_leftShooter = new TalonFX(17, "Drivebase"); // Flywheel
+  TalonFX m_rightShooter = new TalonFX(15,"Drivebase"); // HoodWeel
 
   /** Creates a new Shooter. */
   public Shooter() {
