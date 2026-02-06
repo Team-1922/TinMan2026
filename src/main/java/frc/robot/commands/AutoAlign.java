@@ -55,7 +55,7 @@ public class AutoAlign extends Command {
   @Override
   public void end(boolean interrupted) {
   LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{});
-  m_Drivetrain.driveRobotRelative(new ChassisSpeeds(0,0,0));
+  m_Drivetrain.driveRobotRelative(new ChassisSpeeds(0, 0, 0));
 }
 
   // Returns true when the command should end.
