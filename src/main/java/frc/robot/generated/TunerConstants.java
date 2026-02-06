@@ -81,33 +81,29 @@ public class TunerConstants {
 
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    public static LinearVelocity kSpeedAt12Volts; // dont touch this in other parts of the code
-    {
-        switch (Constants.robotType) {
-            case Tinman1:
+    public static LinearVelocity kSpeedAt12Volts = 
+    switch (Constants.robotType) {
+            case Tinman1->
                 kSpeedAt12Volts = MetersPerSecond.of(5.76);
-            case Tinman2:
+            case Tinman2->
                 kSpeedAt12Volts = MetersPerSecond.of(4.33);
-            default:
+            default->
                 kSpeedAt12Volts = MetersPerSecond.of(0);
-        }
-    }
+        };
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
     private static final double kCoupleRatio = 3.125;
 
-    private static double kDriveGearRatio; // dont touch this in other parts of the code
-    {
+    private static double kDriveGearRatio = // dont touch this in other parts of the code
         switch (Constants.robotType) {
-            case Tinman1:
+            case Tinman1->
                 kDriveGearRatio = 5.357142857142857;
-            case Tinman2:
+            case Tinman2->
                 kDriveGearRatio = 7.125;
-            default:
+            default->
                 kDriveGearRatio = 0;
-        }
-    }
+        };
     private static final double kSteerGearRatio = 18.75;
     private static final Distance kWheelRadius = Inches.of(2);
 
@@ -155,6 +151,12 @@ public class TunerConstants {
     private static int kFrontLeftSteerMotorId;
     private static int kFrontLeftEncoderId;
     private static Angle kFrontLeftEncoderOffset;
+
+    private static final boolean kFrontLeftSteerMotorInverted = true;
+    private static final boolean kFrontLeftEncoderInverted = false;
+
+    private static Distance kFrontLeftXPos;
+    private static final Distance kFrontLeftYPos = Inches.of(9.5);
     {
         switch (Constants.robotType) {
             case Tinman1:
@@ -162,40 +164,33 @@ public class TunerConstants {
                 kFrontLeftSteerMotorId = 5;
                 kFrontLeftEncoderId = 10;
                 kFrontLeftEncoderOffset = Rotations.of(-0.248291015625);
+                kFrontLeftXPos = Inches.of(9.5);
             case Tinman2:
                 kFrontLeftDriveMotorId = 11;
                 kFrontLeftSteerMotorId = 10;
                 kFrontLeftEncoderId = 9;
                 kFrontLeftEncoderOffset = Rotations.of(0.023193359375);
+                kFrontLeftXPos = Inches.of(12.375);
             default:
                 kFrontLeftDriveMotorId = 0;
                 kFrontLeftSteerMotorId = 0;
                 kFrontLeftEncoderId = 0;
                 kFrontLeftEncoderOffset = Rotations.of(0);
-        }
-    }
-    private static final boolean kFrontLeftSteerMotorInverted = true;
-    private static final boolean kFrontLeftEncoderInverted = false;
-
-    private static Distance kFrontLeftXPos;
-    {
-        switch (Constants.robotType) {
-            case Tinman1:
-                kFrontLeftXPos = Inches.of(9.5);
-            case Tinman2:
-                kFrontLeftXPos = Inches.of(12.375);
-            default:
                 kFrontLeftXPos = Inches.of(0);
         }
     }
-
-    private static final Distance kFrontLeftYPos = Inches.of(9.5);
 
     // Front Right
     private static int kFrontRightDriveMotorId; // dont touch these four in other parts of the code
     private static int kFrontRightSteerMotorId;
     private static int kFrontRightEncoderId;
     private static Angle kFrontRightEncoderOffset;
+
+    private static final boolean kFrontRightSteerMotorInverted = true;
+    private static final boolean kFrontRightEncoderInverted = false;
+
+    private static Distance kFrontRightXPos;
+    private static final Distance kFrontRightYPos = Inches.of(-9.5);
     {
         switch (Constants.robotType) {
             case Tinman1:
@@ -203,33 +198,21 @@ public class TunerConstants {
                 kFrontRightSteerMotorId = 6;
                 kFrontRightEncoderId = 9;
                 kFrontRightEncoderOffset = Rotations.of(-0.297607421875);
+                kFrontRightXPos = Inches.of(9.5);
             case Tinman2:
                 kFrontRightDriveMotorId = 5;
                 kFrontRightSteerMotorId = 4;
                 kFrontRightEncoderId = 6;
                 kFrontRightEncoderOffset = Rotations.of(-0.410400390625);
+                kFrontRightXPos = Inches.of(12.375);
             default:
                 kFrontRightDriveMotorId = 0;
                 kFrontRightSteerMotorId = 0;
                 kFrontRightEncoderId = 0;
                 kFrontRightEncoderOffset = Rotations.of(0);
-        }
-    }
-    private static final boolean kFrontRightSteerMotorInverted = true;
-    private static final boolean kFrontRightEncoderInverted = false;
-
-    private static Distance kFrontRightXPos; // dont touch this in other parts of the code
-    {
-        switch (Constants.robotType) {
-            case Tinman1:
-                kFrontRightXPos = Inches.of(9.5);
-            case Tinman2:
-                kFrontRightXPos = Inches.of(12.375);
-            default:
                 kFrontRightXPos = Inches.of(0);
         }
     }
-    private static final Distance kFrontRightYPos = Inches.of(-9.5);
 
     // Back Left
     private static int kBackLeftDriveMotorId;
@@ -273,7 +256,7 @@ public class TunerConstants {
     private static final boolean kBackRightSteerMotorInverted = true;
     private static final boolean kBackRightEncoderInverted = false;
 
-    private static final Distance kBackRightXPos = Inches.of(-9.5);
+    private static  Distance kBackRightXPos;
     private static final Distance kBackRightYPos = Inches.of(-9.5);
     {
         switch (Constants.robotType) {
@@ -282,11 +265,13 @@ public class TunerConstants {
                 kBackRightSteerMotorId = 8;
                 kBackRightEncoderId = 11;
                 kBackRightEncoderOffset = Rotations.of(-0.1767578125);
+                kBackRightXPos = Inches.of(-9.5);
             case Tinman2: 
                 kBackRightDriveMotorId = 2;
                 kBackRightSteerMotorId = 1;
                 kBackRightEncoderId = 3;
                 kBackRightEncoderOffset = Rotations.of(-0.161376953125);
+                kBackRightXPos = Inches.of(-12.375);
             default:
         }
     }
