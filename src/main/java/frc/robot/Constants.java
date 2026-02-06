@@ -8,11 +8,13 @@ import static edu.wpi.first.units.Units.*;
 
 /** Add your docs here. */
 public final class Constants {
+
     public static double offsetInMeters;
     public static double targetDistanceToTag;
     public static final RobotType robotType = RobotType.Tinman1;
+    public static String middleLimeLight = "limelight-front";
+    public static String canbus = "Drivebase";
 
-    
     public enum RobotType{
         Tinman1,
         Tinman2

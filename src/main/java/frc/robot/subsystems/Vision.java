@@ -8,6 +8,7 @@ import com.ctre.phoenix6.hardware.DeviceIdentifier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.LimelightHelpers.RawDetection;
 import frc.robot.LimelightHelpers.RawFiducial;
@@ -24,11 +25,11 @@ public class Vision extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    RawFiducial[] fiducials = LimelightHelpers.getRawFiducials("limelight-front");
+    RawFiducial[] fiducials = LimelightHelpers.getRawFiducials(Constants.middleLimeLight);
     for (RawFiducial fiducial : fiducials) {
 
       id = fiducial.id;
-      tx = LimelightHelpers.getTX("limelight-front");
+      tx = LimelightHelpers.getTX(Constants.middleLimeLight);
       dist = fiducial.distToCamera;
       
       SmartDashboard.putNumberArray("distToCamera", new Double[] { (double) id, dist });
