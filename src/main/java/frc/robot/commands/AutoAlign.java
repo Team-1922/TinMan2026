@@ -8,6 +8,7 @@ import static edu.wpi.first.units.Units.*;
 
 import java.lang.reflect.Array;
 
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -47,14 +48,14 @@ public class AutoAlign extends Command {
     double speed = calculateSpeed();
     double rotationRate = calculateRotatinalRate();
 
-    m_Drivetrain.Move(speed, 0, rotationRate);
+    m_Drivetrain.driveRobotRelative( new ChassisSpeeds(speed, 0, rotationRate));
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
   LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{});
-  m_Drivetrain.Move(0, 0, 0);
+  m_Drivetrain.driveRobotRelative(new ChassisSpeeds(0, 0, 0));
 }
 
   // Returns true when the command should end.
