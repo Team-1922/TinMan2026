@@ -8,15 +8,14 @@ import static edu.wpi.first.units.Units.*;
 
 /** Add your docs here. */
 public final class Constants {
-    public static double offsetInMeters = Meters.of(.5).in(Meters);
-    public static double targetDistanceToTag = Meters.of(2.7).in(Meters);
-    public static RobotType robotType = RobotType.V0;
+    public static double offsetInMeters;
+    public static double targetDistanceToTag;
+    public static final RobotType robotType = RobotType.Tinman1;
 
+    
     public enum RobotType{
-        V0,
-        V1,
-        V2,
-        V3,
-        V4
+        Tinman1,
+        Tinman2
     }
+
 }
