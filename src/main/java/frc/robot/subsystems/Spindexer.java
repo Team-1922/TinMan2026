@@ -14,8 +14,8 @@ import frc.robot.generated.TunerConstants;
 import com.ctre.phoenix6.CANBus;
 
 public class Spindexer extends SubsystemBase {
-  TalonFX m_Spindexer = new TalonFX(Constants.spindexerID, TunerConstants.kCANBus);
-  double m_speed = 1;
+ private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, TunerConstants.kCANBus);
+ private double m_speed = 1;
 
   /** Creates a new Spindexer. */
   public Spindexer() {

@@ -12,8 +12,8 @@ import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 
 public class Shooter extends SubsystemBase {
-  TalonFX m_shooter1 = new TalonFX(Constants.shooterMotorID1, TunerConstants.kCANBus);
-  TalonFX m_shooter2 = new TalonFX(Constants.shooterMotorID2, TunerConstants.kCANBus);
+ private final TalonFX m_shooter1 = new TalonFX(Constants.Shooter.kMotorId1, TunerConstants.kCANBus);
+ private final TalonFX m_shooter2 = new TalonFX(Constants.Shooter.kMotorId2, TunerConstants.kCANBus);
 
   /** Creates a new Shooter. */
   public Shooter() {

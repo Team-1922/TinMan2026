@@ -12,12 +12,12 @@ import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
-  TalonFX m_collector1 = new TalonFX(Constants.collectorID1, TunerConstants.kCANBus);
-  TalonFX m_collector2 = new TalonFX(Constants.collectorID2, TunerConstants.kCANBus);
-  TalonFX m_collector3 = new TalonFX(Constants.collectorID3, TunerConstants.kCANBus);
-  TalonFX m_collector4 = new TalonFX(Constants.collectorID4, TunerConstants.kCANBus); 
+ private final TalonFX m_collector1 = new TalonFX(Constants.Collector.kMotorId1, TunerConstants.kCANBus);
+ private final TalonFX m_collector2 = new TalonFX(Constants.Collector.kMotorId2, TunerConstants.kCANBus);
+ private final TalonFX m_collector3 = new TalonFX(Constants.Collector.kMotorId3, TunerConstants.kCANBus);
+ private final TalonFX m_collector4 = new TalonFX(Constants.Collector.kMotorId4, TunerConstants.kCANBus); 
 
-  double collectorSpeed = 2;
+ private double collectorSpeed = 2;
 
   /** Creates a new Collector. */
   public Collector() {

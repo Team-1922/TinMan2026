@@ -13,10 +13,10 @@ import frc.robot.subsystems.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
-  Shooter m_shooter;
-  Vision m_vision;
-  double m_shooterID1Speed = .75;
-  double m_shooterID2Speed = 1;
+ private final Shooter m_shooter;
+ private final Vision m_vision;
+ private double m_shooterID1Speed = .75;
+ private double m_shooterID2Speed = 1;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Vision vision) {
