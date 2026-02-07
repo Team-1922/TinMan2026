@@ -107,7 +107,7 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //return autoChooser.getSelected();
-        return new PathPlannerAuto("Straight Auto");
+        return new PathPlannerAuto("FirstAuto");
         /*
         try {
             // Load the path you want to follow using its name in the GUI
