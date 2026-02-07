@@ -20,6 +20,7 @@ public class Shooter extends SubsystemBase {
  private final TalonFX m_leaderMotor = new TalonFX(Constants.Shooter.kLeaderMotorId, TunerConstants.kCANBus);
  private final TalonFX m_followerMotor = new TalonFX(Constants.Shooter.kFollowerMotorId, TunerConstants.kCANBus);
  BangBangController m_controller = new BangBangController();
+ private double m_rps = 0;
 
 
   /** Creates a new Shooter. */
@@ -34,16 +35,19 @@ public class Shooter extends SubsystemBase {
     m_followerMotor.setControl(new Follower(Constants.Shooter.kLeaderMotorId, MotorAlignmentValue.Aligned));
   }
 
-  public void run(double rps) {
-    m_leaderMotor.set(m_controller.calculate(m_leaderMotor.getVelocity().getValueAsDouble(), rps));
+  public void setTargetRps(double rps) {
+    m_rps = rps;
   }
 
-  public void Stop(){
+  public void stop(){
+    m_rps = 0;
     m_leaderMotor.stopMotor();
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    if(m_rps > 0){
+      m_leaderMotor.set(m_controller.calculate(m_leaderMotor.getVelocity().getValueAsDouble(), m_rps));
+    }
   }
 }

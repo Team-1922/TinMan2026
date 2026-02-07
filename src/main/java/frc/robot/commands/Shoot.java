@@ -37,14 +37,14 @@ public class Shoot extends Command {
     if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
       m_rps = SmartDashboard.getNumber("Shooter RPS", m_rps);
       
-      m_shooter.run(m_rps);
+      m_shooter.setTargetRps(m_rps);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_shooter.Stop();
+    m_shooter.stop();
   }
 
   // Returns true when the command should end.
