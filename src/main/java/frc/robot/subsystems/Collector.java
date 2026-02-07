@@ -7,12 +7,13 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Collector extends SubsystemBase {
-  TalonFX m_collector1 = new TalonFX(19);
-  TalonFX m_collector2 = new TalonFX(20);
-  TalonFX m_collector3 = new TalonFX(21);
-  TalonFX m_collector4 = new TalonFX(22);
+  TalonFX m_collector1 = new TalonFX(Constants.collectorID1,"Drivebase");
+  TalonFX m_collector2 = new TalonFX(Constants.collectorID2, "Drivebase");
+  TalonFX m_collector3 = new TalonFX(Constants.collectorID3, "Drivebase");
+  TalonFX m_collector4 = new TalonFX(Constants.collectorID4, "Drivebase"); 
 
   double collectorSpeed = 2;
 

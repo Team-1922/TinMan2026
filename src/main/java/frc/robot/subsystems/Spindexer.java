@@ -8,9 +8,10 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Spindexer extends SubsystemBase {
-  TalonFX m_Spindexer = new TalonFX(16, "Drivebase");
+  TalonFX m_Spindexer = new TalonFX(Constants.spindexerID, "Drivebase");
   double m_speed = 1;
 
   /** Creates a new Spindexer. */

@@ -8,10 +8,11 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
-  TalonFX m_loadShooter = new TalonFX(14, "Drivebase");
+  TalonFX m_Feeder = new TalonFX(Constants.feederID, "Drivebase");
   double m_feedSpeed = .2;
 
   public Feeder() {
@@ -25,10 +26,10 @@ public class Feeder extends SubsystemBase {
   }
 
   public void feed() {
-    m_loadShooter.set(m_feedSpeed);
+    m_Feeder.set(m_feedSpeed);
   }
 
   public void stopFeed() {
-    m_loadShooter.set(0);
+    m_Feeder.set(0);
   }
 }
