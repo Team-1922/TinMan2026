@@ -144,7 +144,7 @@ public class TunerConstants {
     private static final int kFrontLeftEncoderId = 9;
     private static final Angle kFrontLeftEncoderOffset =
         switch(Constants.robotType){
-            case Tinman1 -> Rotations.of(-.248291015625);
+            case Tinman1 -> Rotations.of(-.218994140625);
             case Tinman2 -> Rotations.of(0.023193359375);
         };
 
@@ -164,7 +164,7 @@ public class TunerConstants {
     private static final int kFrontRightEncoderId = 10;
     private static final Angle kFrontRightEncoderOffset =
         switch (Constants.robotType) {
-            case Tinman1 -> Rotations.of(-0.297607421875);
+            case Tinman1 -> Rotations.of(-0.289306640625);
             case Tinman2 -> Rotations.of(-0.410400390625);
         };
 
@@ -184,7 +184,7 @@ public class TunerConstants {
     private static final int kBackLeftEncoderId = 11;
     private static final Angle kBackLeftEncoderOffset =
         switch (Constants.robotType) {
-            case Tinman1 -> Rotations.of(0.449462890625);
+            case Tinman1 -> Rotations.of(0.453857421875);
             case Tinman2 -> Rotations.of(0.181884765625);
         };
     private static final boolean kBackLeftSteerMotorInverted = true;
@@ -203,7 +203,7 @@ public class TunerConstants {
     private static int kBackRightEncoderId = 12;
     private static Angle kBackRightEncoderOffset = 
         switch (Constants.robotType){
-            case Tinman1 -> Rotations.of(-0.1767578125);
+            case Tinman1 -> Rotations.of(-0.183837890625);
             case Tinman2 -> Rotations.of(-0.161376953125);
         };
 
