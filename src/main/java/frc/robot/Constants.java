@@ -11,12 +11,12 @@ public final class Constants {
 
     public static double offsetInMeters = Meters.of(.5).in(Meters);
     public static double targetDistanceToTag = Meters.of(2.7).in(Meters);
-    public static final RobotType robotType = RobotType.Tinman1;
+    public static final RobotType robotType = RobotType.TinmanV0;
     public static String middleLimeLight = "limelight-front";
     public static String canbus = "Drivebase";
 
     public enum RobotType{
-        Tinman1,
-        Tinman2
+        TinmanV0,
+        TinmanV1
     }
 }
