@@ -25,13 +25,13 @@ public class Feed extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_spindexer.loadShooter();
+    m_spindexer.setTargetRps(1);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_spindexer.stopShooter();
+    m_spindexer.stop();
   }
 
   // Returns true when the command should end.

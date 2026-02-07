@@ -25,9 +25,9 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
-    MotorOutputConfigs motorConfig = new MotorOutputConfigs();
-    motorConfig.Inverted = InvertedValue.CounterClockwise_Positive;
-    motorConfig.NeutralMode = NeutralModeValue.Coast;
+    MotorOutputConfigs motorConfig = new MotorOutputConfigs()
+    .withInverted(InvertedValue.CounterClockwise_Positive)
+    .withNeutralMode(NeutralModeValue.Coast);
 
     m_leaderMotor.getConfigurator().apply(motorConfig);
     m_followerMotor.getConfigurator().apply(motorConfig);
