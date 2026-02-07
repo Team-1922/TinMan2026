@@ -15,8 +15,8 @@ import frc.robot.subsystems.Vision;
 public class Shoot extends Command {
   Shooter m_shooter;
   Vision m_vision;
-  double m_flywheelSpeed = .75;
-  double m_hoodWheelSpeed = 1;
+  double m_shooterID1Speed = .75;
+  double m_shooterID2Speed = 1;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Vision vision) {
@@ -28,8 +28,8 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("FlyWheel Speed", m_flywheelSpeed);
-    SmartDashboard.putNumber("Hood Wheel Speed", m_hoodWheelSpeed);
+    SmartDashboard.putNumber("FlyWheel Speed", m_shooterID1Speed);
+    SmartDashboard.putNumber("Hood Wheel Speed", m_shooterID2Speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,9 +37,9 @@ public class Shoot extends Command {
   public void execute() {
     double distFromTag = m_vision.getDist();
     if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
-      m_flywheelSpeed = SmartDashboard.getNumber("FlyWheel Speed", m_flywheelSpeed);
-      m_hoodWheelSpeed = SmartDashboard.getNumber("Hood Wheel Speed", m_hoodWheelSpeed);
-      m_shooter.Shoot(m_flywheelSpeed, m_hoodWheelSpeed);
+      m_shooterID1Speed = SmartDashboard.getNumber("FlyWheel Speed", m_shooterID1Speed);
+      m_shooterID2Speed = SmartDashboard.getNumber("Hood Wheel Speed", m_shooterID2Speed);
+      m_shooter.Shoot(m_shooterID1Speed, m_shooterID2Speed);
   }
 }
 

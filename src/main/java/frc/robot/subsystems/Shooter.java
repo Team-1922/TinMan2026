@@ -17,9 +17,9 @@ public class Shooter extends SubsystemBase {
   public Shooter() {
   }
 
-  public void Shoot(double m_tSpeed, double m_bSpeed) {
-    m_shooterID1.set(m_tSpeed);
-    m_shooterID2.set(-m_bSpeed);
+  public void Shoot(double m_sID1Speed, double m_sID2Speed) {
+    m_shooterID1.set(m_sID1Speed);
+    m_shooterID2.set(-m_sID2Speed);
   }
 
   @Override
