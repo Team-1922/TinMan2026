@@ -4,8 +4,10 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
@@ -15,20 +17,29 @@ import frc.robot.generated.TunerConstants;
 import edu.wpi.first.math.controller.BangBangController;
 
 public class Shooter extends SubsystemBase {
- private final TalonFX m_shooter1 = new TalonFX(Constants.Shooter.kMotorId1, TunerConstants.kCANBus);
- private final TalonFX m_shooter2 = new TalonFX(Constants.Shooter.kMotorId2, TunerConstants.kCANBus);
- BangBangController controller = new BangBangController();
+ private final TalonFX m_leaderMotor = new TalonFX(Constants.Shooter.kLeaderMotorId, TunerConstants.kCANBus);
+ private final TalonFX m_followerMotor = new TalonFX(Constants.Shooter.kFollowerMotorId, TunerConstants.kCANBus);
+ BangBangController m_controller = new BangBangController();
 
 
   /** Creates a new Shooter. */
   public Shooter() {
-    m_shooter1.setNeutralMode(NeutralModeValue.Coast);
-    m_shooter2.setNeutralMode(NeutralModeValue.Coast);
-    m_shooter1.setControl(new Follower(Constants.Shooter.kMotorId1, MotorAlignmentValue.Aligned));
+    var motorConfig = new MotorOutputConfigs();
+    motorConfig.Inverted = InvertedValue.CounterClockwise_Positive;
+    motorConfig.NeutralMode = NeutralModeValue.Coast;
+
+    m_leaderMotor.getConfigurator().apply(motorConfig);
+    m_followerMotor.getConfigurator().apply(motorConfig);
+
+    m_followerMotor.setControl(new Follower(Constants.Shooter.kLeaderMotorId, MotorAlignmentValue.Aligned));
   }
 
-  public void Shoot(double rpm) {
-    m_shooter1.set(controller.calculate(m_shooter1.getVelocity().getValueAsDouble(), rpm));
+  public void run(double rps) {
+    m_leaderMotor.set(m_controller.calculate(m_leaderMotor.getVelocity().getValueAsDouble(), rps));
+  }
+
+  public void Stop(){
+    m_leaderMotor.stopMotor();
   }
 
   @Override

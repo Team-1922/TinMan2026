@@ -29,8 +29,8 @@ public final class Constants {
     };
 
     public static class Shooter{
-        public static final int kMotorId1 = 19;
-        public static final int kMotorId2 = 20;
+        public static final int kLeaderMotorId = 19;
+        public static final int kFollowerMotorId = 20;
     };
     
     public static class Spindexer {
