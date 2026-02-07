@@ -81,7 +81,7 @@ public class TunerConstants {
 
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    public static LinearVelocity kSpeedAt12Volts = 
+    public static final LinearVelocity kSpeedAt12Volts = 
     switch (Constants.robotType) {
             case Tinman1 -> MetersPerSecond.of(5.76);
             case Tinman2 -> MetersPerSecond.of(4.33);
@@ -198,10 +198,10 @@ public class TunerConstants {
         };
 
     // Back Right
-    private static int kBackRightDriveMotorId = 4;
-    private static int kBackRightSteerMotorId = 8;
-    private static int kBackRightEncoderId = 12;
-    private static Angle kBackRightEncoderOffset = 
+    private static final int kBackRightDriveMotorId = 4;
+    private static final int kBackRightSteerMotorId = 8;
+    private static final int kBackRightEncoderId = 12;
+    private static final Angle kBackRightEncoderOffset = 
         switch (Constants.robotType){
             case Tinman1 -> Rotations.of(-0.183837890625);
             case Tinman2 -> Rotations.of(-0.161376953125);
@@ -210,14 +210,12 @@ public class TunerConstants {
     private static final boolean kBackRightSteerMotorInverted = true;
     private static final boolean kBackRightEncoderInverted = false;
 
-    private static  Distance kBackRightXPos;
-    private static final Distance kBackRightYPos = Inches.of(-9.5);
-    {
-        switch (Constants.robotType) {
+    private static final Distance kBackRightXPos =
+    switch (Constants.robotType) {
             case Tinman1 -> Inches.of(-9.5);
             case Tinman2 -> Inches.of(-12.375);
-        }
-    }
+        };
+    private static final Distance kBackRightYPos = Inches.of(-9.5);
 
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft = ConstantCreator
             .createModuleConstants(
