@@ -50,18 +50,17 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController DriverController = new CommandXboxController(0);
-     public final CANBus canbus = new CANBus(Constants.drivebaseCanbusName);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
-    public final Shooter shooter = new Shooter(canbus);
-    public final Spindexer spindexer = new Spindexer(canbus);
+    public final Shooter shooter = new Shooter();
+    public final Spindexer spindexer = new Spindexer();
 
     public final Shoot shoot = new Shoot(shooter, vision);
     public final StopShooter stopShooter = new StopShooter(shooter);
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
     public final Feed feed = new Feed(spindexer);
-    public final Collector collector = new Collector(canbus);
+    public final Collector collector = new Collector();
    
 
     public RobotContainer() {

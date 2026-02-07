@@ -11,7 +11,7 @@ public final class Constants {
 
     public static double offsetInMeters = Meters.of(.5).in(Meters);
     public static double targetDistanceToTag = Meters.of(2.7).in(Meters);
-    public static final RobotType robotType = RobotType.TinmanV0;
+    public static final RobotType robotType = RobotType.TinmanV1;
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
 

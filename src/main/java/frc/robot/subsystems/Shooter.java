@@ -9,15 +9,15 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.TunerConstants;
 
 public class Shooter extends SubsystemBase {
-  CANBus m_canbus;
-  TalonFX m_shooter1 = new TalonFX(Constants.shooterMotorID1, m_canbus);
-  TalonFX m_shooter2 = new TalonFX(Constants.shooterMotorID2, m_canbus);
+  TalonFX m_shooter1 = new TalonFX(Constants.shooterMotorID1, TunerConstants.kCANBus);
+  TalonFX m_shooter2 = new TalonFX(Constants.shooterMotorID2, TunerConstants.kCANBus);
 
   /** Creates a new Shooter. */
-  public Shooter( CANBus canbus) {
-    m_canbus = canbus;
+  public Shooter() {
+  
   }
 
   public void Shoot(double m_s1Speed, double m_s2Speed) {

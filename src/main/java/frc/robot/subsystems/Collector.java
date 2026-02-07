@@ -9,20 +9,19 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
-  CANBus m_canbus;
-  TalonFX m_collector1 = new TalonFX(Constants.collectorID1, m_canbus);
-  TalonFX m_collector2 = new TalonFX(Constants.collectorID2, m_canbus);
-  TalonFX m_collector3 = new TalonFX(Constants.collectorID3, m_canbus);
-  TalonFX m_collector4 = new TalonFX(Constants.collectorID4, m_canbus); 
+  TalonFX m_collector1 = new TalonFX(Constants.collectorID1, TunerConstants.kCANBus);
+  TalonFX m_collector2 = new TalonFX(Constants.collectorID2, TunerConstants.kCANBus);
+  TalonFX m_collector3 = new TalonFX(Constants.collectorID3, TunerConstants.kCANBus);
+  TalonFX m_collector4 = new TalonFX(Constants.collectorID4, TunerConstants.kCANBus); 
 
   double collectorSpeed = 2;
 
   /** Creates a new Collector. */
-  public Collector(CANBus canbus) {
+  public Collector() {
     SmartDashboard.putNumber("Collector Speed", collectorSpeed);
-    m_canbus = canbus;
   }
 
   @Override
