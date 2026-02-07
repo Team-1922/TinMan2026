@@ -55,7 +55,7 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void disabledInit() {
-        FollowPathCommand.warmupCommand().schedule();
+        CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
     }
 
     @Override
