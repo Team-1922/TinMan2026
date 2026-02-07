@@ -13,11 +13,7 @@ public final class Constants {
 
     public static final double offsetInMeters = Meters.of(.5).in(Meters);
     public static final double targetDistanceToTag = Meters.of(2.7).in(Meters);
-<<<<<<< HEAD
-    public static final RobotType robotType = RobotType.TinmanV0;
-=======
     public static final RobotType robotType = RobotType.TinmanV1;
->>>>>>> 01d696a9dc136dbe28f77e2580bb816d23ba283c
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
 
@@ -36,11 +32,7 @@ public final class Constants {
         public static final int kMotorId1 = 19;
         public static final int kMotorId2 = 20;
     };
-<<<<<<< HEAD
-
-=======
     
->>>>>>> 01d696a9dc136dbe28f77e2580bb816d23ba283c
     public static class Spindexer {
         public static final int kMotorId1 = 21;
     };
