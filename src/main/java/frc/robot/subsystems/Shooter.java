@@ -20,10 +20,9 @@ public class Shooter extends SubsystemBase {
     m_canbus = canbus;
   }
 
-  public void Shoot(double m_tSpeed, double m_bSpeed) {
-    m_shooter1.set(m_tSpeed);
-    m_shooter2.set(-m_bSpeed);
-    
+  public void Shoot(double m_s1Speed, double m_s2Speed) {
+    m_shooter1.set(m_s1Speed);
+    m_shooter2.set(-m_s2Speed);
   }
 
   @Override
