@@ -24,7 +24,7 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
-    var motorConfig = new MotorOutputConfigs();
+    MotorOutputConfigs motorConfig = new MotorOutputConfigs();
     motorConfig.Inverted = InvertedValue.CounterClockwise_Positive;
     motorConfig.NeutralMode = NeutralModeValue.Coast;
 

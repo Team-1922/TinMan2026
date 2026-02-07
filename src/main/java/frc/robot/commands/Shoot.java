@@ -26,7 +26,7 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Shooter RPM", m_rps);
+    SmartDashboard.putNumber("Shooter RPS", m_rps);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,7 +35,7 @@ public class Shoot extends Command {
     double distFromTag = m_vision.getDist();
 
     if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
-      m_rps = SmartDashboard.getNumber("Shooter RPM", m_rps);
+      m_rps = SmartDashboard.getNumber("Shooter RPS", m_rps);
       
       m_shooter.run(m_rps);
     }
