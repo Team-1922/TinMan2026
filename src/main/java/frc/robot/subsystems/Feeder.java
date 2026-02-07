@@ -4,15 +4,18 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.generated.TunerConstants;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
-  TalonFX m_loadShooter = new TalonFX(14, "Drivebase");
-  double m_feedSpeed = .2;
+ private final TalonFX m_Feeder = new TalonFX(Constants.Feeder.kMotorId1, TunerConstants.kCANBus);
+ private double m_feedSpeed = .2;
 
   public Feeder() {
     SmartDashboard.putNumber("Load Shooter", m_feedSpeed);
@@ -25,10 +28,10 @@ public class Feeder extends SubsystemBase {
   }
 
   public void feed() {
-    m_loadShooter.set(m_feedSpeed);
+    m_Feeder.set(m_feedSpeed);
   }
 
   public void stopFeed() {
-    m_loadShooter.set(0);
+    m_Feeder.set(0);
   }
 }

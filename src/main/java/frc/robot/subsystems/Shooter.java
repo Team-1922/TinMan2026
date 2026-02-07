@@ -4,21 +4,25 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.generated.TunerConstants;
 
 public class Shooter extends SubsystemBase {
-  TalonFX m_leftShooter = new TalonFX(17, "Drivebase"); // Flywheel
-  TalonFX m_rightShooter = new TalonFX(15, "Drivebase"); // HoodWeel
+ private final TalonFX m_shooter1 = new TalonFX(Constants.Shooter.kMotorId1, TunerConstants.kCANBus);
+ private final TalonFX m_shooter2 = new TalonFX(Constants.Shooter.kMotorId2, TunerConstants.kCANBus);
 
   /** Creates a new Shooter. */
   public Shooter() {
+  
   }
 
-  public void Shoot(double m_tSpeed, double m_bSpeed) {
-    m_leftShooter.set(m_tSpeed);
-    m_rightShooter.set(-m_bSpeed);
+  public void Shoot(double m_s1Speed, double m_s2Speed) {
+    m_shooter1.set(m_s1Speed);
+    m_shooter2.set(-m_s2Speed);
   }
 
   @Override

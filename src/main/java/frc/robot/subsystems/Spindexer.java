@@ -8,10 +8,14 @@ import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.generated.TunerConstants;
+
+import com.ctre.phoenix6.CANBus;
 
 public class Spindexer extends SubsystemBase {
-  TalonFX m_Spindexer = new TalonFX(16, "Drivebase");
-  double m_speed = 1;
+ private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, TunerConstants.kCANBus);
+ private double m_speed = 1;
 
   /** Creates a new Spindexer. */
   public Spindexer() {

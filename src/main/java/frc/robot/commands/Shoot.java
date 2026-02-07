@@ -13,10 +13,10 @@ import frc.robot.subsystems.Vision;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
-  Shooter m_shooter;
-  Vision m_vision;
-  double m_flywheelSpeed = .75;
-  double m_hoodWheelSpeed = 1;
+ private final Shooter m_shooter;
+ private final Vision m_vision;
+ private double m_shooterId1Speed = .75;
+ private double m_shooterId2Speed = 1;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Vision vision) {
@@ -28,8 +28,8 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("FlyWheel Speed", m_flywheelSpeed);
-    SmartDashboard.putNumber("Hood Wheel Speed", m_hoodWheelSpeed);
+    SmartDashboard.putNumber("FlyWheel Speed", m_shooterId1Speed);
+    SmartDashboard.putNumber("Hood Wheel Speed", m_shooterId2Speed);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -37,9 +37,9 @@ public class Shoot extends Command {
   public void execute() {
     double distFromTag = m_vision.getDist();
     if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
-      m_flywheelSpeed = SmartDashboard.getNumber("FlyWheel Speed", m_flywheelSpeed);
-      m_hoodWheelSpeed = SmartDashboard.getNumber("Hood Wheel Speed", m_hoodWheelSpeed);
-      m_shooter.Shoot(m_flywheelSpeed, m_hoodWheelSpeed);
+      m_shooterId1Speed = SmartDashboard.getNumber("FlyWheel Speed", m_shooterId1Speed);
+      m_shooterId2Speed = SmartDashboard.getNumber("Hood Wheel Speed", m_shooterId2Speed);
+      m_shooter.Shoot(m_shooterId1Speed, m_shooterId2Speed);
   }
 }
 
