@@ -9,14 +9,17 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import com.ctre.phoenix6.CANBus;
 
 public class Spindexer extends SubsystemBase {
-  TalonFX m_Spindexer = new TalonFX(Constants.spindexerID, "Drivebase");
+  CANBus m_canbus;
+  TalonFX m_Spindexer = new TalonFX(Constants.spindexerID, m_canbus);
   double m_speed = 1;
 
   /** Creates a new Spindexer. */
-  public Spindexer() {
+  public Spindexer(CANBus canbus) {
     SmartDashboard.putNumber("Spindexer Speed", m_speed);
+    m_canbus = canbus;
   }
 
   @Override

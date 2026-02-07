@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -12,11 +13,13 @@ import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
-  TalonFX m_Feeder = new TalonFX(Constants.feederID, "Drivebase");
+  CANBus m_canbus;
+  TalonFX m_Feeder = new TalonFX(Constants.feederID, m_canbus);
   double m_feedSpeed = .2;
 
-  public Feeder() {
+  public Feeder(CANBus canbus) {
     SmartDashboard.putNumber("Load Shooter", m_feedSpeed);
+    m_canbus = canbus;
   }
 
   @Override

@@ -13,7 +13,7 @@ public final class Constants {
     public static double targetDistanceToTag = Meters.of(2.7).in(Meters);
     public static final RobotType robotType = RobotType.TinmanV0;
     public static String middleLimeLight = "limelight-front";
-    public static String canbus = "Drivebase";
+    public static String drivebaseCanbusName = "Drivebase";
 
     public static int collectorID1 = 14;
     public static int collectorID2 = 15;

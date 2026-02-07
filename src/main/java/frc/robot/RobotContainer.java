@@ -7,7 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-
+import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.commands.PathPlannerAuto;
@@ -31,6 +31,7 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Collector;
 
 public class RobotContainer {
     public final Vision vision = new Vision();
@@ -49,16 +50,19 @@ public class RobotContainer {
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
     private final CommandXboxController DriverController = new CommandXboxController(0);
+     public final CANBus canbus = new CANBus(Constants.drivebaseCanbusName);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
-    public final Shooter shooter = new Shooter();
-    public final Spindexer spindexer = new Spindexer();
+    public final Shooter shooter = new Shooter(canbus);
+    public final Spindexer spindexer = new Spindexer(canbus);
 
     public final Shoot shoot = new Shoot(shooter, vision);
     public final StopShooter stopShooter = new StopShooter(shooter);
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
     public final Feed feed = new Feed(spindexer);
+    public final Collector collector = new Collector(canbus);
+   
 
     public RobotContainer() {
         configureBindings();
