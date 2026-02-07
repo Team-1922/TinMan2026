@@ -32,6 +32,7 @@ public final class Constants {
         public static final int kMotorId1 = 19;
         public static final int kMotorId2 = 20;
     };
+    
     public static class Spindexer {
         public static final int kMotorId1 = 21;
     };
