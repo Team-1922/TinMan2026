@@ -16,7 +16,9 @@ import frc.robot.subsystems.Vision;
 public class Shoot extends Command {
  private final Shooter m_shooter;
  private final Vision m_vision;
- private double m_rps;
+ private double m_spindexerRps;
+ private double m_feederRps;
+ private double m_shooterRps;
  private final Spindexer m_spindexer;
  private final Feeder m_feeder;
 
@@ -32,7 +34,9 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Shooter RPS", m_rps);
+    SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
+    SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
+    SmartDashboard.putNumber("Feeder RPS", m_feederRps);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -41,11 +45,13 @@ public class Shoot extends Command {
     double distFromTag = m_vision.getDist();
 
     if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
-      m_rps = SmartDashboard.getNumber("Shooter RPS", m_rps);
-      
-      m_shooter.setTargetRps(m_rps);
-      m_spindexer.setTargetRps(m_rps);
-      m_feeder.setTargetRps(m_rps);
+      m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
+      m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
+      m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
+
+      m_shooter.setTargetRps(m_shooterRps);
+      m_spindexer.setTargetRps(m_spindexerRps);
+      m_feeder.setTargetRps(m_feederRps);
     }
   }
 

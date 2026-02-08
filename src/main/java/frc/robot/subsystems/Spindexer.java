@@ -24,7 +24,6 @@ public class Spindexer extends SubsystemBase {
 
   /** Creates a new Spindexer. */
   public Spindexer() {
-    SmartDashboard.putNumber("Spindexer RPS", m_rps);
      MotorOutputConfigs motorConfig = new MotorOutputConfigs()
     .withInverted(InvertedValue.CounterClockwise_Positive)
     .withNeutralMode(NeutralModeValue.Coast);
@@ -35,7 +34,6 @@ public class Spindexer extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if(m_rps > 0) {
-      m_rps = SmartDashboard.getNumber("Spindexer RPS", m_rps);
       m_Spindexer.set(m_controller.calculate(m_Spindexer.getVelocity().getValueAsDouble(), m_rps));
     }
   }
