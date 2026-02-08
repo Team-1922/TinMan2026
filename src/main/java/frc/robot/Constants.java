@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.CANBus;
+
 import frc.robot.subsystems.Spindexer;
 
 /** Add your docs here. */
@@ -16,6 +18,8 @@ public final class Constants {
     public static final RobotType robotType = RobotType.TinmanV1;
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
+    public static String drivebaseCanbusName2 = "rio";
+    public static final CANBus superstructureCanbus = new CANBus().roboRIO();
 
     public static class Collector {
         public static final int kMotorId1 = 14;

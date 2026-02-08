@@ -11,6 +11,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.math.controller.BangBangController;
+import edu.wpi.first.wpilibj.DutyCycle;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -18,7 +19,7 @@ import frc.robot.generated.TunerConstants;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
- private final TalonFX m_Feeder = new TalonFX(Constants.Feeder.kMotorId1, TunerConstants.kCANBus);
+ private final TalonFX m_Feeder = new TalonFX(Constants.Feeder.kMotorId1, Constants.superstructureCanbus);
  BangBangController m_controller = new BangBangController();
  private double m_rps = 0;
 
@@ -34,8 +35,10 @@ public class Feeder extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
      if(m_rps > 0) {
-        m_Feeder.set(m_controller.calculate(m_Feeder.getVelocity().getValueAsDouble(), m_rps));
-     }
+       // m_Feeder.set(m_controller.calculate(m_Feeder.getVelocity().getValueAsDouble(), m_rps));
+       // SmartDashboard.putNumber("bangbang",(m_controller.calculate(m_Feeder.getVelocity().getValueAsDouble(), m_rps)));
+      }
+      m_Feeder.set(-m_rps);
   }
 
   public void setTargetRps(double rps) {

@@ -17,8 +17,8 @@ import frc.robot.generated.TunerConstants;
 import edu.wpi.first.math.controller.BangBangController;
 
 public class Shooter extends SubsystemBase {
- private final TalonFX m_leaderMotor = new TalonFX(Constants.Shooter.kLeaderMotorId, TunerConstants.kCANBus);
- private final TalonFX m_followerMotor = new TalonFX(Constants.Shooter.kFollowerMotorId, TunerConstants.kCANBus);
+ private final TalonFX m_leaderMotor = new TalonFX(Constants.Shooter.kLeaderMotorId, Constants.superstructureCanbus);
+ private final TalonFX m_followerMotor = new TalonFX(Constants.Shooter.kFollowerMotorId, Constants.superstructureCanbus);
  BangBangController m_controller = new BangBangController();
  private double m_rps = 0;
 
@@ -47,7 +47,8 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     if(m_rps > 0){
-      m_leaderMotor.set(m_controller.calculate(m_leaderMotor.getVelocity().getValueAsDouble(), m_rps));
+ //     m_leaderMotor.set(m_controller.calculate(m_leaderMotor.getVelocity().getValueAsDouble(), m_rps));
     }
+    m_leaderMotor.set(m_rps);
   }
 }

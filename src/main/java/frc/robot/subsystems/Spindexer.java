@@ -17,7 +17,7 @@ import frc.robot.generated.TunerConstants;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 
 public class Spindexer extends SubsystemBase {
- private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, TunerConstants.kCANBus);
+ private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, Constants.superstructureCanbus);
  BangBangController m_controller = new BangBangController();
   private double m_rps;
 
@@ -34,8 +34,9 @@ public class Spindexer extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if(m_rps > 0) {
-      m_Spindexer.set(m_controller.calculate(m_Spindexer.getVelocity().getValueAsDouble(), m_rps));
+  //    m_Spindexer.set(m_controller.calculate(m_Spindexer.getVelocity().getValueAsDouble(), m_rps));
     }
+    m_Spindexer.set(m_rps);
   }
 
   public void setTargetRps(double rps) {
