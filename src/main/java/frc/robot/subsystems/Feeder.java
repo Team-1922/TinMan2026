@@ -25,8 +25,8 @@ public class Feeder extends SubsystemBase {
 
   public Feeder() {
     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-    .withInverted(InvertedValue.CounterClockwise_Positive)
-    .withNeutralMode(NeutralModeValue.Coast);
+      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withNeutralMode(NeutralModeValue.Coast);
     
     m_Feeder.getConfigurator().apply(motorConfig);
   }
