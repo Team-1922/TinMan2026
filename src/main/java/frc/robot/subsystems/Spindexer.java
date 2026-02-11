@@ -15,11 +15,12 @@ import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 
 public class Spindexer extends SubsystemBase {
  private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, Constants.superstructureCanbus);
- BangBangController m_controller = new BangBangController();
-  private double m_rps;
+  private double m_rps = 0;
+  private VelocityDutyCycle spindexerDutyCycle = new VelocityDutyCycle(null);
 
 
   /** Creates a new Spindexer. */
@@ -28,15 +29,15 @@ public class Spindexer extends SubsystemBase {
       .withInverted(InvertedValue.CounterClockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
     m_Spindexer.getConfigurator().apply(motorConfig);
+    m_Spindexer.getConfigurator().apply(Constants.Spindexer.slot0());
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
+    // This method will be called once per scheduler run   
     if(m_rps > 0) {
-  //    m_Spindexer.set(m_controller.calculate(m_Spindexer.getVelocity().getValueAsDouble(), m_rps));
+      m_Spindexer.setControl(spindexerDutyCycle.withVelocity((m_rps * Constants.Spindexer.kGearRatio)));
     }
-    m_Spindexer.set(m_rps);
   }
 
   public void setTargetRps(double rps) {

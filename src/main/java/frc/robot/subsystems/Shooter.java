@@ -47,8 +47,7 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     if(m_rps > 0){
- //     m_leaderMotor.set(m_controller.calculate(m_leaderMotor.getVelocity().getValueAsDouble(), m_rps));
+      m_leaderMotor.set(m_controller.calculate(m_leaderMotor.getVelocity().getValueAsDouble(), m_rps));
     }
-    m_leaderMotor.set(m_rps);
   }
 }

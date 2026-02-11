@@ -16,9 +16,9 @@ import frc.robot.subsystems.Vision;
 public class Shoot extends Command {
  private final Shooter m_shooter;
  private final Vision m_vision;
- private double m_spindexerRps = .1;
- private double m_feederRps = .42;
- private double m_shooterRps = .42;
+ private double m_spindexerRps = 1;
+ private double m_feederRps = 1;
+ private double m_shooterRps = 10;
  private final Spindexer m_spindexer;
  private final Feeder m_feeder;
 
@@ -53,7 +53,7 @@ public class Shoot extends Command {
         m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
         m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
 
-      m_shooter.setTargetRps(m_shooterRps);
+    //  m_shooter.setTargetRps(m_shooterRps);
       m_spindexer.setTargetRps(-m_spindexerRps);
       m_feeder.setTargetRps(m_feederRps);
    // }

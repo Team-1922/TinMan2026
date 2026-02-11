@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -22,23 +23,23 @@ public class Feeder extends SubsystemBase {
  private final TalonFX m_Feeder = new TalonFX(Constants.Feeder.kMotorId1, Constants.superstructureCanbus);
  BangBangController m_controller = new BangBangController();
  private double m_rps = 0;
+ private VelocityDutyCycle feederDutyCycle = new VelocityDutyCycle(null);
 
   public Feeder() {
     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
     
     m_Feeder.getConfigurator().apply(motorConfig);
+    m_Feeder.getConfigurator().apply(Constants.Feeder.slot0());
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-     if(m_rps > 0) {
-       // m_Feeder.set(m_controller.calculate(m_Feeder.getVelocity().getValueAsDouble(), m_rps));
-       // SmartDashboard.putNumber("bangbang",(m_controller.calculate(m_Feeder.getVelocity().getValueAsDouble(), m_rps)));
-      }
-      m_Feeder.set(-m_rps);
+    if(m_rps > 0) {    
+      m_Feeder.setControl( feederDutyCycle.withVelocity(m_rps));
+    }
   }
 
   public void setTargetRps(double rps) {

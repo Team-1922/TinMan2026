@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.Slot0Configs;
 
 import frc.robot.subsystems.Spindexer;
 
@@ -19,7 +20,7 @@ public final class Constants {
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
     public static String drivebaseCanbusName2 = "rio";
-    public static final CANBus superstructureCanbus = new CANBus().roboRIO();
+    public static final CANBus superstructureCanbus = CANBus.roboRIO();
 
     public static class Collector {
         public static final int kMotorId1 = 14;
@@ -30,6 +31,12 @@ public final class Constants {
 
     public static class Feeder {
         public static final int kMotorId1 = 18;
+
+        public static Slot0Configs slot0() {
+            Slot0Configs slot0Configs = new Slot0Configs();
+            slot0Configs.kP = .15;
+            return slot0Configs;
+        }
     };
 
     public static class Shooter{
@@ -39,8 +46,16 @@ public final class Constants {
     
     public static class Spindexer {
         public static final int kMotorId1 = 21;
+        public static final double kGearRatio = 6;
+        
+        public static Slot0Configs slot0() {
+            Slot0Configs slot0Configs = new Slot0Configs();
+            slot0Configs.kP = .15;
+            return slot0Configs;
+        }
     };
 
+    
     public enum RobotType{
         TinmanV0,
         TinmanV1
