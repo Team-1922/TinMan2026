@@ -35,13 +35,13 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double distFromTag = m_vision.getDist();
-    if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
-      m_shooterId1Speed = SmartDashboard.getNumber("FlyWheel Speed", m_shooterId1Speed);
-      m_shooterId2Speed = SmartDashboard.getNumber("Hood Wheel Speed", m_shooterId2Speed);
-      m_shooter.Shoot(m_shooterId1Speed, m_shooterId2Speed);
+    //double distFromTag = m_vision.getDist();
+    //if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
+    //m_shooterId1Speed = SmartDashboard.getNumber("FlyWheel Speed", m_shooterId1Speed);
+    //m_shooterId2Speed = SmartDashboard.getNumber("Hood Wheel Speed", m_shooterId2Speed);
+    m_shooter.Shoot(m_shooterId1Speed, m_shooterId2Speed);
+    //}
   }
-}
 
   // Called once the command ends or is interrupted.
   @Override

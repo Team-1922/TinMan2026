@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.hardware.TalonFX;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
@@ -17,12 +18,19 @@ public class Shooter extends SubsystemBase {
 
   /** Creates a new Shooter. */
   public Shooter() {
-  
+    putShooterSpeeds();
   }
 
   public void Shoot(double m_s1Speed, double m_s2Speed) {
     m_shooter1.set(m_s1Speed);
     m_shooter2.set(-m_s2Speed);
+  }
+
+  public void putShooterSpeeds(){
+    double s1Speed = m_shooter1.getVelocity().getValueAsDouble();
+    double s2Speed = m_shooter2.getVelocity().getValueAsDouble(); 
+    SmartDashboard.putNumber("Shooter 1 Speed", s1Speed);
+    SmartDashboard.putNumber("Shooter 2 Speed", s2Speed);
   }
 
   @Override
