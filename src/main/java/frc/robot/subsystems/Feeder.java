@@ -18,8 +18,10 @@ import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
- private final TalonFX m_Feeder = new TalonFX(Constants.Feeder.kMotorId1, 
-      Constants.superstructureCanbus);
+ private final TalonFX m_Feeder = new TalonFX(
+      Constants.Feeder.kMotorId1, 
+      Constants.superstructureCanbus
+  );
  private double m_rps = 0;
  private VelocityDutyCycle m_feederDutyCycle = new VelocityDutyCycle(0)
       .withSlot(0);

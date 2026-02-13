@@ -16,7 +16,10 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 
 public class Spindexer extends SubsystemBase {
- private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, Constants.superstructureCanbus);
+ private final TalonFX m_Spindexer = new TalonFX(
+      Constants.Spindexer.kMotorId1,
+      Constants.superstructureCanbus
+  );
   private double m_rps = 0;
   private VelocityDutyCycle m_spindexerDutyCycle = new VelocityDutyCycle(0)
       .withSlot(0);
