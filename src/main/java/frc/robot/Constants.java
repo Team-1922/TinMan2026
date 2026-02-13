@@ -32,12 +32,12 @@ public final class Constants {
 
     public static class Feeder {
         public static final int kMotorId1 = 18;
-        public static final double kGearRatio = 2;
+        public static final double kGearRatio = 1;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = .15;
-            slot0Configs.kS = .0;
+            slot0Configs.kP = 0.04;
+            slot0Configs.kS = 0.25;
             return slot0Configs;
         }
     };
