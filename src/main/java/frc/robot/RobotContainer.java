@@ -33,6 +33,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Collector;
+import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
     public final Vision vision = new Vision();
@@ -67,6 +68,9 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
+
+        //NamedCommands.registerCommand("AutoShoot", new ParallelCommandGroup(autoAlign, shoot));
+
     }
     
     private void configureBindings() {
