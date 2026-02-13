@@ -8,11 +8,9 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
-import edu.wpi.first.math.controller.BangBangController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.generated.TunerConstants;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -20,8 +18,8 @@ import com.ctre.phoenix6.controls.VelocityDutyCycle;
 public class Spindexer extends SubsystemBase {
  private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, Constants.superstructureCanbus);
   private double m_rps = 0;
-  private VelocityDutyCycle spindexerDutyCycle = new VelocityDutyCycle(null);
-
+  private VelocityDutyCycle m_spindexerDutyCycle = new VelocityDutyCycle(0)
+      .withSlot(0);
 
   /** Creates a new Spindexer. */
   public Spindexer() {
@@ -36,8 +34,13 @@ public class Spindexer extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run   
     if(m_rps > 0) {
-      m_Spindexer.setControl(spindexerDutyCycle.withVelocity((m_rps * Constants.Spindexer.kGearRatio)));
+      m_Spindexer.setControl(
+          m_spindexerDutyCycle.withVelocity(
+              m_rps * Constants.Spindexer.kGearRatio
+          )
+      );
     }
+    SmartDashboard.putNumber("Spindexer Motor RPS", m_rps * Constants.Spindexer.kGearRatio);
   }
 
   public void setTargetRps(double rps) {

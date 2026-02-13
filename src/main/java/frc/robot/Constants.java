@@ -14,9 +14,10 @@ import frc.robot.subsystems.Spindexer;
 /** Add your docs here. */
 public final class Constants {
 
+    public static final RobotType robotType = RobotType.TinmanV1;
+
     public static final double offsetInMeters = Meters.of(.5).in(Meters);
     public static final double targetDistanceToTag = Meters.of(2.7).in(Meters);
-    public static final RobotType robotType = RobotType.TinmanV1;
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
     public static String drivebaseCanbusName2 = "rio";
@@ -31,10 +32,12 @@ public final class Constants {
 
     public static class Feeder {
         public static final int kMotorId1 = 18;
+        public static final double kGearRatio = 2;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
             slot0Configs.kP = .15;
+            slot0Configs.kS = .0;
             return slot0Configs;
         }
     };
@@ -50,7 +53,8 @@ public final class Constants {
         
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = .15;
+            slot0Configs.kP = .06;
+            slot0Configs.kS = .1;
             return slot0Configs;
         }
     };
