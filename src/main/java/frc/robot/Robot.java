@@ -18,100 +18,100 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 
 public class Robot extends LoggedRobot {
-    private Command m_autonomousCommand;
+  private Command m_autonomousCommand;
 
-    private final RobotContainer m_robotContainer;
+  private final RobotContainer m_robotContainer;
 
-    /* log and replay timestamp and joystick data */
-    private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
-            .withTimestampReplay()
-            .withJoystickReplay();
+  /* log and replay timestamp and joystick data */
+  private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
+      .withTimestampReplay()
+      .withJoystickReplay();
 
-    public Robot() {
-        Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
+  public Robot() {
+    Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
 
-        if (isReal()) {
-            // Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
-            Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
-        } else {
-            setUseTiming(false); // Run as fast as possible
-            String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the
-                                                          // user)
-            Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
-            Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a
-                                                                                                  // new log
-        }
-        Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
-                        // be added.
-
-        m_robotContainer = new RobotContainer();
+    if (isReal()) {
+      // Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
+      Logger.addDataReceiver(new NT4Publisher()); // Publish data to NetworkTables
+    } else {
+      setUseTiming(false); // Run as fast as possible
+      String logPath = LogFileUtil.findReplayLog(); // Pull the replay log from AdvantageScope (or prompt the
+                                                    // user)
+      Logger.setReplaySource(new WPILOGReader(logPath)); // Read replay log
+      Logger.addDataReceiver(new WPILOGWriter(LogFileUtil.addPathSuffix(logPath, "_sim"))); // Save outputs to a
+                                                                                            // new log
     }
+    Logger.start(); // Start logging! No more data receivers, replay sources, or metadata values may
+                    // be added.
 
-    @Override
-    public void robotPeriodic() {
-        m_timeAndJoystickReplay.update();
-        CommandScheduler.getInstance().run();
+    m_robotContainer = new RobotContainer();
+  }
+
+  @Override
+  public void robotPeriodic() {
+    m_timeAndJoystickReplay.update();
+    CommandScheduler.getInstance().run();
+  }
+
+  @Override
+  public void disabledInit() {
+    CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+  }
+
+  @Override
+  public void disabledPeriodic() {
+  }
+
+  @Override
+  public void disabledExit() {
+  }
+
+  @Override
+  public void autonomousInit() {
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    if (m_autonomousCommand != null) {
+      CommandScheduler.getInstance().schedule(m_autonomousCommand);
     }
+  }
 
-    @Override
-    public void disabledInit() {
-        CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
+  @Override
+  public void autonomousPeriodic() {
+  }
+
+  @Override
+  public void autonomousExit() {
+  }
+
+  @Override
+  public void teleopInit() {
+    if (m_autonomousCommand != null) {
+      CommandScheduler.getInstance().cancel(m_autonomousCommand);
     }
+  }
 
-    @Override
-    public void disabledPeriodic() {
-    }
+  @Override
+  public void teleopPeriodic() {
+  }
 
-    @Override
-    public void disabledExit() {
-    }
+  @Override
+  public void teleopExit() {
+  }
 
-    @Override
-    public void autonomousInit() {
-        m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+  @Override
+  public void testInit() {
+    CommandScheduler.getInstance().cancelAll();
+  }
 
-        if (m_autonomousCommand != null) {
-            CommandScheduler.getInstance().schedule(m_autonomousCommand);
-        }
-    }
+  @Override
+  public void testPeriodic() {
+  }
 
-    @Override
-    public void autonomousPeriodic() {
-    }
+  @Override
+  public void testExit() {
+  }
 
-    @Override
-    public void autonomousExit() {
-    }
-
-    @Override
-    public void teleopInit() {
-        if (m_autonomousCommand != null) {
-            CommandScheduler.getInstance().cancel(m_autonomousCommand);
-        }
-    }
-
-    @Override
-    public void teleopPeriodic() {
-    }
-
-    @Override
-    public void teleopExit() {
-    }
-
-    @Override
-    public void testInit() {
-        CommandScheduler.getInstance().cancelAll();
-    }
-
-    @Override
-    public void testPeriodic() {
-    }
-
-    @Override
-    public void testExit() {
-    }
-
-    @Override
-    public void simulationPeriodic() {
-    }
+  @Override
+  public void simulationPeriodic() {
+  }
 }

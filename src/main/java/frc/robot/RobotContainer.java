@@ -35,95 +35,93 @@ import frc.robot.subsystems.Collector;
 import frc.robot.subsystems.Feeder;
 
 public class RobotContainer {
-    public final Vision vision = new Vision();
-    private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
-                                                                                        // speed
-    private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
-                                                                                      // max angular velocity
+  public final Vision vision = new Vision();
+  private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
+                                                                                      // speed
+  private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
+                                                                                    // max angular velocity
 
-    /* Setting up bindings for necessary control of the swerve drive platform */
-    private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
-            .withDeadband(MaxSpeed * 0.12).withRotationalDeadband(MaxAngularRate * 0.12) // Add a 12% deadband
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
-    private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
-    private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+  /* Setting up bindings for necessary control of the swerve drive platform */
+  private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
+      .withDeadband(MaxSpeed * 0.12).withRotationalDeadband(MaxAngularRate * 0.12) // Add a 12% deadband
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // Use open-loop control for drive motors
+  private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
+  private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
 
-    private final Telemetry logger = new Telemetry(MaxSpeed);
+  private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController DriverController = new CommandXboxController(0);
+  private final CommandXboxController DriverController = new CommandXboxController(0);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
-    public final Shooter shooter = new Shooter();
-    public final Spindexer spindexer = new Spindexer();
-    public final Feeder feeder = new Feeder();
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+  public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
+  public final Shooter shooter = new Shooter();
+  public final Spindexer spindexer = new Spindexer();
+  public final Feeder feeder = new Feeder();
 
-    public final Shoot shoot = new Shoot(shooter, vision);
-    public final StopShooter stopShooter = new StopShooter(shooter);
-    public final LoadShooter loadShooter = new LoadShooter(spindexer);
-    public final Feed feed = new Feed(feeder);
-    public final Collector collector = new Collector();
-   
+  public final Shoot shoot = new Shoot(shooter, vision);
+  public final StopShooter stopShooter = new StopShooter(shooter);
+  public final LoadShooter loadShooter = new LoadShooter(spindexer);
+  public final Feed feed = new Feed(feeder);
+  public final Collector collector = new Collector();
 
-    public RobotContainer() {
-        configureBindings();
-    }
-    
-    private void configureBindings() {
-        // Note that X is defined as forward according to WPILib convention,
-        // and Y is defined as to the left according to WPILib convention.
-        drivetrain.setDefaultCommand(
-                // Drivetrain will execute this command periodically
+  public RobotContainer() {
+    configureBindings();
+  }
 
-                drivetrain.applyRequest(() -> drive
-                        .withVelocityX(-DriverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                        .withVelocityY(-DriverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
-                        .withRotationalRate(-DriverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-                ));
+  private void configureBindings() {
+    // Note that X is defined as forward according to WPILib convention,
+    // and Y is defined as to the left according to WPILib convention.
+    drivetrain.setDefaultCommand(
+        // Drivetrain will execute this command periodically
 
-        // Idle while the robot is disabled. This ensures the configured
-        // neutral mode is applied to the drive motors while disabled.
-        final var idle = new SwerveRequest.Idle();
-        RobotModeTriggers.disabled().whileTrue(
-                drivetrain.applyRequest(() -> idle).ignoringDisable(true));
+        drivetrain.applyRequest(() -> drive
+            .withVelocityX(-DriverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+            .withVelocityY(-DriverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withRotationalRate(-DriverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative
+                                                                                // X (left)
+        ));
 
-        DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
-                .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
-        DriverController.x().whileTrue(autoAlign);
-        DriverController.rightTrigger().whileTrue(shoot);//.whileFalse(stopShooter);
-        DriverController.leftTrigger().whileTrue(feed);
-        DriverController.rightBumper().whileTrue(loadShooter);
+    // Idle while the robot is disabled. This ensures the configured
+    // neutral mode is applied to the drive motors while disabled.
+    final var idle = new SwerveRequest.Idle();
+    RobotModeTriggers.disabled().whileTrue(
+        drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-        // Run SysId routines when holding back/start and X/Y.
-        // Note that each routine should be run exactly once in a single log.
-        DriverController.back().and(DriverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
-        DriverController.back().and(DriverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
-        DriverController.start().and(DriverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
-        DriverController.start().and(DriverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
+    DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
+        .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
+    DriverController.x().whileTrue(autoAlign);
+    DriverController.rightTrigger().whileTrue(shoot);// .whileFalse(stopShooter);
+    DriverController.leftTrigger().whileTrue(feed);
+    DriverController.rightBumper().whileTrue(loadShooter);
 
-        // Reset the field-centric heading on left bumper press.
-        DriverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+    // Run SysId routines when holding back/start and X/Y.
+    // Note that each routine should be run exactly once in a single log.
+    DriverController.back().and(DriverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
+    DriverController.back().and(DriverController.x()).whileTrue(drivetrain.sysIdDynamic(Direction.kReverse));
+    DriverController.start().and(DriverController.y()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kForward));
+    DriverController.start().and(DriverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
-        drivetrain.registerTelemetry(logger::telemeterize);
-    }
+    // Reset the field-centric heading on left bumper press.
+    DriverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
-    
+    drivetrain.registerTelemetry(logger::telemeterize);
+  }
 
-    public Command getAutonomousCommand() {
-        //return autoChooser.getSelected();
-        return new PathPlannerAuto("Straight Auto");
-        /*
-        try {
-            // Load the path you want to follow using its name in the GUI
-            PathPlannerPath path = PathPlannerPath.fromPathFile("Straight Path");
-            // Create a path following command using AutoBuilder. This will also trigger
-            // event markers.
-            return AutoBuilder.followPath(path);
-        } catch (Exception e) {
-            DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-            return Commands.none();
-        }
-        */
-    }
+  public Command getAutonomousCommand() {
+    // return autoChooser.getSelected();
+    return new PathPlannerAuto("Straight Auto");
+    /*
+     * try {
+     * // Load the path you want to follow using its name in the GUI
+     * PathPlannerPath path = PathPlannerPath.fromPathFile("Straight Path");
+     * // Create a path following command using AutoBuilder. This will also trigger
+     * // event markers.
+     * return AutoBuilder.followPath(path);
+     * } catch (Exception e) {
+     * DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
+     * return Commands.none();
+     * }
+     */
+  }
 }
