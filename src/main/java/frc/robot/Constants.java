@@ -6,16 +6,22 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.Slot0Configs;
+
 import frc.robot.subsystems.Spindexer;
 
 /** Add your docs here. */
 public final class Constants {
 
+    public static final RobotType robotType = RobotType.TinmanV1;
+
     public static final double offsetInMeters = Meters.of(.5).in(Meters);
     public static final double targetDistanceToTag = Meters.of(2.7).in(Meters);
-    public static final RobotType robotType = RobotType.TinmanV1;
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
+    public static String drivebaseCanbusName2 = "rio";
+    public static final CANBus superstructureCanbus = CANBus.roboRIO();
 
     public static class Collector {
         public static final int kMotorId1 = 14;
@@ -26,17 +32,34 @@ public final class Constants {
 
     public static class Feeder {
         public static final int kMotorId1 = 18;
+        public static final double kGearRatio = 1;
+
+        public static Slot0Configs slot0() {
+            Slot0Configs slot0Configs = new Slot0Configs();
+            slot0Configs.kP = 0.04;
+            slot0Configs.kS = 0.25;
+            return slot0Configs;
+        }
     };
 
     public static class Shooter{
-        public static final int kMotorId1 = 19;
-        public static final int kMotorId2 = 20;
+        public static final int kLeaderMotorId = 19;
+        public static final int kFollowerMotorId = 20;
     };
     
     public static class Spindexer {
         public static final int kMotorId1 = 21;
+        public static final double kGearRatio = 6;
+        
+        public static Slot0Configs slot0() {
+            Slot0Configs slot0Configs = new Slot0Configs();
+            slot0Configs.kP = .06;
+            slot0Configs.kS = .1;
+            return slot0Configs;
+        }
     };
 
+    
     public enum RobotType{
         TinmanV0,
         TinmanV1

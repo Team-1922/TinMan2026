@@ -8,7 +8,9 @@ import com.ctre.phoenix6.hardware.DeviceIdentifier;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
+import frc.robot.Constants.RobotType;
 import frc.robot.LimelightHelpers.RawDetection;
 import frc.robot.LimelightHelpers.RawFiducial;
 
@@ -37,7 +39,7 @@ public class Vision extends SubsystemBase {
   }
 
   public double getDist() {
-    return dist;
+    return Constants.robotType == RobotType.TinmanV0 ? dist : Constants.targetDistanceToTag;
   }
 
   public double getTx() {

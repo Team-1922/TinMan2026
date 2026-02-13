@@ -5,37 +5,53 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.generated.TunerConstants;
 
-import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 
 public class Spindexer extends SubsystemBase {
- private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, TunerConstants.kCANBus);
- private double m_speed = 1;
+ private final TalonFX m_Spindexer = new TalonFX(
+      Constants.Spindexer.kMotorId1,
+      Constants.superstructureCanbus
+  );
+  private double m_rps = 0;
+  private VelocityDutyCycle m_spindexerDutyCycle = new VelocityDutyCycle(0)
+      .withSlot(0);
 
   /** Creates a new Spindexer. */
   public Spindexer() {
-    SmartDashboard.putNumber("Spindexer Speed", m_speed);
+     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
+      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withNeutralMode(NeutralModeValue.Coast);
+    m_Spindexer.getConfigurator().apply(motorConfig);
+    m_Spindexer.getConfigurator().apply(Constants.Spindexer.slot0());
   }
 
   @Override
   public void periodic() {
-    // This method will be called once per scheduler run
-
-    m_speed = SmartDashboard.getNumber("Spindexer Speed", m_speed);
+    // This method will be called once per scheduler run   
+    if(m_rps > 0) {
+      m_Spindexer.setControl(
+          m_spindexerDutyCycle.withVelocity(
+              m_rps * Constants.Spindexer.kGearRatio
+          )
+      );
+    }
+    SmartDashboard.putNumber("Spindexer Motor RPS", m_rps * Constants.Spindexer.kGearRatio);
   }
 
-  public void loadShooter() {
-    m_Spindexer.set(m_speed);
+  public void setTargetRps(double rps) {
+    m_rps = rps;
   }
 
-  public void stopShooter() {
-    m_Spindexer.set(0);
-
+  public void stop() {
+    m_rps = 0;
+    m_Spindexer.stopMotor();
   }
-
 }
