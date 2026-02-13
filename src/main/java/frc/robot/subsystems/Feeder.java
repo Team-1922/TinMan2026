@@ -14,11 +14,12 @@ import frc.robot.generated.TunerConstants;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
- private final TalonFX m_Feeder = new TalonFX(Constants.Feeder.kMotorId1, TunerConstants.kCANBus);
- private double m_feedSpeed = .2;
+ private final TalonFX m_Feeder = new TalonFX(Constants.Feeder.kMotorId1, TunerConstants.rioCANBus);
+ private double m_feedSpeed = .3;
 
   public Feeder() {
-    SmartDashboard.putNumber("Load Shooter", m_feedSpeed);
+    SmartDashboard.putNumber("Feeder Target Speed", m_feedSpeed);
+    SmartDashboard.putNumber("Feeder Actual Speed", m_Feeder.getVelocity().getValueAsDouble());
   }
 
   @Override

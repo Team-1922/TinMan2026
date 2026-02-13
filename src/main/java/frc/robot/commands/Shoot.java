@@ -15,8 +15,8 @@ import frc.robot.subsystems.Vision;
 public class Shoot extends Command {
  private final Shooter m_shooter;
  private final Vision m_vision;
- private double m_shooterId1Speed = .75;
- private double m_shooterId2Speed = 1;
+ private double m_shooterId1Speed = .20;
+ private double m_shooterId2Speed = .30;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Vision vision) {

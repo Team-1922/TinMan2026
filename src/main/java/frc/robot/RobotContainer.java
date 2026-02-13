@@ -32,6 +32,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Collector;
+import frc.robot.subsystems.Feeder;
 
 public class RobotContainer {
     public final Vision vision = new Vision();
@@ -55,11 +56,12 @@ public class RobotContainer {
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
+    public final Feeder feeder = new Feeder();
 
     public final Shoot shoot = new Shoot(shooter, vision);
     public final StopShooter stopShooter = new StopShooter(shooter);
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
-    public final Feed feed = new Feed(spindexer);
+    public final Feed feed = new Feed(feeder);
     public final Collector collector = new Collector();
    
 
@@ -91,7 +93,7 @@ public class RobotContainer {
         DriverController.x().whileTrue(autoAlign);
         DriverController.rightTrigger().whileTrue(shoot);//.whileFalse(stopShooter);
         DriverController.leftTrigger().whileTrue(feed);
-        //DriverController.rightBumper().whileTrue( new ParallelCommandGroup(autoAlign, shoot));
+        DriverController.rightBumper().whileTrue(loadShooter);
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

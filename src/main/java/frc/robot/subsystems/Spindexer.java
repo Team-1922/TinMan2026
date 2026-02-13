@@ -11,11 +11,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 
-import com.ctre.phoenix6.CANBus;
-
 public class Spindexer extends SubsystemBase {
- private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, TunerConstants.kCANBus);
- private double m_speed = 1;
+ private final TalonFX m_Spindexer = new TalonFX(Constants.Spindexer.kMotorId1, TunerConstants.rioCANBus);
+ private double m_speed = .15;
 
   /** Creates a new Spindexer. */
   public Spindexer() {
@@ -29,11 +27,11 @@ public class Spindexer extends SubsystemBase {
     m_speed = SmartDashboard.getNumber("Spindexer Speed", m_speed);
   }
 
-  public void loadShooter() {
+  public void spinSpindexer() {
     m_Spindexer.set(m_speed);
   }
 
-  public void stopShooter() {
+  public void stopSpindexer() {
     m_Spindexer.set(0);
 
   }
