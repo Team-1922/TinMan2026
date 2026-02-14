@@ -33,6 +33,7 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Collector;
+import frc.robot.commands.Collect;
 
 public class RobotContainer {
     public final Vision vision = new Vision();
@@ -57,13 +58,13 @@ public class RobotContainer {
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
+    public final Collector collector = new Collector();
 
     public final Shoot shoot = new Shoot(shooter, vision, feeder, spindexer);
     public final StopShooter stopShooter = new StopShooter(shooter);
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
     public final Feed feed = new Feed(spindexer);
-    public final Collector collector = new Collector();
-   
+    public final Collect collect = new Collect(collector);
 
     public RobotContainer() {
         configureBindings();
@@ -90,10 +91,8 @@ public class RobotContainer {
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
-        DriverController.x().whileTrue(autoAlign);
-        DriverController.rightBumper().whileTrue(shoot);
-        DriverController.leftTrigger().whileTrue(feed);
-        //DriverController.rightBumper().whileTrue( new ParallelCommandGroup(autoAlign, shoot));
+        DriverController.leftTrigger().whileTrue(collect);
+        DriverController.rightTrigger().whileTrue(new ParallelCommandGroup(shoot));
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

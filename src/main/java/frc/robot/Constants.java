@@ -19,8 +19,6 @@ public final class Constants {
     public static final double offsetInMeters = Meters.of(.5).in(Meters);
     public static final double targetDistanceToTag = Meters.of(2.7).in(Meters);
     public static String middleLimeLight = "limelight-front";
-    public static String drivebaseCanbusName = "Drivebase";
-    public static String drivebaseCanbusName2 = "rio";
     public static final CANBus superstructureCanbus = CANBus.roboRIO();
 
     public static class Collector {
@@ -28,6 +26,14 @@ public final class Constants {
         public static final int kMotorId2 = 15;
         public static final int kMotorId3 = 16;
         public static final int kMotorId4 = 17;
+        public static final double kGearRatio = 2;
+
+        public static Slot0Configs slot0() {
+            Slot0Configs slot0Configs = new Slot0Configs();
+            slot0Configs.kP = .06;
+            slot0Configs.kS = .1;
+            return slot0Configs;
+        }
     };
 
     public static class Feeder {
