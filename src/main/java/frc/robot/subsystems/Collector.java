@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -13,21 +14,31 @@ import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
  private final TalonFX m_collector1 = new TalonFX(Constants.Collector.kMotorId1, TunerConstants.kCANBus);
- private final TalonFX m_collector2 = new TalonFX(Constants.Collector.kMotorId2, TunerConstants.kCANBus);
- private final TalonFX m_collector3 = new TalonFX(Constants.Collector.kMotorId3, TunerConstants.kCANBus);
- private final TalonFX m_collector4 = new TalonFX(Constants.Collector.kMotorId4, TunerConstants.kCANBus); 
-
- private double collectorSpeed = 2;
+ private double m_rps = 0;
+ private double m_collectorSpeed = 2;
 
   /** Creates a new Collector. */
   public Collector() {
-    SmartDashboard.putNumber("Collector Speed", collectorSpeed);
+    SmartDashboard.putNumber("Collector Speed", m_collectorSpeed);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.getNumber("Collector Speed", collectorSpeed);
+    SmartDashboard.getNumber("Collector Speed", m_collectorSpeed);
 
+  }
+
+  public double setTargetRps(double rps) {
+    m_rps = rps;
+    return rps;
+  }
+
+  public void stopCollector() {
+    m_rps = 0;
+  }
+
+  public void collect() {
+    m_collector1.setControl( new VelocityDutyCycle(m_rps));
   }
 }
