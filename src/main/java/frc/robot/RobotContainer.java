@@ -22,10 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
-import frc.robot.commands.Feed;
-import frc.robot.commands.LoadShooter;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.StopShooter;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
@@ -33,6 +30,8 @@ import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Collector;
+import com.pathplanner.lib.auto.NamedCommands;
+import frc.robot.commands.IdleSpindexer;
 
 public class RobotContainer {
     public final Vision vision = new Vision();
@@ -53,20 +52,20 @@ public class RobotContainer {
     private final CommandXboxController DriverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
+    public final Collector collector = new Collector();
 
     public final Shoot shoot = new Shoot(shooter, vision, feeder, spindexer);
-    public final StopShooter stopShooter = new StopShooter(shooter);
-    public final LoadShooter loadShooter = new LoadShooter(spindexer);
-    public final Feed feed = new Feed(spindexer);
-    public final Collector collector = new Collector();
-   
+    public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
+    public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
 
     public RobotContainer() {
         configureBindings();
+        
+        NamedCommands.registerCommand("idleSpindexer", idleSpindexer);
+
     }
     
     private void configureBindings() {
@@ -92,7 +91,6 @@ public class RobotContainer {
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
         DriverController.x().whileTrue(autoAlign);
         DriverController.rightBumper().whileTrue(shoot);
-        DriverController.leftTrigger().whileTrue(feed);
         //DriverController.rightBumper().whileTrue( new ParallelCommandGroup(autoAlign, shoot));
 
         // Run SysId routines when holding back/start and X/Y.
@@ -112,7 +110,10 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //return autoChooser.getSelected();
-        return new PathPlannerAuto("Straight Auto");
+        return new ParallelCommandGroup(
+            idleSpindexer, 
+            new PathPlannerAuto("Straight Auto")
+        );
         /*
         try {
             // Load the path you want to follow using its name in the GUI
