@@ -52,6 +52,6 @@ public class Spindexer extends SubsystemBase {
 
   public void setIdleSpeed() {
     m_rps = Constants.Spindexer.spindexerIdleSpeed;
-    m_Spindexer.stopMotor();
+    m_Spindexer.set(m_rps);
   }
 }
