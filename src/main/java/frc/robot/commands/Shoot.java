@@ -47,12 +47,11 @@ public class Shoot extends Command {
     double distFromTag = m_vision.getDist();
     m_shooter.setTargetRps(m_shooterRps);
     m_spindexer.setTargetRps(m_spindexerRps);
+    SmartDashboard.putNumber("Shooter Velocity", m_shooter.getVelocity());
     //if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
         // m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
         // m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
         // m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
-      
-      SmartDashboard.putNumber("Shooter Velocity", m_shooter.getVelocity());
       if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold){
         m_feeder.setTargetRps(m_feederRps);
       } else{
