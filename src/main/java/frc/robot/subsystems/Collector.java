@@ -15,32 +15,38 @@ import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
- private final TalonFX m_collector1 = new TalonFX(Constants.Collector.kMotorId1, TunerConstants.kCANBus);
+ private final TalonFX m_collector1 = new TalonFX(Constants.Collector.kMotorId1, Constants.superstructureCanbus);
  private double m_rps = 0;
- private VelocityDutyCycle collectorDutyCycle = new VelocityDutyCycle(0);
+ private VelocityDutyCycle m_collectorDutyCycle = new VelocityDutyCycle(0).
+    withSlot(0);
 
   /** Creates a new Collector. */
   public Collector() {
       MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
+      m_collector1.getConfigurator().apply(Constants.Collector.slot0());
       m_collector1.getConfigurator().apply(motorConfig);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(m_rps > 0) {
-      m_collector1.setControl(collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
-    }
   }
 
   public double setTargetRps(double rps) {
     m_rps = rps;
     return rps;
   }
+  
+  public void collect() {
+   if(m_rps > 0) {
+      m_collector1.setControl(m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
+    }
+  }
 
   public void stopCollector() {
     m_rps = 0;
+    m_collector1.stopMotor();
   }
 }
