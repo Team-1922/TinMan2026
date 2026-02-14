@@ -58,14 +58,13 @@ public class RobotContainer {
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
+    public final Collector collector = new Collector();
 
     public final Shoot shoot = new Shoot(shooter, vision, feeder, spindexer);
     public final StopShooter stopShooter = new StopShooter(shooter);
     public final LoadShooter loadShooter = new LoadShooter(spindexer);
     public final Feed feed = new Feed(spindexer);
-    public final Collector collector = new Collector();
     public final Collect collect = new Collect(collector);
-   
 
     public RobotContainer() {
         configureBindings();
