@@ -110,7 +110,10 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         //return autoChooser.getSelected();
-        return new ParallelCommandGroup(idleSpindexer, new PathPlannerAuto("Straight Auto"));
+        return new ParallelCommandGroup(
+            idleSpindexer, 
+            new PathPlannerAuto("Straight Auto")
+        );
         /*
         try {
             // Load the path you want to follow using its name in the GUI
