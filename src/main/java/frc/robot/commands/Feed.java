@@ -31,7 +31,7 @@ public class Feed extends Command {
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_spindexer.stop();
+    //m_spindexer.stop(); this file is no longer used and should be deleted in a seperate branch
   }
 
   // Returns true when the command should end.

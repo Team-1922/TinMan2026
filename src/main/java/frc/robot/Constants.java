@@ -50,6 +50,7 @@ public final class Constants {
     public static class Spindexer {
         public static final int kMotorId1 = 21;
         public static final double kGearRatio = 6;
+        public static final double spindexerIdleSpeed = .1;
         
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();

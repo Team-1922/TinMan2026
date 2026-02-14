@@ -21,6 +21,7 @@ public class Shoot extends Command {
  private double m_shooterRps = 20;
  private final Spindexer m_spindexer;
  private final Feeder m_feeder;
+ private final double m_shooterSpeedOffset = .1;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Vision vision, Feeder feeder, Spindexer spindexer) {
@@ -51,9 +52,9 @@ public class Shoot extends Command {
         // m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
     
     m_shooter.setTargetRps(m_shooterRps);
+    m_spindexer.setTargetRps(m_spindexerRps);
     SmartDashboard.putNumber("Shooter Velocity", m_shooter.getVelocity());
-    if(m_shooter.getVelocity() >= m_shooterRps - .1){
-      m_spindexer.setTargetRps(m_spindexerRps);
+    if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedOffset){
       m_feeder.setTargetRps(m_feederRps);
     }
       
@@ -64,7 +65,7 @@ public class Shoot extends Command {
   @Override
   public void end(boolean interrupted) {
     m_shooter.stop();
-    m_spindexer.stop();
+    m_spindexer.setIdleSpeed();
     m_feeder.stop();
   }
 
