@@ -11,10 +11,12 @@ import frc.robot.subsystems.Collector;
 public class Collect extends Command {
   /** Creates a new Collect. */
   Collector m_collector;
+  private double collectorRps = 1;
 
   public Collect(Collector collector) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_collector = collector;
+    addRequirements(collector);
   }
 
   // Called when the command is initially scheduled.
@@ -24,7 +26,7 @@ public class Collect extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_collector.setTargetRps(1);
+    m_collector.setTargetRps(collectorRps);
   }
 
   // Called once the command ends or is interrupted.
