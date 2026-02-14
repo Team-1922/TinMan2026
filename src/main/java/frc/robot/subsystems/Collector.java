@@ -4,12 +4,17 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
+import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.NeutralModeValue;
+
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
+import com.ctre.phoenix6.configs.MotorOutputConfigs;
 
 public class Collector extends SubsystemBase {
  private final TalonFX m_collector1 = new TalonFX(Constants.Collector.kMotorId1, TunerConstants.kCANBus);
@@ -17,7 +22,12 @@ public class Collector extends SubsystemBase {
  private VelocityDutyCycle collectorDutyCycle = new VelocityDutyCycle(0);
 
   /** Creates a new Collector. */
-  public Collector() {}
+  public Collector() {
+      MotorOutputConfigs motorConfig = new MotorOutputConfigs()
+      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withNeutralMode(NeutralModeValue.Coast);
+      m_collector1.getConfigurator().apply(motorConfig);
+  }
 
   @Override
   public void periodic() {
