@@ -9,6 +9,9 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import frc.robot.subsystems.Spindexer;
 
 /** Add your docs here. */
@@ -22,6 +25,19 @@ public final class Constants {
     public static String drivebaseCanbusName = "Drivebase";
     public static String drivebaseCanbusName2 = "rio";
     public static final CANBus superstructureCanbus = CANBus.roboRIO();
+        public static final SwerveModulePosition[] swerveModulePositions = new SwerveModulePosition[]{
+        new SwerveModulePosition(0.381,new Rotation2d(341.3402 * (Math.PI/180))), // front left swerve module needs tuning
+        new SwerveModulePosition(0.381,new Rotation2d(38.6598 * Math.PI/180)), // front right swerve module needs tuning
+        new SwerveModulePosition(0.381,new Rotation2d(141.3402 * (Math.PI/180))), // back left swerve module needs tuning
+        new SwerveModulePosition(0.381,new Rotation2d(218.6598 * (Math.PI/180))), // back right swerve module needs tuning
+    };
+    public static final Translation2d[] kinematicsTranslations = new Translation2d[]{
+        new Translation2d(0.381,new Rotation2d(341.3402 * (Math.PI/180))), // front left swerve module needs tuning
+        new Translation2d(0.381,new Rotation2d(38.6598 * (Math.PI/180))), // front right swerve module needs tuning
+        new Translation2d(0.381,new Rotation2d(141.3402 * (Math.PI/180))), // back left swerve module needs tuning
+        new Translation2d(0.381,new Rotation2d(218.6598 * (Math.PI/180))), // back right swerve module needs tuning
+    };
+
 
     public static class Collector {
         public static final int kMotorId1 = 14;
