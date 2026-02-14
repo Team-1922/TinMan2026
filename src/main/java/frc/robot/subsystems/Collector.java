@@ -33,7 +33,7 @@ public class Collector extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     if(m_rps > 0) {
-      m_collector1.setControl(collectorDutyCycle.withVelocity(m_rps));
+      m_collector1.setControl(collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
     }
   }
 
