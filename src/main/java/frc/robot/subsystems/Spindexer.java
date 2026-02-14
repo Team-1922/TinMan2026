@@ -53,7 +53,7 @@ public class Spindexer extends SubsystemBase {
       );
     }
     else if(m_Spindexer.getVelocity().getValueAsDouble() != 0){
-      m_Spindexer.set(0);
+      m_Spindexer.stopMotor();
     }
     SmartDashboard.putNumber("Spindexer Motor RPS", m_rps * Constants.Spindexer.kGearRatio);
   }
