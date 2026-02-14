@@ -45,12 +45,15 @@ public class Spindexer extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run   
-    if(m_rps > 0) {
+    if(m_rps != 0) {
       m_Spindexer.setControl(
-          m_spindexerDutyCycle.withVelocity(
-              m_rps * Constants.Spindexer.kGearRatio
-          )
+        m_spindexerDutyCycle.withVelocity(
+          m_rps * Constants.Spindexer.kGearRatio
+        )
       );
+    }
+    else if(m_Spindexer.getVelocity().getValueAsDouble() != 0){
+      m_Spindexer.set(0);
     }
     SmartDashboard.putNumber("Spindexer Motor RPS", m_rps * Constants.Spindexer.kGearRatio);
   }
