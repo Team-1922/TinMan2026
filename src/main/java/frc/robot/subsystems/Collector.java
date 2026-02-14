@@ -15,18 +15,16 @@ import frc.robot.generated.TunerConstants;
 public class Collector extends SubsystemBase {
  private final TalonFX m_collector1 = new TalonFX(Constants.Collector.kMotorId1, TunerConstants.kCANBus);
  private double m_rps = 0;
- private double m_collectorSpeed = 2;
 
   /** Creates a new Collector. */
   public Collector() {
-    SmartDashboard.putNumber("Collector Speed", m_collectorSpeed);
+    SmartDashboard.putNumber(getName(), m_rps);
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    SmartDashboard.getNumber("Collector Speed", m_collectorSpeed);
-
+    SmartDashboard.getNumber(getName(), m_rps);
   }
 
   public double setTargetRps(double rps) {
