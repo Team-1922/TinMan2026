@@ -58,7 +58,7 @@ public class RobotContainer {
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
-    public final Localization localization = new Localization();
+    public final Localization localization = new Localization(drivetrain);
 
     public final Shoot shoot = new Shoot(shooter, vision, feeder, spindexer, localization);
     public final StopShooter stopShooter = new StopShooter(shooter);

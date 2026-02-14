@@ -25,40 +25,36 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.generated.TunerConstants;
 
 public class Localization extends SubsystemBase {
-  LimelightHelpers.PoseEstimate m_poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight");
-  SwerveDrivePoseEstimator m_poseEstimator;
-  Pigeon2 m_gyro;
-  SwerveDriveKinematics m_kinematics;
+  private final CommandSwerveDrivetrain m_drivetrain;
   Field2d m_Field2d = new Field2d();
   /** Creates a new Localization. */
-  public Localization() {
-    m_gyro = new Pigeon2(TunerConstants.kPigeonId);
-    m_poseEstimator = new SwerveDrivePoseEstimator(m_kinematics, m_gyro.getRotation2d(), Constants.swerveModulePositions, null);
-    m_kinematics = new SwerveDriveKinematics(Constants.kinematicsTranslations);
-    
+  public Localization(CommandSwerveDrivetrain drivetrain) {
+    m_drivetrain = drivetrain;
   };
  
   public Pose2d getPose2dEstimate(){
-    return m_poseEstimate.pose;
+    return m_drivetrain.getPose();
   }
 
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    LimelightHelpers.SetRobotOrientation("limelight", m_poseEstimator.getEstimatedPosition().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    
+    LimelightHelpers.SetRobotOrientation("limelight-front", getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate mt2_estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
     Boolean doRejectUpdate = false;
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
-    if(Math.abs(m_gyro.getAngularVelocityXDevice().getValueAsDouble()) > 360 || m_poseEstimate.tagCount == 0)
+    if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720 || mt2_estimate.tagCount == 0)
     {
       doRejectUpdate = true;
     }
     if(!doRejectUpdate)
     {
-      m_poseEstimator.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-      m_poseEstimator.addVisionMeasurement(
-        m_poseEstimate.pose,
-        m_poseEstimate.timestampSeconds);
+      m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      m_drivetrain.addVisionMeasurement(
+        mt2_estimate.pose,
+        mt2_estimate.timestampSeconds);
     }
     m_Field2d.setRobotPose(getPose2dEstimate());
     SmartDashboard.putData("Field2d", m_Field2d);
