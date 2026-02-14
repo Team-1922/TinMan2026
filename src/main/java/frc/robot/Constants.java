@@ -36,8 +36,8 @@ public final class Constants {
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 0.08;
-            slot0Configs.kS = 0.40;
+            slot0Configs.kP = 0.11;
+            slot0Configs.kS = 0.60;
             return slot0Configs;
         }
     };
