@@ -9,7 +9,6 @@ import static edu.wpi.first.units.Units.*;
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
 
-import frc.robot.subsystems.Spindexer;
 
 /** Add your docs here. */
 public final class Constants {
@@ -20,7 +19,6 @@ public final class Constants {
     public static final double targetDistanceToTag = Meters.of(2.7).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
-    public static String drivebaseCanbusName2 = "rio";
     public static final CANBus superstructureCanbus = CANBus.roboRIO();
 
     public static class Collector {

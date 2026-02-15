@@ -26,6 +26,7 @@ import frc.robot.commands.Shoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Localization;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
@@ -55,9 +56,10 @@ public class RobotContainer {
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
-    public final Collector collector = new Collector();
+    public final Localization localization = new Localization(drivetrain);
 
-    public final Shoot shoot = new Shoot(shooter, vision, feeder, spindexer);
+    public final Shoot shoot = new Shoot(shooter, vision, feeder, spindexer, localization);
+    public final Collector collector = new Collector();
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
     public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
 
