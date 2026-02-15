@@ -8,7 +8,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.hardware.Pigeon2;
 
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.estimator.PoseEstimator;
 import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
@@ -80,7 +80,7 @@ public class Localization extends SubsystemBase {
     deltaX = m_hubpose.getX() - robotPose.getX();
     deltaY = m_hubpose.getY() - robotPose.getY();
     targetYaw = Math.atan2(deltaY, deltaX);
-    errorYaw =  targetYaw - robotPose.getRotation().getRadians();
+    errorYaw =   MathUtil.angleModulus(targetYaw - robotPose.getRotation().getRadians());
     errorX = deltaX - Constants.targetDistanceToHub * Math.cos(targetYaw);
     errorY = deltaY - Constants.targetDistanceToHub * Math.sin(targetYaw);
     

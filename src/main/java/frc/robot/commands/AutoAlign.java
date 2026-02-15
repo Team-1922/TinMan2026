@@ -28,9 +28,10 @@ public class AutoAlign extends Command {
   CommandSwerveDrivetrain m_drivetrain;
   Localization m_localization;
    
-    double m_xKp = .5;
-    double m_yKp = .5;
-    double m_yawKp = .5;
+    double m_xKp = 1;
+    double m_yKp = 1;
+    double m_yawKp = 1;
+    double m_aliancesign;
 
 
   /** Creates a new AutoAlign. */
@@ -40,6 +41,12 @@ public class AutoAlign extends Command {
     m_vision = vision;
     m_drivetrain = drivetrain;
     m_localization = localization;
+    
+    if(DriverStation.getAlliance().get() == Alliance.Blue) {
+      m_aliancesign = 1;
+    } else{
+      m_aliancesign = -1;
+    }
   }
 
   // Called when the command is initially scheduled.
@@ -50,8 +57,8 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
 
-    double vX = m_localization.getErrorX() * m_xKp;
-    double vY = m_localization.getErrorY() * m_yKp;
+    double vX = m_localization.getErrorX() * m_xKp * m_aliancesign;
+    double vY = m_localization.getErrorY() * m_yKp * m_aliancesign;
     double vYaw = m_localization.getErrorYaw() * m_yawKp;
     
     m_drivetrain.Move(vX, vY, vYaw);
