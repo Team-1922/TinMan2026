@@ -16,13 +16,13 @@ import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 
 public class Spindexer extends SubsystemBase {
- private final TalonFX m_Spindexer = new TalonFX(
-      Constants.Spindexer.kMotorId1,
-      Constants.superstructureCanbus
+  private final TalonFX m_Spindexer = new TalonFX(
+    Constants.Spindexer.kMotorId1,
+    Constants.superstructureCanbus
   );
   private double m_rps = 0;
   private VelocityDutyCycle m_spindexerDutyCycle = new VelocityDutyCycle(0)
-      .withSlot(0);
+    .withSlot(0);
 
   /** Creates a new Spindexer. */
   public Spindexer() {
@@ -33,25 +33,28 @@ public class Spindexer extends SubsystemBase {
     m_Spindexer.getConfigurator().apply(Constants.Spindexer.slot0());
   }
 
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run   
-    if(m_rps > 0) {
-      m_Spindexer.setControl(
-          m_spindexerDutyCycle.withVelocity(
-              m_rps * Constants.Spindexer.kGearRatio
-          )
-      );
-    }
-    SmartDashboard.putNumber("Spindexer Motor RPS", m_rps * Constants.Spindexer.kGearRatio);
-  }
-
+  
   public void setTargetRps(double rps) {
     m_rps = rps;
   }
 
-  public void stop() {
-    m_rps = 0;
-    m_Spindexer.stopMotor();
+  public void setIdleSpeed() {
+    m_rps = Constants.Spindexer.spindexerIdleSpeed;
+  }
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run   
+    if(m_rps != 0) {
+      m_Spindexer.setControl(
+        m_spindexerDutyCycle.withVelocity(
+          m_rps * Constants.Spindexer.kGearRatio
+        )
+      );
+    }
+    else if(m_Spindexer.getVelocity().getValueAsDouble() != 0){
+      m_Spindexer.stopMotor();
+    }
+    SmartDashboard.putNumber("Spindexer Motor RPS", m_rps * Constants.Spindexer.kGearRatio);
   }
 }

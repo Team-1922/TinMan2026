@@ -15,7 +15,7 @@ public final class Constants {
 
     public static final RobotType robotType = RobotType.TinmanV1;
 
-    public static final double offsetInMeters = Meters.of(.5).in(Meters);
+    public static final double offsetInMeters = Meters.of(.1).in(Meters);
     public static final double targetDistanceToTag = Meters.of(2.7).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
@@ -34,8 +34,8 @@ public final class Constants {
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 0.04;
-            slot0Configs.kS = 0.25;
+            slot0Configs.kP = 0.11;
+            slot0Configs.kS = 0.60;
             return slot0Configs;
         }
     };
@@ -48,6 +48,7 @@ public final class Constants {
     public static class Spindexer {
         public static final int kMotorId1 = 21;
         public static final double kGearRatio = 6;
+        public static final double spindexerIdleSpeed = 1.2;
         
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
