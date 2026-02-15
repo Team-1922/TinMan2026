@@ -39,7 +39,7 @@ public class Vision extends SubsystemBase {
   }
 
   public double getDist() {
-    return Constants.robotType == RobotType.TinmanV0 ? dist : Constants.targetDistanceToTag;
+    return Constants.robotType == RobotType.TinmanV0 ? dist : Constants.targetDistanceToHub;
   }
 
   public double getTx() {

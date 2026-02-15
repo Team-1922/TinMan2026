@@ -6,56 +6,60 @@ package frc.robot.commands;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.lang.annotation.Target;
 import java.lang.reflect.Array;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Vision;
 import frc.robot.Constants;
 import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlign extends Command {
   Vision m_vision;
-  CommandSwerveDrivetrain m_Drivetrain;
+  CommandSwerveDrivetrain m_drivetrain;
+  Localization m_localization;
    
-    double m_percentXOffsetToTag = 1.5;
-    int m_blueHubMiddleTag = 10;
-    int  m_redHubMiddleTag = 26;
-    double m_proportionalXSpeed = 1.5;
-    double m_proportionalRotatinalRate = .15;
+    double m_xKp = .5;
+    double m_yKp = .5;
+    double m_yawKp = .5;
 
 
   /** Creates a new AutoAlign. */
-  public AutoAlign(Vision vision, CommandSwerveDrivetrain drivetrain) {
+  public AutoAlign(Vision vision, CommandSwerveDrivetrain drivetrain, Localization localization) {
     // Use addRequirements() here to declare subsystem dependencies.
+    addRequirements(drivetrain);
     m_vision = vision;
-    m_Drivetrain = drivetrain; 
+    m_drivetrain = drivetrain;
+    m_localization = localization;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{m_redHubMiddleTag, m_blueHubMiddleTag});
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double speed = calculateSpeed();
-    double rotationRate = calculateRotatinalRate();
 
-    m_Drivetrain.driveRobotRelative( new ChassisSpeeds(speed, 0, rotationRate));
+    double vX = m_localization.getErrorX() * m_xKp;
+    double vY = m_localization.getErrorY() * m_yKp;
+    double vYaw = m_localization.getErrorYaw() * m_yawKp;
+    
+    m_drivetrain.Move(vX, vY, vYaw);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-  LimelightHelpers.SetFiducialIDFiltersOverride("limelight-front", new int[]{});
-  m_Drivetrain.driveRobotRelative(new ChassisSpeeds(0, 0, 0));
 }
 
   // Returns true when the command should end.
@@ -64,24 +68,4 @@ public class AutoAlign extends Command {
     return false;
   }
 
-  private double calculateSpeed() {
-    double speed = 0;
-
-    double distFromTag = m_vision.getDist();
-    if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters) {
-        speed = (distFromTag - Constants.targetDistanceToTag) * m_proportionalXSpeed; 
-    }
-
-    return speed;
-  }
-
-  private double calculateRotatinalRate() {
-    double rotationalRate = 0;
-    
-    if (m_vision.getTx() <= -m_percentXOffsetToTag || m_vision.getTx() >= m_percentXOffsetToTag) {
-      rotationalRate = -m_vision.getTx() * m_proportionalRotatinalRate;
-    }
-
-    return rotationalRate;
-  }
 }

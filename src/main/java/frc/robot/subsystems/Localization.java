@@ -20,6 +20,8 @@ import frc.robot.generated.TunerConstants;
 import frc.robot.Constants;
 import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.generated.TunerConstants;
@@ -27,9 +29,24 @@ import frc.robot.generated.TunerConstants;
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
   Field2d m_Field2d = new Field2d();
+  double deltaX;
+  double deltaY;
+  double targetYaw;
+  double errorYaw;
+  double errorX;
+  double errorY;
+    private final Pose2d m_hubpose;
+    final Pose2d blueHubPose2d = new Pose2d(5.22, 4.035, null);
+    final Pose2d redHubPose2d = new Pose2d(11.32, 4.035, null);
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
+    
+    if(DriverStation.getAlliance().get() == Alliance.Blue) {
+      m_hubpose = blueHubPose2d;
+    } else{
+      m_hubpose = redHubPose2d;
+    }
   };
  
   public Pose2d getPose2dEstimate(){
@@ -58,5 +75,30 @@ public class Localization extends SubsystemBase {
     }
     m_Field2d.setRobotPose(getPose2dEstimate());
     SmartDashboard.putData("Field2d", m_Field2d);
+
+    Pose2d robotPose = m_drivetrain.getPose();
+    deltaX = m_hubpose.getX() - robotPose.getX();
+    deltaY = m_hubpose.getY() - robotPose.getY();
+    targetYaw = Math.atan2(deltaY, deltaX);
+    errorYaw =  targetYaw - robotPose.getRotation().getRadians();
+    errorX = deltaX - Constants.targetDistanceToHub * Math.cos(targetYaw);
+    errorY = deltaY - Constants.targetDistanceToHub * Math.sin(targetYaw);
   }
+
+  public double getErrorX() {
+    return errorX;
+  }
+
+  public double getErrorY() {
+    return errorY;
+  }
+
+  public double getErrorYaw(){
+    return errorYaw;
+  }
+
+  public double distFromHub(){
+    return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+  }
+  
 }
