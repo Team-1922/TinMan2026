@@ -19,11 +19,11 @@ public class Shoot extends Command {
  private final Vision m_vision;
  private double m_spindexerRps = 3;
  private double m_feederRps = 50;
- private double m_shooterRps = 23.8;
+ private double m_shooterRps = 21; //23.8
  private final Spindexer m_spindexer;
  private final Feeder m_feeder;
  private final Localization m_localization;
- private final double m_shooterSpeedThreshold = 5;
+ private final double m_shooterSpeedThreshold = 4.6;
 
   /** Creates a new Shoot. */
   public Shoot(Shooter shooter, Vision vision, Feeder feeder, Spindexer spindexer, Localization localization) {
