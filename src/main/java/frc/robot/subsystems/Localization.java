@@ -83,6 +83,11 @@ public class Localization extends SubsystemBase {
     errorYaw =  targetYaw - robotPose.getRotation().getRadians();
     errorX = deltaX - Constants.targetDistanceToHub * Math.cos(targetYaw);
     errorY = deltaY - Constants.targetDistanceToHub * Math.sin(targetYaw);
+    
+    SmartDashboard.putNumber("target_yaw", targetYaw);
+    SmartDashboard.putNumber("error_x", errorX);
+    SmartDashboard.putNumber("error_y", errorY);
+    SmartDashboard.putNumber("error_yaw", errorYaw);
   }
 
   public double getErrorX() {
