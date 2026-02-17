@@ -11,7 +11,7 @@ import frc.robot.subsystems.Collector;
 public class Collect extends Command {
   /** Creates a new Collect. */
   Collector m_collector;
-  private double m_collectorRps = 10;
+  private double m_collectorRps = 25;
 
   public Collect(Collector collector) {
     // Use addRequirements() here to declare subsystem dependencies.
