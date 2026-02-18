@@ -29,13 +29,11 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Localization;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Collector;
 import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.commands.IdleSpindexer;
 
 public class RobotContainer {
-    public final Vision vision = new Vision();
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
                                                                                         // speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
@@ -58,10 +56,10 @@ public class RobotContainer {
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
 
-    public final Shoot shoot = new Shoot(shooter, vision, feeder, spindexer, localization);
+    public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
     public final Collector collector = new Collector();
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
-    public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain, localization);
+    public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
 
     public RobotContainer() {
         configureBindings();

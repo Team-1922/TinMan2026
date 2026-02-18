@@ -5,26 +5,16 @@
 
 package frc.robot.subsystems;
 
-
-import com.ctre.phoenix6.hardware.Pigeon2;
-
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.PoseEstimator;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-import frc.robot.generated.TunerConstants;
 import frc.robot.Constants;
-import edu.wpi.first.math.kinematics.Kinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.generated.TunerConstants;
 
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
@@ -35,18 +25,15 @@ public class Localization extends SubsystemBase {
   double errorYaw;
   double errorX;
   double errorY;
-    private final Pose2d m_hubpose;
-    final Pose2d blueHubPose2d = new Pose2d(5.22, 4.035, null);
-    final Pose2d redHubPose2d = new Pose2d(11.32, 4.035, null);
+  private final Pose2d m_hubpose;
+  final Pose2d blueHubPose2d = new Pose2d(5.22, 4.035, null);
+  final Pose2d redHubPose2d = new Pose2d(11.32, 4.035, null);
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
     
-    if(DriverStation.getAlliance().get() == Alliance.Blue) {
-      m_hubpose = blueHubPose2d;
-    } else{
-      m_hubpose = redHubPose2d;
-    }
+    m_hubpose = DriverStation.getAlliance().get() == 
+      Alliance.Blue ? blueHubPose2d : redHubPose2d;
   };
  
   public Pose2d getPose2dEstimate(){
@@ -80,7 +67,7 @@ public class Localization extends SubsystemBase {
     deltaX = m_hubpose.getX() - robotPose.getX();
     deltaY = m_hubpose.getY() - robotPose.getY();
     targetYaw = Math.atan2(deltaY, deltaX);
-    errorYaw =   MathUtil.angleModulus(targetYaw - robotPose.getRotation().getRadians());
+    errorYaw = MathUtil.angleModulus(targetYaw - robotPose.getRotation().getRadians());
     errorX = deltaX - Constants.targetDistanceToHub * Math.cos(targetYaw);
     errorY = deltaY - Constants.targetDistanceToHub * Math.sin(targetYaw);
     
@@ -103,7 +90,7 @@ public class Localization extends SubsystemBase {
   }
 
   public double distFromHub(){
-    return Math.sqrt(deltaX*deltaX + deltaY*deltaY);
+    return Math.sqrt(deltaX*deltaX + deltaY * deltaY);
   }
   
 }

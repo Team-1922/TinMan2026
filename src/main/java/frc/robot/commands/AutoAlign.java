@@ -4,61 +4,45 @@
 
 package frc.robot.commands;
 
-import static edu.wpi.first.units.Units.*;
-
-import java.lang.annotation.Target;
-import java.lang.reflect.Array;
-
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.ChassisSpeeds;
-import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Vision;
-import frc.robot.Constants;
-import frc.robot.LimelightHelpers;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class AutoAlign extends Command {
-  Vision m_vision;
   CommandSwerveDrivetrain m_drivetrain;
   Localization m_localization;
    
-    double m_xKp = 1;
-    double m_yKp = 1;
-    double m_yawKp = 1;
-    double m_aliancesign;
+  double m_xKp = 1;
+  double m_yKp = 1;
+  double m_yawKp = 1;
+  double m_alianceSign;
 
 
   /** Creates a new AutoAlign. */
-  public AutoAlign(Vision vision, CommandSwerveDrivetrain drivetrain, Localization localization) {
+  public AutoAlign(CommandSwerveDrivetrain drivetrain, Localization localization) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
-    m_vision = vision;
     m_drivetrain = drivetrain;
     m_localization = localization;
     
-    if(DriverStation.getAlliance().get() == Alliance.Blue) {
-      m_aliancesign = 1;
-    } else{
-      m_aliancesign = -1;
-    }
+    
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_alianceSign = DriverStation.getAlliance().get() == Alliance.Blue ? 1 : -1;
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
 
-    double vX = m_localization.getErrorX() * m_xKp * m_aliancesign;
-    double vY = m_localization.getErrorY() * m_yKp * m_aliancesign;
+    double vX = m_localization.getErrorX() * m_xKp * m_alianceSign;
+    double vY = m_localization.getErrorY() * m_yKp * m_alianceSign;
     double vYaw = m_localization.getErrorYaw() * m_yawKp;
     
     m_drivetrain.Move(vX, vY, vYaw);

@@ -10,13 +10,11 @@ import frc.robot.Constants;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
  private final Shooter m_shooter;
- private final Vision m_vision;
  private double m_spindexerRps = 3;
  private double m_feederRps = 50;
  private double m_shooterRps = 21; //23.8
@@ -26,10 +24,9 @@ public class Shoot extends Command {
  private final double m_shooterSpeedThreshold = 4.6;
 
   /** Creates a new Shoot. */
-  public Shoot(Shooter shooter, Vision vision, Feeder feeder, Spindexer spindexer, Localization localization) {
+  public Shoot(Shooter shooter, Feeder feeder, Spindexer spindexer, Localization localization) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
-    m_vision = vision;
     m_feeder = feeder;
     m_spindexer = spindexer;
     m_localization = localization;
