@@ -16,7 +16,7 @@ public final class Constants {
     public static final RobotType robotType = RobotType.TinmanV1;
 
     public static final double offsetInMeters = Meters.of(.1).in(Meters);
-    public static final double targetDistanceToTag = Meters.of(2.7).in(Meters);
+    public static final double targetDistanceToHub = Meters.of(2.75).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
     public static final CANBus superstructureCanbus = CANBus.roboRIO();
@@ -52,8 +52,8 @@ public final class Constants {
         
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = .06;
-            slot0Configs.kS = .1;
+            slot0Configs.kP = .1;
+            slot0Configs.kS = .5;
             return slot0Configs;
         }
     };

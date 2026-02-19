@@ -27,7 +27,7 @@ public class Spindexer extends SubsystemBase {
   /** Creates a new Spindexer. */
   public Spindexer() {
      MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
     m_Spindexer.getConfigurator().apply(motorConfig);
     m_Spindexer.getConfigurator().apply(Constants.Spindexer.slot0());

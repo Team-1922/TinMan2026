@@ -68,8 +68,8 @@ public class AutoAlign extends Command {
     double speed = 0;
 
     double distFromTag = m_vision.getDist();
-    if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters) {
-        speed = (distFromTag - Constants.targetDistanceToTag) * m_proportionalXSpeed; 
+    if (distFromTag <= Constants.targetDistanceToHub - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToHub + Constants.offsetInMeters) {
+        speed = (distFromTag - Constants.targetDistanceToHub) * m_proportionalXSpeed; 
     }
 
     return speed;
