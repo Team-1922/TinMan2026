@@ -18,7 +18,7 @@ public class AutoAlign extends Command {
   double m_xKp = 1;
   double m_yKp = 1;
   double m_yawKp = 1;
-  double m_alianceSign;
+  double m_alianceSign = 1;
 
 
   /** Creates a new AutoAlign. */

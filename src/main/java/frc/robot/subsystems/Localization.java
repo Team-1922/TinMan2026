@@ -32,11 +32,12 @@ public class Localization extends SubsystemBase {
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
     
-    m_hubpose = DriverStation.getAlliance().get() == 
-      Alliance.Blue ? blueHubPose2d : redHubPose2d;
+    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
+    ? blueHubPose2d 
+    : redHubPose2d;
   };
  
-  public Pose2d getPose2dEstimate(){
+  public Pose2d getPose2dEstimate() {
     return m_drivetrain.getPose();
   }
 
@@ -67,7 +68,8 @@ public class Localization extends SubsystemBase {
     deltaX = m_hubpose.getX() - robotPose.getX();
     deltaY = m_hubpose.getY() - robotPose.getY();
     targetYaw = Math.atan2(deltaY, deltaX);
-    errorYaw = MathUtil.angleModulus(targetYaw - robotPose.getRotation().getRadians());
+    errorYaw = 
+      MathUtil.angleModulus(targetYaw - robotPose.getRotation().getRadians());
     errorX = deltaX - Constants.targetDistanceToHub * Math.cos(targetYaw);
     errorY = deltaY - Constants.targetDistanceToHub * Math.sin(targetYaw);
     
@@ -85,11 +87,11 @@ public class Localization extends SubsystemBase {
     return errorY;
   }
 
-  public double getErrorYaw(){
+  public double getErrorYaw() {
     return errorYaw;
   }
 
-  public double distFromHub(){
+  public double distFromHub() {
     return Math.sqrt(deltaX*deltaX + deltaY * deltaY);
   }
   

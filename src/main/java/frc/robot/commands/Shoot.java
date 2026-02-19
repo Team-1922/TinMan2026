@@ -17,14 +17,17 @@ public class Shoot extends Command {
  private final Shooter m_shooter;
  private double m_spindexerRps = 3;
  private double m_feederRps = 50;
- private double m_shooterRps = 21; //23.8
+ private double m_shooterRps = 21;
  private final Spindexer m_spindexer;
  private final Feeder m_feeder;
  private final Localization m_localization;
  private final double m_shooterSpeedThreshold = 4.6;
+ private boolean isReadyToShoot;
 
   /** Creates a new Shoot. */
-  public Shoot(Shooter shooter, Feeder feeder, Spindexer spindexer, Localization localization) {
+  public Shoot(
+    Shooter shooter, Feeder feeder, Spindexer spindexer, Localization localization)
+  {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_feeder = feeder;
@@ -39,20 +42,22 @@ public class Shoot extends Command {
     SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
+    isReadyToShoot = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
-    m_shooter.setTargetRps(m_shooterRps);
-    m_spindexer.setTargetRps(m_spindexerRps);
+    m_shooter.setTargetRps(SmartDashboard.getNumber("Shooter RPS", m_shooterRps));
+    m_spindexer.setTargetRps(SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps));
     SmartDashboard.putNumber("Shooter Velocity", m_shooter.getVelocity());
-    if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.offsetInMeters){
+    if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold){
       if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold){
+        isReadyToShoot = true;
+      } 
+      if(isReadyToShoot){
         m_feeder.setTargetRps(m_feederRps);
-      } else{
-        m_feeder.stop();
       }
      } else if(m_feeder.getSpeed() > 0){
       m_feeder.stop();
@@ -65,6 +70,7 @@ public class Shoot extends Command {
     m_shooter.stop();
     m_spindexer.setIdleSpeed();
     m_feeder.stop();
+    isReadyToShoot = false;
   }
 
   // Returns true when the command should end.
