@@ -15,7 +15,10 @@ import frc.robot.Constants;
 import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
- private final TalonFX m_collector1 = new TalonFX(Constants.Collector.kMotorId1, Constants.superstructureCanbus);
+ private final TalonFX m_collector1 = new TalonFX(
+  Constants.Collector.kMotorId1, 
+  Constants.superstructureCanbus);
+
  private double m_rps = 0;
  private VelocityDutyCycle m_collectorDutyCycle = new VelocityDutyCycle(0).
     withSlot(0);

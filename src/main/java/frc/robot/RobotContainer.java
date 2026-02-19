@@ -22,10 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
-import frc.robot.commands.Feed;
-import frc.robot.commands.LoadShooter;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.StopShooter;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
@@ -61,9 +58,6 @@ public class RobotContainer {
     public final Collector collector = new Collector();
 
     public final Shoot shoot = new Shoot(shooter, vision, feeder, spindexer);
-    public final StopShooter stopShooter = new StopShooter(shooter);
-    public final LoadShooter loadShooter = new LoadShooter(spindexer);
-    public final Feed feed = new Feed(spindexer);
     public final Collect collect = new Collect(collector);
 
     public RobotContainer() {
