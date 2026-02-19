@@ -11,6 +11,7 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Vision;
+import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
@@ -21,14 +22,17 @@ public class Shoot extends Command {
  private double m_shooterRps = 21;
  private final Spindexer m_spindexer;
  private final Feeder m_feeder;
+ private final Localization m_localization;
+ private final double m_shooterSpeedThreshold = 5;
 
   /** Creates a new Shoot. */
-  public Shoot(Shooter shooter, Vision vision, Feeder feeder, Spindexer spindexer) {
+  public Shoot(Shooter shooter, Vision vision, Feeder feeder, Spindexer spindexer, Localization localization) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_vision = vision;
     m_feeder = feeder;
     m_spindexer = spindexer;
+    m_localization = localization;
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
@@ -44,23 +48,28 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     double distFromTag = m_vision.getDist();
-
-   // if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
+    m_shooter.setTargetRps(m_shooterRps);
+    m_spindexer.setTargetRps(m_spindexerRps);
+    SmartDashboard.putNumber("Shooter Velocity", m_shooter.getVelocity());
+    //if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
         // m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
         // m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
         // m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
-
-      m_shooter.setTargetRps(m_shooterRps);
-      m_spindexer.setTargetRps(m_spindexerRps);
-      m_feeder.setTargetRps(m_feederRps);
-   // }
+      if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold){
+        m_feeder.setTargetRps(m_feederRps);
+      } else{
+        m_feeder.stop();
+      }
+    /* } else if(m_feeder.getSpeed() > 0){
+      m_feeder.stop();
+    }*/
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     m_shooter.stop();
-    m_spindexer.stop();
+    m_spindexer.setIdleSpeed();
     m_feeder.stop();
   }
 

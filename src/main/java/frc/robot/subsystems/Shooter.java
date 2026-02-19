@@ -45,6 +45,10 @@ public class Shooter extends SubsystemBase {
     ));
   }
 
+  public double getVelocity(){
+    return m_leaderMotor.getVelocity().getValueAsDouble();
+  }
+
   public void setTargetRps(double rps) {
     m_rps = rps;
   }

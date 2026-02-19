@@ -56,4 +56,8 @@ public class Feeder extends SubsystemBase {
     m_rps = 0;
     m_Feeder.stopMotor();
   }
+
+  public double getSpeed(){
+    return m_Feeder.getVelocity().getValueAsDouble();
+  }
 }
