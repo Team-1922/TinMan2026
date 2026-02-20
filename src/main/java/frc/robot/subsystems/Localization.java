@@ -5,34 +5,39 @@
 
 package frc.robot.subsystems;
 
-
-import com.ctre.phoenix6.hardware.Pigeon2;
-
-
+import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
-import edu.wpi.first.math.estimator.PoseEstimator;
-import edu.wpi.first.math.estimator.SwerveDrivePoseEstimator;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
-import frc.robot.generated.TunerConstants;
 import frc.robot.Constants;
-import edu.wpi.first.math.kinematics.Kinematics;
-import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.generated.TunerConstants;
 
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
-  Field2d m_Field2d = new Field2d();
+  private Field2d m_Field2d = new Field2d();
+  private double m_deltaX;
+  private double m_deltaY;
+  private double m_targetYaw;
+  private double m_errorYaw;
+  private double m_errorX;
+  private double m_errorY;
+  private final Pose2d m_hubpose;
+  private final Pose2d m_blueHubPose2d = new Pose2d(5.22, 4.035, null);
+  private final Pose2d m_redHubPose2d = new Pose2d(11.32, 4.035, null);
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
+    
+    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
+    ? m_blueHubPose2d 
+    : m_redHubPose2d;
   };
  
-  public Pose2d getPose2dEstimate(){
+  public Pose2d getPose2dEstimate() {
     return m_drivetrain.getPose();
   }
 
@@ -58,5 +63,36 @@ public class Localization extends SubsystemBase {
     }
     m_Field2d.setRobotPose(getPose2dEstimate());
     SmartDashboard.putData("Field2d", m_Field2d);
+
+    Pose2d robotPose = m_drivetrain.getPose();
+    m_deltaX = m_hubpose.getX() - robotPose.getX();
+    m_deltaY = m_hubpose.getY() - robotPose.getY();
+    m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
+    m_errorYaw = 
+      MathUtil.angleModulus(m_targetYaw - robotPose.getRotation().getRadians());
+    m_errorX = m_deltaX - Constants.targetDistanceToHub * Math.cos(m_targetYaw);
+    m_errorY = m_deltaY - Constants.targetDistanceToHub * Math.sin(m_targetYaw);
+    
+    SmartDashboard.putNumber("target_yaw", m_targetYaw);
+    SmartDashboard.putNumber("error_x", m_errorX);
+    SmartDashboard.putNumber("error_y", m_errorY);
+    SmartDashboard.putNumber("error_yaw", m_errorYaw);
   }
+
+  public double getM_errorX() {
+    return m_errorX;
+  }
+
+  public double getM_errorY() {
+    return m_errorY;
+  }
+
+  public double getM_errorYaw() {
+    return m_errorYaw;
+  }
+
+  public double distFromHub() {
+    return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
+  }
+  
 }
