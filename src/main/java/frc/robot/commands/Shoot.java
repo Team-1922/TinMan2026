@@ -33,15 +33,16 @@ public class Shoot extends Command {
     m_feeder = feeder;
     m_spindexer = spindexer;
     m_localization = localization;
+    SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
+    SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
+    SmartDashboard.putNumber("Feeder RPS", m_feederRps);
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
-    SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
-    SmartDashboard.putNumber("Feeder RPS", m_feederRps);
+    
     m_isReadyToShoot = false;
   }
 
@@ -49,8 +50,10 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
-    m_shooter.setTargetRps(SmartDashboard.getNumber("Shooter RPS", m_shooterRps));
-    m_spindexer.setTargetRps(SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps));
+    m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
+    m_shooter.setTargetRps(m_shooterRps);
+    m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
+    m_spindexer.setTargetRps(m_spindexerRps);
     if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold){
       if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold){
         m_isReadyToShoot = true;
@@ -69,7 +72,6 @@ public class Shoot extends Command {
     m_shooter.stop();
     m_spindexer.setIdleSpeed();
     m_feeder.stop();
-    m_isReadyToShoot = false;
   }
 
   // Returns true when the command should end.
