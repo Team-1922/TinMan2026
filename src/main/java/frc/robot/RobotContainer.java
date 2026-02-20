@@ -30,6 +30,7 @@ import frc.robot.subsystems.Localization;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
+import frc.robot.commands.Collect;
 import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.commands.IdleSpindexer;
 
@@ -58,6 +59,8 @@ public class RobotContainer {
 
     public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
     public final Collector collector = new Collector();
+    public final Collect collect = new Collect(collector);
+
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
     public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
 
@@ -89,6 +92,7 @@ public class RobotContainer {
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
+        DriverController.leftTrigger().whileTrue(collect);
         DriverController.rightTrigger()
             .whileTrue( new ParallelCommandGroup(autoAlign, shoot));
         DriverController.rightBumper().whileTrue(shoot);
