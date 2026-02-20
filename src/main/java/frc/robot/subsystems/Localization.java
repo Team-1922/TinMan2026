@@ -18,23 +18,23 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
-  Field2d m_Field2d = new Field2d();
-  double m_deltaX;
-  double m_deltaY;
-  double m_targetYaw;
-  double m_errorYaw;
-  double m_errorX;
-  double m_errorY;
+  private Field2d m_Field2d = new Field2d();
+  private double m_deltaX;
+  private double m_deltaY;
+  private double m_targetYaw;
+  private double m_errorYaw;
+  private double m_errorX;
+  private double m_errorY;
   private final Pose2d m_hubpose;
-  final Pose2d blueHubPose2d = new Pose2d(5.22, 4.035, null);
-  final Pose2d redHubPose2d = new Pose2d(11.32, 4.035, null);
+  private final Pose2d m_blueHubPose2d = new Pose2d(5.22, 4.035, null);
+  private final Pose2d m_redHubPose2d = new Pose2d(11.32, 4.035, null);
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
     
     m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
-    ? blueHubPose2d 
-    : redHubPose2d;
+    ? m_blueHubPose2d 
+    : m_redHubPose2d;
   };
  
   public Pose2d getPose2dEstimate() {

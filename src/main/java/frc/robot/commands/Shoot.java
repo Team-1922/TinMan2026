@@ -22,7 +22,7 @@ public class Shoot extends Command {
  private final Feeder m_feeder;
  private final Localization m_localization;
  private final double m_shooterSpeedThreshold = 4.6;
- private boolean isReadyToShoot;
+ private boolean m_isReadyToShoot;
 
   /** Creates a new Shoot. */
   public Shoot(
@@ -42,7 +42,7 @@ public class Shoot extends Command {
     SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
-    isReadyToShoot = false;
+    m_isReadyToShoot = false;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -54,9 +54,9 @@ public class Shoot extends Command {
     SmartDashboard.putNumber("Shooter Velocity", m_shooter.getVelocity());
     if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold){
       if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold){
-        isReadyToShoot = true;
+        m_isReadyToShoot = true;
       } 
-      if(isReadyToShoot){
+      if(m_isReadyToShoot){
         m_feeder.setTargetRps(m_feederRps);
       }
      } else if(m_feeder.getSpeed() > 0){
@@ -70,7 +70,7 @@ public class Shoot extends Command {
     m_shooter.stop();
     m_spindexer.setIdleSpeed();
     m_feeder.stop();
-    isReadyToShoot = false;
+    m_isReadyToShoot = false;
   }
 
   // Returns true when the command should end.
