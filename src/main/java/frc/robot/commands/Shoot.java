@@ -51,7 +51,6 @@ public class Shoot extends Command {
     double distFromHub = m_localization.distFromHub();
     m_shooter.setTargetRps(SmartDashboard.getNumber("Shooter RPS", m_shooterRps));
     m_spindexer.setTargetRps(SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps));
-    SmartDashboard.putNumber("Shooter Velocity", m_shooter.getVelocity());
     if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold){
       if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold){
         m_isReadyToShoot = true;
