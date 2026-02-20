@@ -41,9 +41,9 @@ public class AutoAlign extends Command {
   @Override
   public void execute() {
 
-    double vX = m_localization.getErrorX() * m_xKp * m_alianceSign;
-    double vY = m_localization.getErrorY() * m_yKp * m_alianceSign;
-    double vYaw = m_localization.getErrorYaw() * m_yawKp;
+    double vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
+    double vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
+    double vYaw = m_localization.getM_errorYaw() * m_yawKp;
     
     m_drivetrain.Move(vX, vY, vYaw);
   }

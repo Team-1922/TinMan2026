@@ -19,12 +19,12 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
   Field2d m_Field2d = new Field2d();
-  double deltaX;
-  double deltaY;
-  double targetYaw;
-  double errorYaw;
-  double errorX;
-  double errorY;
+  double m_deltaX;
+  double m_deltaY;
+  double m_targetYaw;
+  double m_errorYaw;
+  double m_errorX;
+  double m_errorY;
   private final Pose2d m_hubpose;
   final Pose2d blueHubPose2d = new Pose2d(5.22, 4.035, null);
   final Pose2d redHubPose2d = new Pose2d(11.32, 4.035, null);
@@ -65,34 +65,34 @@ public class Localization extends SubsystemBase {
     SmartDashboard.putData("Field2d", m_Field2d);
 
     Pose2d robotPose = m_drivetrain.getPose();
-    deltaX = m_hubpose.getX() - robotPose.getX();
-    deltaY = m_hubpose.getY() - robotPose.getY();
-    targetYaw = Math.atan2(deltaY, deltaX);
-    errorYaw = 
-      MathUtil.angleModulus(targetYaw - robotPose.getRotation().getRadians());
-    errorX = deltaX - Constants.targetDistanceToHub * Math.cos(targetYaw);
-    errorY = deltaY - Constants.targetDistanceToHub * Math.sin(targetYaw);
+    m_deltaX = m_hubpose.getX() - robotPose.getX();
+    m_deltaY = m_hubpose.getY() - robotPose.getY();
+    m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
+    m_errorYaw = 
+      MathUtil.angleModulus(m_targetYaw - robotPose.getRotation().getRadians());
+    m_errorX = m_deltaX - Constants.targetDistanceToHub * Math.cos(m_targetYaw);
+    m_errorY = m_deltaY - Constants.targetDistanceToHub * Math.sin(m_targetYaw);
     
-    SmartDashboard.putNumber("target_yaw", targetYaw);
-    SmartDashboard.putNumber("error_x", errorX);
-    SmartDashboard.putNumber("error_y", errorY);
-    SmartDashboard.putNumber("error_yaw", errorYaw);
+    SmartDashboard.putNumber("target_yaw", m_targetYaw);
+    SmartDashboard.putNumber("error_x", m_errorX);
+    SmartDashboard.putNumber("error_y", m_errorY);
+    SmartDashboard.putNumber("error_yaw", m_errorYaw);
   }
 
-  public double getErrorX() {
-    return errorX;
+  public double getM_errorX() {
+    return m_errorX;
   }
 
-  public double getErrorY() {
-    return errorY;
+  public double getM_errorY() {
+    return m_errorY;
   }
 
-  public double getErrorYaw() {
-    return errorYaw;
+  public double getM_errorYaw() {
+    return m_errorYaw;
   }
 
   public double distFromHub() {
-    return Math.sqrt(deltaX*deltaX + deltaY * deltaY);
+    return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
   }
   
 }
