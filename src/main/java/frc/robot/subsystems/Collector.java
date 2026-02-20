@@ -37,9 +37,8 @@ public class Collector extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public double setTargetRps(double rps) {
+  public void setTargetRps(double rps) {
     m_rps = rps;
-    return rps;
   }
   
   public void collect() {
