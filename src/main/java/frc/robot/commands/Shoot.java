@@ -18,8 +18,8 @@ public class Shoot extends Command {
  private final Shooter m_shooter;
  private final Vision m_vision;
  private double m_spindexerRps = 3;
- private double m_feederRps = 50;
- private double m_shooterRps = 23;
+ private double m_feederRps = 65;
+ private double m_shooterRps = 25;
  private final Spindexer m_spindexer;
  private final Feeder m_feeder;
  private final Localization m_localization;
@@ -50,20 +50,18 @@ public class Shoot extends Command {
     double distFromTag = m_vision.getDist();
     m_shooter.setTargetRps(m_shooterRps);
     m_spindexer.setTargetRps(m_spindexerRps);
-    SmartDashboard.putNumber("Shooter Velocity", m_shooter.getVelocity());
-    //if (distFromTag <= Constants.targetDistanceToTag - Constants.offsetInMeters || distFromTag >= Constants.targetDistanceToTag + Constants.offsetInMeters){
-        // m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
-        // m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
-        // m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
+ //   if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold){
       if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold){
         m_feeder.setTargetRps(m_feederRps);
       } else{
         m_feeder.stop();
       }
-    /* } else if(m_feeder.getSpeed() > 0){
-      m_feeder.stop();
-    }*/
+   //  } else
+  //  if(m_feeder.getSpeed() > 0){
+  //     m_feeder.stop();
+  //   }
   }
+  
 
   // Called once the command ends or is interrupted.
   @Override
