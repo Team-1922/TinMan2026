@@ -27,9 +27,9 @@ public class Shoot extends Command {
 
   /** Creates a new Shoot. */
   public Shoot(
-      Shooter shooter, 
-      Feeder feeder, 
-      Spindexer spindexer, 
+      Shooter shooter,
+      Feeder feeder,
+      Spindexer spindexer,
       Localization localization
       ) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -59,11 +59,11 @@ public class Shoot extends Command {
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
 
-    if (!m_requireAlign ||
-        Math.abs(
-        distFromHub
-        - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold) 
-        {
+    if (
+        !m_requireAlign
+        || Math.abs(distFromHub- Constants.targetDistanceToHub)
+            < Constants.autoAlignDistanceThreshold
+    ) {
       m_shooter.setTargetRps(m_shooterRps);
       m_spindexer.setTargetRps(m_spindexerRps);
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
