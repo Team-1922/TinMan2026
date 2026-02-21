@@ -15,6 +15,8 @@ import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
@@ -56,9 +58,10 @@ public class RobotContainer {
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
-    public final Collector collector = new Collector();
-    public final Collect collect = new Collect(collector);
+    public final Collector collector = new Collector();  
+    private final SendableChooser<Command> autoChooser;
 
+    public final Collect collect = new Collect(collector);
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
     public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
     public final AutoAlign autoAutoAlign = new AutoAlign(drivetrain, localization);
@@ -70,6 +73,8 @@ public class RobotContainer {
         
         NamedCommands.registerCommand("shoot", autoShoot);
         NamedCommands.registerCommand("AutoAlign",autoAutoAlign);
+        autoChooser = AutoBuilder.buildAutoChooser();
+        SmartDashboard.putData("Auto Chooser", autoChooser);
     }
     
     private void configureBindings() {
@@ -114,22 +119,6 @@ public class RobotContainer {
     
 
     public Command getAutonomousCommand() {
-        //return autoChooser.getSelected();
-        return new ParallelCommandGroup(
-            idleSpindexer, 
-            new PathPlannerAuto("Straight Auto")
-        );
-        /*
-        try {
-            // Load the path you want to follow using its name in the GUI
-            PathPlannerPath path = PathPlannerPath.fromPathFile("Straight Path");
-            // Create a path following command using AutoBuilder. This will also trigger
-            // event markers.
-            return AutoBuilder.followPath(path);
-        } catch (Exception e) {
-            DriverStation.reportError("Big oops: " + e.getMessage(), e.getStackTrace());
-            return Commands.none();
-        }
-        */
+        return autoChooser.getSelected();
     }
 }
