@@ -23,7 +23,7 @@ public class Shoot extends Command {
   private final Localization m_localization;
   private final double m_shooterSpeedThreshold = 4.6;
   private boolean m_isReadyToShoot;
-  private boolean m_wihoutAlign = false;
+  private boolean m_requireAlign = false;
 
   /** Creates a new Shoot. */
   public Shoot(
@@ -36,7 +36,7 @@ public class Shoot extends Command {
     SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
-    SmartDashboard.putBoolean("Are we testing without Auto Align?", m_wihoutAlign);
+    SmartDashboard.putBoolean("Requires Align", m_requireAlign);
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
@@ -52,13 +52,13 @@ public class Shoot extends Command {
   public void execute() {
     double distFromHub = m_localization.distFromHub();
     m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
-    m_shooter.setTargetRps(m_shooterRps);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
-    m_spindexer.setTargetRps(m_spindexerRps);
-    m_wihoutAlign = SmartDashboard.getBoolean("Are we testing without Auto Align?", m_wihoutAlign);
-    if (!m_wihoutAlign) {
-      if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold) {
-        if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
+    m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
+
+    if (!m_requireAlign || Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold) {
+       m_shooter.setTargetRps(m_shooterRps);
+       m_spindexer.setTargetRps(m_spindexerRps);
+      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
           m_isReadyToShoot = true;
         }
         if (m_isReadyToShoot) {
@@ -66,17 +66,7 @@ public class Shoot extends Command {
         }
       } else if (m_feeder.getSpeed() > 0) {
         m_feeder.stop();
-      }
-    } else if (m_wihoutAlign) {
-      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
-        m_isReadyToShoot = true;
-      }
-      if (m_isReadyToShoot) {
-        m_feeder.setTargetRps(m_feederRps);
-      } else if (m_feeder.getSpeed() > 0) {
-        m_feeder.stop();
-      }
-    }
+        }
   }
 
   // Called once the command ends or is interrupted.
