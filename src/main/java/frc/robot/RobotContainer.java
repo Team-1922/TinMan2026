@@ -23,20 +23,20 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
-import frc.robot.commands.Feed;
-import frc.robot.commands.LoadShooter;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.StopShooter;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
+import frc.robot.subsystems.Feeder;
+import frc.robot.subsystems.Localization;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
-import frc.robot.subsystems.Vision;
 import frc.robot.subsystems.Collector;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import frc.robot.commands.Collect;
+import com.pathplanner.lib.auto.NamedCommands;
+import frc.robot.commands.IdleSpindexer;
 
 public class RobotContainer {
-    public final Vision vision = new Vision();
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
                                                                                         // speed
     private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
@@ -54,23 +54,27 @@ public class RobotContainer {
     private final CommandXboxController DriverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final AutoAlign autoAlign = new AutoAlign(vision, drivetrain);
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
+    public final Feeder feeder = new Feeder();
+    public final Localization localization = new Localization(drivetrain);
 
-    public final Shoot shoot = new Shoot(shooter, vision);
-    public final StopShooter stopShooter = new StopShooter(shooter);
-    public final LoadShooter loadShooter = new LoadShooter(spindexer);
-    public final Feed feed = new Feed(spindexer);
+    public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
     public final Collector collector = new Collector();
 
     private final SendableChooser<Command> autoChooser;
-   
+    public final Collect collect = new Collect(collector);
+
+    public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
+    public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
 
     public RobotContainer() {
         configureBindings();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+        
+        NamedCommands.registerCommand("idleSpindexer", idleSpindexer);
+
     }
     
     private void configureBindings() {
@@ -94,10 +98,10 @@ public class RobotContainer {
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
-        DriverController.x().whileTrue(autoAlign);
-        DriverController.rightTrigger().whileTrue(shoot).whileFalse(stopShooter);
-        DriverController.leftTrigger().whileTrue(feed);
-        DriverController.rightBumper().whileTrue( new ParallelCommandGroup(autoAlign, shoot));
+        DriverController.leftTrigger().whileTrue(collect);
+        DriverController.rightTrigger()
+            .whileTrue( new ParallelCommandGroup(autoAlign, shoot));
+        DriverController.rightBumper().whileTrue(shoot);
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.

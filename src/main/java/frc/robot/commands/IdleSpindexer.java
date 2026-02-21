@@ -8,34 +8,32 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.Spindexer;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class LoadShooter extends Command {
+public class IdleSpindexer extends Command {
   Spindexer m_spindexer;
-
-  /** Creates a new loadShooter. */
-  public LoadShooter(Spindexer spindexer) {
+  /** Creates a new IdleSpindexer. */
+  public IdleSpindexer(Spindexer spindexer) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_spindexer = spindexer;
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_spindexer.loadShooter();
+    
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_spindexer.setIdleSpeed();
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    return true; //this command just needs to start the spindexer and stop
   }
 }

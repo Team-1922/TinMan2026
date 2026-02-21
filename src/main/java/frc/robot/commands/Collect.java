@@ -5,33 +5,36 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.subsystems.Shooter;
-import frc.robot.subsystems.Spindexer;
+import frc.robot.subsystems.Collector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class StopShooter extends Command {
-  Shooter m_shooter;
+public class Collect extends Command {
+  /** Creates a new Collect. */
+  Collector m_collector;
+  private double m_collectorRps = 25;
 
-  /** Creates a new StopShooter. */
-  public StopShooter(Shooter shooter) {
+  public Collect(Collector collector) {
     // Use addRequirements() here to declare subsystem dependencies.
-    m_shooter = shooter;
+    m_collector = collector;
+    addRequirements(collector);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
+      m_collector.setTargetRps(m_collectorRps);
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_shooter.Shoot(0, 0);
+    m_collector.collect();
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
+    m_collector.stopCollector();
   }
 
   // Returns true when the command should end.
