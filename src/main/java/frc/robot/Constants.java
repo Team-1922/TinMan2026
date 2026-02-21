@@ -8,6 +8,9 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.Slot0Configs;
+import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 
 
 /** Add your docs here. */
@@ -52,6 +55,17 @@ public final class Constants {
     public static class Shooter{
         public static final int kLeaderMotorId = 19;
         public static final int kFollowerMotorId = 20;
+        public static final double kGearRatio = 1;
+
+        public static TalonFXConfiguration configs(){
+            var config = new TalonFXConfiguration();
+                config.Slot0.kP = 999999.0;
+                config.TorqueCurrent.PeakForwardTorqueCurrent = 40.0;
+                config.TorqueCurrent.PeakReverseTorqueCurrent = 0.0;
+                config.MotorOutput.PeakForwardDutyCycle = 1.0;
+                config.MotorOutput.PeakReverseDutyCycle = 0.0;
+                return config;
+        }        
     };
     
     public static class Spindexer {
