@@ -56,19 +56,20 @@ public class RobotContainer {
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
-
-    public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
     public final Collector collector = new Collector();
     public final Collect collect = new Collect(collector);
 
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
     public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
+    public final AutoAlign autoAutoAlign = new AutoAlign(drivetrain, localization);
+    public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
+    public final Shoot autoShoot = new Shoot(shooter, feeder, spindexer, localization);
 
     public RobotContainer() {
         configureBindings();
         
-        NamedCommands.registerCommand("idleSpindexer", idleSpindexer);
-
+        NamedCommands.registerCommand("shoot", autoShoot);
+        NamedCommands.registerCommand("AutoAlign",autoAutoAlign);
     }
     
     private void configureBindings() {
