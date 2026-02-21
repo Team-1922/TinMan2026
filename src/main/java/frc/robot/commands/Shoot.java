@@ -14,20 +14,20 @@ import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
- private final Shooter m_shooter;
- private double m_spindexerRps = 3;
- private double m_feederRps = 50;
- private double m_shooterRps = 21;
- private final Spindexer m_spindexer;
- private final Feeder m_feeder;
- private final Localization m_localization;
- private final double m_shooterSpeedThreshold = 4.6;
- private boolean m_isReadyToShoot;
+  private final Shooter m_shooter;
+  private double m_spindexerRps = 3;
+  private double m_feederRps = 50;
+  private double m_shooterRps = 21;
+  private final Spindexer m_spindexer;
+  private final Feeder m_feeder;
+  private final Localization m_localization;
+  private final double m_shooterSpeedThreshold = 4.6;
+  private boolean m_isReadyToShoot;
+  private boolean m_wihoutAlign = false;
 
   /** Creates a new Shoot. */
   public Shoot(
-    Shooter shooter, Feeder feeder, Spindexer spindexer, Localization localization)
-  {
+      Shooter shooter, Feeder feeder, Spindexer spindexer, Localization localization) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_feeder = feeder;
@@ -36,13 +36,14 @@ public class Shoot extends Command {
     SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
+    SmartDashboard.putBoolean("Are we testing without Auto Align?", m_wihoutAlign);
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    
+
     m_isReadyToShoot = false;
   }
 
@@ -54,15 +55,27 @@ public class Shoot extends Command {
     m_shooter.setTargetRps(m_shooterRps);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_spindexer.setTargetRps(m_spindexerRps);
-    if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold){
-      if(m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold){
-        m_isReadyToShoot = true;
-      } 
-      if(m_isReadyToShoot){
-        m_feeder.setTargetRps(m_feederRps);
+    m_wihoutAlign = SmartDashboard.getBoolean("Are we testing without Auto Align?", m_wihoutAlign);
+    if (!m_wihoutAlign) {
+      if (Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold) {
+        if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
+          m_isReadyToShoot = true;
+        }
+        if (m_isReadyToShoot) {
+          m_feeder.setTargetRps(m_feederRps);
+        }
+      } else if (m_feeder.getSpeed() > 0) {
+        m_feeder.stop();
       }
-     } else if(m_feeder.getSpeed() > 0){
-      m_feeder.stop();
+    } else if (m_wihoutAlign) {
+      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
+        m_isReadyToShoot = true;
+      }
+      if (m_isReadyToShoot) {
+        m_feeder.setTargetRps(m_feederRps);
+      } else if (m_feeder.getSpeed() > 0) {
+        m_feeder.stop();
+      }
     }
   }
 
