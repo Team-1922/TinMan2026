@@ -23,11 +23,15 @@ public class Shoot extends Command {
   private final Localization m_localization;
   private final double m_shooterSpeedThreshold = 4.6;
   private boolean m_isReadyToShoot;
-  private boolean m_requireAlign = false;
+  private boolean m_requireAlign = true;
 
   /** Creates a new Shoot. */
   public Shoot(
-      Shooter shooter, Feeder feeder, Spindexer spindexer, Localization localization) {
+      Shooter shooter, 
+      Feeder feeder, 
+      Spindexer spindexer, 
+      Localization localization
+      ) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_feeder = feeder;
@@ -55,18 +59,22 @@ public class Shoot extends Command {
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
 
-    if (!m_requireAlign || Math.abs(distFromHub - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold) {
-       m_shooter.setTargetRps(m_shooterRps);
-       m_spindexer.setTargetRps(m_spindexerRps);
+    if (!m_requireAlign ||
+        Math.abs(
+        distFromHub
+        - Constants.targetDistanceToHub) < Constants.autoAlignDistanceThreshold) 
+        {
+      m_shooter.setTargetRps(m_shooterRps);
+      m_spindexer.setTargetRps(m_spindexerRps);
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
-          m_isReadyToShoot = true;
-        }
-        if (m_isReadyToShoot) {
-          m_feeder.setTargetRps(m_feederRps);
-        }
-      } else if (m_feeder.getSpeed() > 0) {
-        m_feeder.stop();
-        }
+        m_isReadyToShoot = true;
+      }
+      if (m_isReadyToShoot) {
+        m_feeder.setTargetRps(m_feederRps);
+      }
+    } else if (m_feeder.getSpeed() > 0) {
+      m_feeder.stop();
+    }
   }
 
   // Called once the command ends or is interrupted.

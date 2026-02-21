@@ -95,8 +95,13 @@ public class RobotContainer {
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
         DriverController.leftTrigger().whileTrue(collect);
         DriverController.rightTrigger()
-            .whileTrue( new ParallelCommandGroup(autoAlign, new Shoot(shooter, feeder, spindexer, localization)));
-        DriverController.rightBumper().whileTrue(new Shoot(shooter, feeder, spindexer, localization));
+            .whileTrue( 
+            new ParallelCommandGroup(autoAlign, 
+            new Shoot(shooter, feeder, spindexer, localization)
+            ));
+        DriverController.rightBumper().whileTrue(
+            new Shoot(shooter, feeder, spindexer, localization)
+            );
 
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
