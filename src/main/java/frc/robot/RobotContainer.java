@@ -58,13 +58,11 @@ public class RobotContainer {
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
+    public final Collector collector = new Collector();  
+    private final SendableChooser<Command> autoChooser;
 
     public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
-    public final Collector collector = new Collector();
-
-    private final SendableChooser<Command> autoChooser;
     public final Collect collect = new Collect(collector);
-
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
     public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
 
@@ -72,9 +70,6 @@ public class RobotContainer {
         configureBindings();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
-        
-        NamedCommands.registerCommand("idleSpindexer", idleSpindexer);
-
     }
     
     private void configureBindings() {
@@ -120,6 +115,5 @@ public class RobotContainer {
 
     public Command getAutonomousCommand() {
         return autoChooser.getSelected();
-        //return new PathPlannerAuto("Straight Auto");
     }
 }
