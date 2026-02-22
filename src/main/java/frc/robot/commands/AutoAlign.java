@@ -45,7 +45,7 @@ public class AutoAlign extends Command {
     double vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
     double vYaw = m_localization.getM_errorYaw() * m_yawKp;
     
-    m_drivetrain.Move(vX, vY, vYaw);
+    m_drivetrain.Move(vX * 5, vY * 5, vYaw);
   }
 
   // Called once the command ends or is interrupted.
