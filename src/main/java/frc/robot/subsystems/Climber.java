@@ -33,6 +33,7 @@ public class Climber extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    
   }
 
   public double setTargetRps(double rps) {
