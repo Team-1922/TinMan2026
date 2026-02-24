@@ -5,15 +5,21 @@
     "data": {
       "commands": [
         {
+          "type": "named",
+          "data": {
+            "name": "setBotPose"
+          }
+        },
+        {
           "type": "path",
           "data": {
-            "pathName": "CurvyPath"
+            "pathName": "CurvyPath.0"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "AutoAlign"
+            "name": "shoot"
           }
         }
       ]
