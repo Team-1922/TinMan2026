@@ -45,4 +45,10 @@ public class Climber extends SubsystemBase {
       m_climber1.setControl(m_climberDutyCycle.withVelocity(m_rps * Constants.Climber.kGearRatio));
     }
   }
+
+  public void stopClimber(){
+    if (m_rps <= 0) {
+      m_climber1.setControl(m_climberDutyCycle.withVelocity(0));
+    }
+  }
 }
