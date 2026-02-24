@@ -14,7 +14,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.math.controller.BangBangController;
 
 public class Shooter extends SubsystemBase {
   private final TalonFX m_leaderMotor = new TalonFX(
