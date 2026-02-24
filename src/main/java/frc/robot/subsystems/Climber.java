@@ -39,4 +39,10 @@ public class Climber extends SubsystemBase {
     m_rps = rps;
     return m_rps;
   }
+
+  public void climb() {
+    if (m_rps >= 0) {
+      m_climber1.setControl(m_climberDutyCycle.withVelocity(m_rps * Constants.Climber.kGearRatio));
+    }
+  }
 }
