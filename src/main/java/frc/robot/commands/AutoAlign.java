@@ -15,8 +15,8 @@ public class AutoAlign extends Command {
   CommandSwerveDrivetrain m_drivetrain;
   Localization m_localization;
    
-  double m_xKp = 1;
-  double m_yKp = 1;
+  double m_xKp = 5;
+  double m_yKp = 5;
   double m_yawKp = 1;
   double m_alianceSign = 1;
 
@@ -45,7 +45,7 @@ public class AutoAlign extends Command {
     double vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
     double vYaw = m_localization.getM_errorYaw() * m_yawKp;
     
-    m_drivetrain.Move(vX * 5, vY * 5, vYaw);
+    m_drivetrain.Move(vX, vY, vYaw);
   }
 
   // Called once the command ends or is interrupted.
