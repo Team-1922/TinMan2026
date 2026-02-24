@@ -37,7 +37,9 @@ public class Shooter extends SubsystemBase {
         .withNeutralMode(NeutralModeValue.Coast);
 
     m_leaderMotor.getConfigurator().apply(motorConfig);
+    m_leaderMotor.getConfigurator().apply(Constants.Shooter.ShooterCurrentConfigs);
     m_followerMotor.getConfigurator().apply(motorConfig);
+    m_followerMotor.getConfigurator().apply(Constants.Shooter.ShooterCurrentConfigs);
 
     m_followerMotor.setControl(new Follower(
         Constants.Shooter.kLeaderMotorId,

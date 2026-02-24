@@ -7,6 +7,7 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 
 
@@ -35,6 +36,14 @@ public final class Constants {
             slot0Configs.kS = .1;
             return slot0Configs;
         }
+
+        public static final CurrentLimitsConfigs CollectorCurrentConfigs = new CurrentLimitsConfigs()
+        .withStatorCurrentLimitEnable(true)
+        .withStatorCurrentLimit(20)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentLimit(20)
+        .withSupplyCurrentLowerLimit(20)
+        .withSupplyCurrentLowerTime(.75);
     };
 
     public static class Feeder {
@@ -47,11 +56,27 @@ public final class Constants {
             slot0Configs.kS = 0.60;
             return slot0Configs;
         }
+
+        public static final CurrentLimitsConfigs FeederCurrentConfigs = new CurrentLimitsConfigs()
+        .withStatorCurrentLimitEnable(true)
+        .withStatorCurrentLimit(20)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentLimit(20)
+        .withSupplyCurrentLowerLimit(20)
+        .withSupplyCurrentLowerTime(.75);
     };
 
     public static class Shooter{
         public static final int kLeaderMotorId = 19;
         public static final int kFollowerMotorId = 20;
+        
+        public static final CurrentLimitsConfigs ShooterCurrentConfigs = new CurrentLimitsConfigs()
+        .withStatorCurrentLimitEnable(true)
+        .withStatorCurrentLimit(20)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentLimit(20)
+        .withSupplyCurrentLowerLimit(20)
+        .withSupplyCurrentLowerTime(.75);
     };
     
     public static class Spindexer {
@@ -65,6 +90,14 @@ public final class Constants {
             slot0Configs.kS = .1;
             return slot0Configs;
         }
+
+        public static final CurrentLimitsConfigs SpindedxerCurrentConfigs = new CurrentLimitsConfigs()
+        .withStatorCurrentLimitEnable(true)
+        .withStatorCurrentLimit(20)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentLimit(20)
+        .withSupplyCurrentLowerLimit(20)
+        .withSupplyCurrentLowerTime(.75);
     };
 
     
