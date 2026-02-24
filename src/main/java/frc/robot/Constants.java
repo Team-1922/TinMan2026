@@ -67,6 +67,18 @@ public final class Constants {
         }
     };
 
+    public static class Climber {
+        public static final int kMotorId1 = 22;
+        public static final double kGearRatio = 1;
+
+        public static Slot0Configs slot0() {
+            Slot0Configs slot0Configs = new Slot0Configs();
+            slot0Configs.kP = .1;
+            slot0Configs.kS = .1;
+            return slot0Configs;
+        }
+    }
+
     
     public enum RobotType{
         TinmanV0,
