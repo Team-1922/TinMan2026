@@ -18,7 +18,7 @@ public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
  private final TalonFX m_Feeder = new TalonFX(
       Constants.Feeder.kMotorId1, 
-      Constants.superstructureCanbus
+      Constants.drivebaseCanbusName
   );
  private double m_rps = 0;
  private VelocityDutyCycle m_feederDutyCycle = new VelocityDutyCycle(0)
@@ -26,7 +26,7 @@ public class Feeder extends SubsystemBase {
 
   public Feeder() {
     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.Clockwise_Positive)
+      .withInverted(InvertedValue.CounterClockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
     
     m_Feeder.getConfigurator().apply(motorConfig);

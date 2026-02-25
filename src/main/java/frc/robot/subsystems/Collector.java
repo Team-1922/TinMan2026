@@ -2,7 +2,7 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-package frc.robot.subsystems;
+/*package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -24,7 +24,7 @@ public class Collector extends SubsystemBase {
     withSlot(0);
 
   /** Creates a new Collector. */
-  public Collector() {
+  /*public Collector() {
       MotorOutputConfigs motorConfig = new MotorOutputConfigs()
       .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
@@ -51,4 +51,4 @@ public class Collector extends SubsystemBase {
     m_rps = 0;
     m_collector1.stopMotor();
   }
-}
+}*/
