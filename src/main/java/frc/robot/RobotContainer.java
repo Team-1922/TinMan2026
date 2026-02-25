@@ -72,7 +72,7 @@ public class RobotContainer {
         configureBindings();
         
         NamedCommands.registerCommand("shoot", new ParallelCommandGroup(autoAutoAlign, autoShoot));
-        NamedCommands.registerCommand("AutoAlign",autoAutoAlign);
+        NamedCommands.registerCommand("AutoAlign", autoAutoAlign);
         NamedCommands.registerCommand("setBotPose", drivetrain.runOnce(drivetrain::seedFieldCentric));
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
