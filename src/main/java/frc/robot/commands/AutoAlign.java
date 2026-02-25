@@ -15,8 +15,8 @@ public class AutoAlign extends Command {
   CommandSwerveDrivetrain m_drivetrain;
   Localization m_localization;
    
-  double m_xKp = 1;
-  double m_yKp = 1;
+  double m_xKp = 5;
+  double m_yKp = 5;
   double m_yawKp = 1;
   double m_alianceSign = 1;
 
