@@ -16,11 +16,11 @@ import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 /** Add your docs here. */
 public final class Constants {
 
-    public static final RobotType robotType = RobotType.TinmanV1;
+    public static final RobotType robotType = RobotType.TinmanV2;
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
-    public static final double targetDistanceToHub = Meters.of(2).in(Meters);
+    public static final double targetDistanceToHub = Meters.of(2.7).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
     public static final CANBus superstructureCanbus = CANBus.roboRIO();
@@ -83,7 +83,7 @@ public final class Constants {
 
     
     public enum RobotType{
-        TinmanV0,
+        TinmanV2,
         TinmanV1
     }
 }
