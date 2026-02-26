@@ -9,27 +9,26 @@ import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
- private final TalonFX m_collector1 = new TalonFX(
-  Constants.Collector.kMotorId1, 
-  Constants.superstructureCanbus);
+  private final TalonFX m_collector1 = new TalonFX(
+    Constants.Collector.kMotorId1, 
+    Constants.superstructureCanbus
+  );
 
- private double m_rps = 0;
- private VelocityDutyCycle m_collectorDutyCycle = new VelocityDutyCycle(0).
+  private double m_rps = 0;
+  private VelocityDutyCycle m_collectorDutyCycle = new VelocityDutyCycle(0).
     withSlot(0);
 
   /** Creates a new Collector. */
   public Collector() {
-      MotorOutputConfigs motorConfig = new MotorOutputConfigs()
+    MotorOutputConfigs motorConfig = new MotorOutputConfigs()
       .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
-      m_collector1.getConfigurator().apply(Constants.Collector.slot0());
-      m_collector1.getConfigurator().apply(motorConfig);
+    m_collector1.getConfigurator().apply(Constants.Collector.slot0());
+    m_collector1.getConfigurator().apply(motorConfig);
   }
 
   @Override
@@ -42,8 +41,9 @@ public class Collector extends SubsystemBase {
   }
   
   public void collect() {
-   if(m_rps > 0) {
-      m_collector1.setControl(m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
+    if(m_rps > 0) {
+      m_collector1.setControl(
+        m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
     }
   }
 

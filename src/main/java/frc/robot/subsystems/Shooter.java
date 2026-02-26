@@ -11,40 +11,37 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
-
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Shooter extends SubsystemBase {
   private final TalonFX m_leaderMotor = new TalonFX(
-      Constants.Shooter.kLeaderMotorId,
-      Constants.superstructureCanbus
+    Constants.Shooter.kLeaderMotorId,
+    Constants.superstructureCanbus
   );
 
   private final TalonFX m_followerMotor = new TalonFX(
-      Constants.Shooter.kFollowerMotorId,
-      Constants.superstructureCanbus
+    Constants.Shooter.kFollowerMotorId,
+    Constants.superstructureCanbus
   );
 
   private VelocityDutyCycle m_shooterDutyCycle = new VelocityDutyCycle(0)
     .withSlot(0);
- private double m_rps = 0;
-
+  private double m_rps = 0;
 
   /** Creates a new Shooter. */
   public Shooter() {
     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-        .withInverted(InvertedValue.CounterClockwise_Positive)
-        .withNeutralMode(NeutralModeValue.Coast);
+      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withNeutralMode(NeutralModeValue.Coast);
 
     m_leaderMotor.getConfigurator().apply(motorConfig);
     m_leaderMotor.getConfigurator().apply(Constants.Shooter.configs());
     m_followerMotor.getConfigurator().apply(motorConfig);
     m_followerMotor.getConfigurator().apply(Constants.Shooter.configs());
-
     m_followerMotor.setControl(new Follower(
-        Constants.Shooter.kLeaderMotorId,
-        MotorAlignmentValue.Aligned
+      Constants.Shooter.kLeaderMotorId,
+      MotorAlignmentValue.Aligned
     ));
   }
 

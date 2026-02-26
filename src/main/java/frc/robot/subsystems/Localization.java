@@ -2,7 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
@@ -41,21 +40,25 @@ public class Localization extends SubsystemBase {
     return m_drivetrain.getPose();
   }
 
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    
-    LimelightHelpers.SetRobotOrientation("limelight-front", getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate mt2_estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+    LimelightHelpers.SetRobotOrientation("limelight-front", 
+      getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate mt2_estimate 
+      = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
     Boolean doRejectUpdate = false;
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
-    if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720 || mt2_estimate.tagCount == 0)
-    {
+    if(
+      Math.abs(m_drivetrain
+        .getPigeon2()
+        .getAngularVelocityZWorld()
+        .getValueAsDouble()) > 720 
+        || mt2_estimate.tagCount == 0) {
       doRejectUpdate = true;
     }
-    if(!doRejectUpdate)
-    {
+
+    if(!doRejectUpdate) {
       m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
       m_drivetrain.addVisionMeasurement(
         mt2_estimate.pose,
@@ -94,5 +97,4 @@ public class Localization extends SubsystemBase {
   public double distFromHub() {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
   }
-  
 }
