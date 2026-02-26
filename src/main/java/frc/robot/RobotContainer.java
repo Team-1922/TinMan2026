@@ -23,6 +23,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.RobotType;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.Shoot;
 import frc.robot.generated.TunerConstants;
@@ -31,8 +32,8 @@ import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Localization;
 import frc.robot.subsystems.Shooter;
 import frc.robot.subsystems.Spindexer;
-//import frc.robot.subsystems.Collector;
-//import frc.robot.commands.Collect;
+import frc.robot.subsystems.Collector;
+import frc.robot.commands.Collect;
 import com.pathplanner.lib.auto.NamedCommands;
 import frc.robot.commands.IdleSpindexer;
 
@@ -58,10 +59,10 @@ public class RobotContainer {
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
-    //public final Collector collector = new Collector();  
+    public final Collector collector = new Collector();;  
     private final SendableChooser<Command> autoChooser;
 
-//    public final Collect collect = new Collect(collector);
+    public final Collect collect = new Collect(collector);
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
     public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
     public final AutoAlign autoAutoAlign = new AutoAlign(drivetrain, localization);
@@ -70,7 +71,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
-        
+
         NamedCommands.registerCommand("shoot", new ParallelCommandGroup(autoAutoAlign, autoShoot));
         NamedCommands.registerCommand("AutoAlign", autoAutoAlign);
         NamedCommands.registerCommand("setBotPose", drivetrain.runOnce(drivetrain::seedFieldCentric));
@@ -99,7 +100,12 @@ public class RobotContainer {
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
-    //    DriverController.leftTrigger().whileTrue(collect);
+
+        if(Constants.robotType == RobotType.TinmanV1)
+        {
+            DriverController.leftTrigger().whileTrue(collect);
+        }
+        
         DriverController.rightTrigger().whileTrue( 
             new ParallelCommandGroup(
                 autoAlign, 

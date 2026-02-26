@@ -36,7 +36,7 @@ public class Vision extends SubsystemBase {
   }
 
   public double getDist() {
-    return Constants.robotType == RobotType.TinmanV2 ? dist : Constants.targetDistanceToHub;
+    return dist;
   }
 
   public double getTx() {

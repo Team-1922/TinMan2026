@@ -18,7 +18,7 @@ public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
  private final TalonFX m_Feeder = new TalonFX(
       Constants.Feeder.kMotorId1, 
-      Constants.drivebaseCanbusName
+      Constants.superstructureCanbus
   );
  private double m_rps = 0;
  private VelocityDutyCycle m_feederDutyCycle = new VelocityDutyCycle(0)
