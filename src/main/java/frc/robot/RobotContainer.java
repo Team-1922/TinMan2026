@@ -59,7 +59,7 @@ public class RobotContainer {
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
-    public final Collector collector = new Collector();;  
+    public final Collector collector = new Collector();
     private final SendableChooser<Command> autoChooser;
 
     public final Collect collect = new Collect(collector);
@@ -71,7 +71,7 @@ public class RobotContainer {
 
     public RobotContainer() {
         configureBindings();
-
+        
         NamedCommands.registerCommand("shoot", new ParallelCommandGroup(autoAutoAlign, autoShoot));
         NamedCommands.registerCommand("AutoAlign", autoAutoAlign);
         NamedCommands.registerCommand("setBotPose", drivetrain.runOnce(drivetrain::seedFieldCentric));
