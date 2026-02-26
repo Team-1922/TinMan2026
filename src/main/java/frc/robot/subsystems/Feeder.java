@@ -13,6 +13,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotType;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
@@ -26,7 +27,9 @@ public class Feeder extends SubsystemBase {
 
   public Feeder() {
     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withInverted(Constants.robotType == RobotType.TinmanV1
+        ? InvertedValue.Clockwise_Positive
+        : InvertedValue.CounterClockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
     
     m_Feeder.getConfigurator().apply(motorConfig);
