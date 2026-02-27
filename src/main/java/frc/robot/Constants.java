@@ -19,14 +19,14 @@ import frc.robot.generated.TunerConstants;
 /** Add your docs here. */
 public final class Constants {
 
-    public static final RobotType robotType = RobotType.TinmanV2;
+    public static final RobotType robotType = RobotType.TinmanV1;
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
     public static final double targetDistanceToHub = Meters.of(2.7).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
-    public static final CANBus superstructureCanbus =  switch(Constants.robotType){
+    public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
             case TinmanV2 -> TunerConstants.kCANBus;
             case TinmanV1 ->  CANBus.roboRIO();
         };

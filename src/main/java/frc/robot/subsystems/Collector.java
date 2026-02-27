@@ -26,13 +26,12 @@ public class Collector extends SubsystemBase {
 
   /** Creates a new Collector. */
   public Collector() {
-    if(Constants.robotType == RobotType.TinmanV1)
-    {
+    if(Constants.robotType == RobotType.TinmanV1) {
       MotorOutputConfigs motorConfig = new MotorOutputConfigs()
       .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
       m_collector1.getConfigurator().apply(Constants.Collector.slot0());
-      m_collector1.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
+   //   m_collector1.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
       m_collector1.getConfigurator().apply(motorConfig);
     }
   }

@@ -101,8 +101,7 @@ public class RobotContainer {
         DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
 
-        if(Constants.robotType == RobotType.TinmanV1)
-        {
+        if(Constants.robotType == RobotType.TinmanV1){
             DriverController.leftTrigger().whileTrue(collect);
         }
         

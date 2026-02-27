@@ -82,11 +82,7 @@ public class TunerConstants {
 
     // Theoretical free speed (m/s) at 12 V applied output;
     // This needs to be tuned to your individual robot
-    public static final LinearVelocity kSpeedAt12Volts = 
-    switch (Constants.robotType) {
-            case TinmanV2 -> MetersPerSecond.of(4.33);
-            case TinmanV1 -> MetersPerSecond.of(4.33);
-        };
+    public static final LinearVelocity kSpeedAt12Volts = MetersPerSecond.of(4.33);
 
     // Every 1 rotation of the azimuth results in kCoupleRatio drive motor turns;
     // This may need to be tuned to your individual robot
