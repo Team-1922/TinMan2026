@@ -43,7 +43,8 @@ public class Collector extends SubsystemBase {
   public void collect() {
     if(m_rps > 0) {
       m_collector1.setControl(
-        m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
+        m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio)
+      );
     }
   }
 

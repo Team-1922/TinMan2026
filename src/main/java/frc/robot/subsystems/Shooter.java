@@ -63,8 +63,7 @@ public class Shooter extends SubsystemBase {
     if(m_rps > 0){
       m_leaderMotor.setControl(m_shooterDutyCycle.withVelocity(
         m_rps * Constants.Shooter.kGearRatio
-        )
-      );
+      ));
     }
   }
 }
