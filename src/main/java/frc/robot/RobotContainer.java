@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -23,6 +24,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import frc.robot.Constants.RobotType;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.Shoot;
 import frc.robot.generated.TunerConstants;
@@ -58,7 +60,7 @@ public class RobotContainer {
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
-    public final Collector collector = new Collector();  
+    public final Collector collector = new Collector();
     private final SendableChooser<Command> autoChooser;
 
     public final Collect collect = new Collect(collector);
@@ -76,6 +78,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("setBotPose", drivetrain.runOnce(drivetrain::seedFieldCentric));
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        LimelightHelpers.setCameraPose_RobotSpace(Constants.middleLimeLight, 
+            Units.inchesToMeters(3.5), 
+            Units.inchesToMeters(7.5), 
+            Units.inchesToMeters(20.25), 
+            0, 
+            30, 
+            0);
     }
     
     private void configureBindings() {
@@ -99,7 +109,11 @@ public class RobotContainer {
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
-        DriverController.leftTrigger().whileTrue(collect);
+
+        if(Constants.robotType == RobotType.TinmanV1) {
+            DriverController.leftTrigger().whileTrue(collect);
+        }
+        
         DriverController.rightTrigger().whileTrue( 
             new ParallelCommandGroup(
                 autoAlign, 
