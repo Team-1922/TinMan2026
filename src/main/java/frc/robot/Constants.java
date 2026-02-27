@@ -13,18 +13,23 @@ import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 
+import frc.robot.generated.TunerConstants;
+
 
 /** Add your docs here. */
 public final class Constants {
 
-    public static final RobotType robotType = RobotType.TinmanV1;
+    public static final RobotType robotType = RobotType.TinmanV2;
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
-    public static final double targetDistanceToHub = Meters.of(2).in(Meters);
+    public static final double targetDistanceToHub = Meters.of(2.7).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
-    public static final CANBus superstructureCanbus = CANBus.roboRIO();
+    public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
+            case TinmanV2 -> TunerConstants.kCANBus;
+            case TinmanV1 ->  CANBus.roboRIO();
+        };
 
     public static class Collector {
         public static final int kMotorId1 = 14;
@@ -96,7 +101,7 @@ public final class Constants {
     public static class Spindexer {
         public static final int kMotorId1 = 21;
         public static final double kGearRatio = 6;
-        public static final double spindexerIdleSpeed = 2;
+        public static final double spindexerIdleSpeed = 0;
         
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
@@ -116,7 +121,7 @@ public final class Constants {
 
     
     public enum RobotType{
-        TinmanV0,
+        TinmanV2,
         TinmanV1
     }
 }

@@ -15,13 +15,13 @@ import frc.robot.subsystems.Localization;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
   private final Shooter m_shooter;
-  private double m_spindexerRps = 4;
+  private double m_spindexerRps = 21.7;
   private double m_feederRps = 50;
   private double m_shooterRps = 20;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
-  private final double m_shooterSpeedThreshold = 4.6;
+  private final double m_shooterSpeedThreshold = 2;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
 

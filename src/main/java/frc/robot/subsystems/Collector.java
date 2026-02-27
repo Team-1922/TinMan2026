@@ -12,6 +12,7 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.Constants.RobotType;
 import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
@@ -25,12 +26,14 @@ public class Collector extends SubsystemBase {
 
   /** Creates a new Collector. */
   public Collector() {
+    if(Constants.robotType == RobotType.TinmanV1) {
       MotorOutputConfigs motorConfig = new MotorOutputConfigs()
       .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
       m_collector1.getConfigurator().apply(Constants.Collector.slot0());
       m_collector1.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
       m_collector1.getConfigurator().apply(motorConfig);
+    }
   }
 
   @Override
