@@ -30,7 +30,7 @@ public class Feeder extends SubsystemBase {
       .withNeutralMode(NeutralModeValue.Coast);
     
     m_Feeder.getConfigurator().apply(motorConfig);
-  //  m_Feeder.getConfigurator().apply(Constants.Feeder.FeederCurrentConfigs);
+    m_Feeder.getConfigurator().apply(Constants.Feeder.FeederCurrentConfigs);
     m_Feeder.getConfigurator().apply(Constants.Feeder.slot0());
   }
 

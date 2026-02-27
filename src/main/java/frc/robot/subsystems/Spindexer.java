@@ -31,7 +31,7 @@ public class Spindexer extends SubsystemBase {
       .withNeutralMode(NeutralModeValue.Coast);
     m_Spindexer.getConfigurator().apply(motorConfig);
     m_Spindexer.getConfigurator().apply(Constants.Spindexer.slot0());
-//    m_Spindexer.getConfigurator().apply(Constants.Spindexer.SpindedxerCurrentConfigs);
+    m_Spindexer.getConfigurator().apply(Constants.Spindexer.SpindedxerCurrentConfigs);
   }
 
   
