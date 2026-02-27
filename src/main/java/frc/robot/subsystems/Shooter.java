@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.Follower;
+import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
@@ -13,7 +14,6 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import edu.wpi.first.math.controller.BangBangController;
 
 public class Shooter extends SubsystemBase {
   private final TalonFX m_leaderMotor = new TalonFX(
@@ -26,7 +26,8 @@ public class Shooter extends SubsystemBase {
       Constants.superstructureCanbus
   );
 
- BangBangController m_controller = new BangBangController();
+  private VelocityDutyCycle m_shooterDutyCycle = new VelocityDutyCycle(0)
+    .withSlot(0);
  private double m_rps = 0;
 
 
@@ -63,11 +64,9 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
     if(m_rps > 0){
-      m_leaderMotor.set(
-          m_controller.calculate(
-              m_leaderMotor.getVelocity().getValueAsDouble(), 
-              m_rps
-          )
+      m_leaderMotor.setControl(m_shooterDutyCycle.withVelocity(
+        m_rps * Constants.Shooter.kGearRatio
+        )
       );
     }
   }

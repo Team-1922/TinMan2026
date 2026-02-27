@@ -61,13 +61,19 @@ public class RobotContainer {
     public final Collector collector = new Collector();  
     private final SendableChooser<Command> autoChooser;
 
-    public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
     public final Collect collect = new Collect(collector);
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
     public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
+    public final AutoAlign autoAutoAlign = new AutoAlign(drivetrain, localization);
+    public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
+    public final Shoot autoShoot = new Shoot(shooter, feeder, spindexer, localization);
 
     public RobotContainer() {
         configureBindings();
+        
+        NamedCommands.registerCommand("shoot", new ParallelCommandGroup(autoAutoAlign, autoShoot));
+        NamedCommands.registerCommand("AutoAlign", autoAutoAlign);
+        NamedCommands.registerCommand("setBotPose", drivetrain.runOnce(drivetrain::seedFieldCentric));
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
     }
