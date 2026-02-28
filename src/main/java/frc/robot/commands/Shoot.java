@@ -18,6 +18,7 @@ public class Shoot extends Command {
   private double m_spindexerRps = 21.7;
   private double m_feederRps = 50;
   private double m_shooterRps = 20;
+  private double m_yawThreshold = .01;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
@@ -41,6 +42,7 @@ public class Shoot extends Command {
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
     SmartDashboard.putBoolean("Requires Align", m_requireAlign);
+    SmartDashboard.putNumber("Yaw Threshold", m_yawThreshold);
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
@@ -58,12 +60,16 @@ public class Shoot extends Command {
     m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
+    m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
 
     if (
         !m_requireAlign
-        || Math.abs(distFromHub- Constants.targetDistanceToHub)
-            < Constants.autoAlignDistanceThreshold
-    ) {
+        || (
+            Math.abs(distFromHub- Constants.targetDistanceToHub)
+              < Constants.autoAlignDistanceThreshold 
+            && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold)
+        )
+     {
       m_shooter.setTargetRps(m_shooterRps);
       m_spindexer.setTargetRps(m_spindexerRps);
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {

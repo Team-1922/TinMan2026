@@ -19,7 +19,7 @@ import frc.robot.generated.TunerConstants;
 /** Add your docs here. */
 public final class Constants {
 
-    public static final RobotType robotType = RobotType.TinmanV2;
+    public static final RobotType robotType = RobotType.TinmanV1;
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
