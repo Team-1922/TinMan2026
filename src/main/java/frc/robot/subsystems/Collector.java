@@ -20,15 +20,15 @@ import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
  private final TalonFX m_leaderMotor = new TalonFX(
-  Constants.Collector.kMotorId1, 
+  Constants.Collector.kLEeaderID, 
   Constants.superstructureCanbus);
 
   private final TalonFX m_followerMotor = new TalonFX(
-  Constants.Collector.kMotorId2, 
+  Constants.Collector.kFollowerID, 
   Constants.superstructureCanbus);
 
    private final TalonFX m_positionalMotor = new TalonFX(
-  Constants.Collector.kMotorId3, 
+  Constants.Collector.kPositinalId3, 
   Constants.superstructureCanbus);
 
  private double m_rps = 0;
@@ -49,7 +49,7 @@ public class Collector extends SubsystemBase {
       m_followerMotor.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
       m_followerMotor.getConfigurator().apply(motorConfig);
       m_followerMotor.setControl(new Follower(
-        Constants.Collector.kMotorId1,
+        Constants.Collector.kLEeaderID,
         MotorAlignmentValue.Aligned
       ));
 
@@ -57,8 +57,6 @@ public class Collector extends SubsystemBase {
       m_positionalMotor.getConfigurator().apply(Constants.Collector.RotatinalCurrentConfigs);
       m_positionalMotor.getConfigurator().apply(motorConfig);
       m_positionalMotor.setPosition(Constants.Collector.startPose);
-
-
   }
 
   @Override

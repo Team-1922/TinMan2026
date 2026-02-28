@@ -32,9 +32,9 @@ public final class Constants {
         };
 
     public static class Collector {
-        public static final int kMotorId1 = 14;
-        public static final int kMotorId2 = 15;
-        public static final int kMotorId3 = 16;
+        public static final int kLEeaderID = 14;
+        public static final int kFollowerID = 15;
+        public static final int kPositinalId3 = 16;
         public static final int kMotorId4 = 17;
         public static final double kGearRatio = 2;
 
