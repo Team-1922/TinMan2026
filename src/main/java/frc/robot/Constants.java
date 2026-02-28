@@ -52,6 +52,16 @@ public final class Constants {
         .withSupplyCurrentLimit(20)
         .withSupplyCurrentLowerLimit(20)
         .withSupplyCurrentLowerTime(.75);
+
+        public static final CurrentLimitsConfigs RotatinalCurrentConfigs = new CurrentLimitsConfigs()
+        .withStatorCurrentLimitEnable(true)
+        .withStatorCurrentLimit(20)
+        .withSupplyCurrentLimitEnable(true)
+        .withSupplyCurrentLimit(20)
+        .withSupplyCurrentLowerLimit(20)
+        .withSupplyCurrentLowerTime(.75);
+
+        public static final double startPose = 0; 
     };
 
     public static class Feeder {

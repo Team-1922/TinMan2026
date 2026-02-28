@@ -4,10 +4,13 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -16,8 +19,16 @@ import frc.robot.Constants.RobotType;
 import frc.robot.generated.TunerConstants;
 
 public class Collector extends SubsystemBase {
- private final TalonFX m_collector1 = new TalonFX(
+ private final TalonFX m_leaderMotor = new TalonFX(
   Constants.Collector.kMotorId1, 
+  Constants.superstructureCanbus);
+
+  private final TalonFX m_followerMotor = new TalonFX(
+  Constants.Collector.kMotorId2, 
+  Constants.superstructureCanbus);
+
+   private final TalonFX m_positionalMotor = new TalonFX(
+  Constants.Collector.kMotorId3, 
   Constants.superstructureCanbus);
 
  private double m_rps = 0;
@@ -26,14 +37,28 @@ public class Collector extends SubsystemBase {
 
   /** Creates a new Collector. */
   public Collector() {
-    if(Constants.robotType == RobotType.TinmanV1) {
       MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.Clockwise_Positive)
+      .withInverted(InvertedValue.CounterClockwise_Positive)
       .withNeutralMode(NeutralModeValue.Coast);
-      m_collector1.getConfigurator().apply(Constants.Collector.slot0());
-      m_collector1.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
-      m_collector1.getConfigurator().apply(motorConfig);
-    }
+      
+      m_leaderMotor.getConfigurator().apply(Constants.Collector.slot0());
+      m_leaderMotor.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
+      m_leaderMotor.getConfigurator().apply(motorConfig);
+
+      m_followerMotor.getConfigurator().apply(Constants.Collector.slot0());
+      m_followerMotor.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
+      m_followerMotor.getConfigurator().apply(motorConfig);
+      m_followerMotor.setControl(new Follower(
+        Constants.Collector.kMotorId1,
+        MotorAlignmentValue.Aligned
+      ));
+
+      m_positionalMotor.getConfigurator().apply(Constants.Collector.slot0());
+      m_positionalMotor.getConfigurator().apply(Constants.Collector.RotatinalCurrentConfigs);
+      m_positionalMotor.getConfigurator().apply(motorConfig);
+      m_positionalMotor.setPosition(Constants.Collector.startPose);
+
+
   }
 
   @Override
@@ -44,15 +69,19 @@ public class Collector extends SubsystemBase {
   public void setTargetRps(double rps) {
     m_rps = rps;
   }
+
+  public void deploy(double angle) {
+    m_positionalMotor.setPosition(angle);
+  }
   
   public void collect() {
    if(m_rps > 0) {
-      m_collector1.setControl(m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
+      m_leaderMotor.setControl(m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
     }
   }
 
   public void stopCollector() {
     m_rps = 0;
-    m_collector1.stopMotor();
+    m_leaderMotor.stopMotor();
   }
 }
