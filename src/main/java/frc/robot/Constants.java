@@ -11,8 +11,10 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
+import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicExpoDutyCycle;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
@@ -76,14 +78,18 @@ public final class Constants {
 
         public static final CANcoderConfiguration colectorCANcoderConfig = new CANcoderConfiguration().withMagnetSensor(
                 new MagnetSensorConfigs()
-                .withMagnetOffset(null)
-                .withAbsoluteSensorDiscontinuityPoint(null)
+                .withMagnetOffset(-0.477783203125)
+                .withAbsoluteSensorDiscontinuityPoint(.5)
         );
+
+        public static final MotionMagicConfigs CollectorMotionMagicConfigs = new MotionMagicConfigs()
+        .withMotionMagicExpo_kV(2)
+        .withMotionMagicExpo_kA(2);
 
         public static final double endPos = Units.degreesToRotations(90);
         
         public static final double startPos = 0; 
-        public static final MotionMagicVoltage kRequest = new MotionMagicVoltage(0);
+        public static final MotionMagicExpoDutyCycle kRequest = new MotionMagicExpoDutyCycle(0);
     };
 
     public static class Feeder {

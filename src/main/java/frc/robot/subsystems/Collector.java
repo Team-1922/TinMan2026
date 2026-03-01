@@ -47,7 +47,7 @@ public class Collector extends SubsystemBase {
       .withNeutralMode(NeutralModeValue.Coast);
 
        MotorOutputConfigs positinalMotorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.CounterClockwise_Positive)
+      .withInverted(InvertedValue.Clockwise_Positive)
       .withNeutralMode(NeutralModeValue.Brake);
       
       m_leaderMotor.getConfigurator().apply(Constants.Collector.slot0());
@@ -68,6 +68,7 @@ public class Collector extends SubsystemBase {
       m_positionalMotor.getConfigurator().apply(Constants.Collector.RotatinalCurrentConfigs);
       m_positionalMotor.getConfigurator().apply(positinalMotorConfig);
       m_positionalMotor.getConfigurator().apply(Constants.Collector.collectorFeedbackConfig);
+      m_positionalMotor.getConfigurator().apply(Constants.Collector.CollectorMotionMagicConfigs);
 
       m_positionalMotor.setPosition(Constants.Collector.startPos);
   }
