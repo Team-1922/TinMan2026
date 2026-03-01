@@ -25,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.Constants.RobotType;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.RetractCollector;
 import frc.robot.commands.Shoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -68,6 +69,7 @@ public class RobotContainer {
     public final AutoAlign autoAutoAlign = new AutoAlign(drivetrain, localization);
     public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
     public final Shoot autoShoot = new Shoot(shooter, feeder, spindexer, localization);
+    public final RetractCollector retractCollector = new RetractCollector(collector);
 
     public RobotContainer() {
         configureBindings();
@@ -108,6 +110,9 @@ public class RobotContainer {
                 autoAlign, 
                 new Shoot(shooter, feeder, spindexer, localization)
         ));
+
+        DriverController.povDown().whileTrue(retractCollector);
+        
         DriverController.rightBumper().whileTrue(
             new Shoot(shooter, feeder, spindexer, localization)
         );

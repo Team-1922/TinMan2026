@@ -85,6 +85,10 @@ public class Collector extends SubsystemBase {
   public void deploy(double angle) {
     m_positionalMotor.setControl(Constants.Collector.kRequest.withPosition(angle));
   }
+
+  public void retract(double angle) {
+    m_positionalMotor.setControl(Constants.Collector.kRequest.withPosition(angle));
+  }
   
   public void collect() {
    if(m_rps > 0) {
