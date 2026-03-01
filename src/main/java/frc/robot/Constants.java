@@ -15,9 +15,6 @@ import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicExpoDutyCycle;
-import com.ctre.phoenix6.controls.MotionMagicVoltage;
-import com.ctre.phoenix6.controls.VelocityDutyCycle;
-import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import edu.wpi.first.math.util.Units;
@@ -40,12 +37,10 @@ public final class Constants {
         };
 
     public static class Collector {
-        public static final int kLeaderID = 14;
-        public static final int kFollowerID = 15;
-        public static final int kPositinalId = 16;
-        public static final int kMotorId4 = 17;
+        public static final int kRollerMotorId = 14;
+        public static final int kPivotMotorId = 16;
+        public static final int kPivotCanCoderId = 22;
         public static final double kGearRatio = 2;
-        public static final int kCANcoderID = 22;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
@@ -54,7 +49,7 @@ public final class Constants {
             return slot0Configs;
         }
 
-        public static final CurrentLimitsConfigs CollectorCurrentConfigs = new CurrentLimitsConfigs()
+        public static final CurrentLimitsConfigs kRollerCurrentConfigs = new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
         .withStatorCurrentLimit(20)
         .withSupplyCurrentLimitEnable(true)
@@ -62,7 +57,7 @@ public final class Constants {
         .withSupplyCurrentLowerLimit(20)
         .withSupplyCurrentLowerTime(.75);
 
-        public static final CurrentLimitsConfigs RotatinalCurrentConfigs = new CurrentLimitsConfigs()
+        public static final CurrentLimitsConfigs kPivotCurrentConfigs = new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
         .withStatorCurrentLimit(20)
         .withSupplyCurrentLimitEnable(true)
@@ -70,19 +65,19 @@ public final class Constants {
         .withSupplyCurrentLowerLimit(20)
         .withSupplyCurrentLowerTime(.75);
 
-        public static final FeedbackConfigs collectorFeedbackConfig = new FeedbackConfigs()
+        public static final FeedbackConfigs kPivotFeedbackConfig = new FeedbackConfigs()
         .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
-        .withFeedbackRemoteSensorID(kCANcoderID)
+        .withFeedbackRemoteSensorID(kPivotCanCoderId)
         .withRotorToSensorRatio(25)
         .withSensorToMechanismRatio(1);
 
-        public static final CANcoderConfiguration colectorCANcoderConfig = new CANcoderConfiguration().withMagnetSensor(
+        public static final CANcoderConfiguration kPivotCanCoderConfig = new CANcoderConfiguration().withMagnetSensor(
                 new MagnetSensorConfigs()
                 .withMagnetOffset(-0.477783203125)
                 .withAbsoluteSensorDiscontinuityPoint(.5)
         );
 
-        public static final MotionMagicConfigs CollectorMotionMagicConfigs = new MotionMagicConfigs()
+        public static final MotionMagicConfigs kPivotMotionMagicConfigs = new MotionMagicConfigs()
         .withMotionMagicExpo_kV(2)
         .withMotionMagicExpo_kA(2);
 
