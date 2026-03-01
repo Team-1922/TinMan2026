@@ -14,7 +14,6 @@ public class Collect extends Command {
   /** Creates a new Collect. */
   Collector m_collector;
   private double m_collectorRps = 80;
-  private double m_collectorAngle = Constants.Collector.endPos;
 
   public Collect(Collector collector) {
     // Use addRequirements() here to declare subsystem dependencies.
@@ -32,9 +31,7 @@ public class Collect extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    
-    m_collector.deploy(m_collectorAngle);
-    m_collectorAngle = Constants.Collector.endPos;
+    m_collector.deploy(Constants.Collector.endPos);
 
     m_collectorRps = SmartDashboard.getNumber("Collector RPS", m_collectorRps);
     m_collector.collect();

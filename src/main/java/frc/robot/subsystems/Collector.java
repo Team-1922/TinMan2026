@@ -54,13 +54,13 @@ public class Collector extends SubsystemBase {
       m_leaderMotor.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
       m_leaderMotor.getConfigurator().apply(lfMotorConfig);
 
-      m_followerMotor.getConfigurator().apply(Constants.Collector.slot0());
+     /*  m_followerMotor.getConfigurator().apply(Constants.Collector.slot0());
       m_followerMotor.getConfigurator().apply(Constants.Collector.CollectorCurrentConfigs);
       m_followerMotor.getConfigurator().apply(lfMotorConfig);
       m_followerMotor.setControl(new Follower(
         Constants.Collector.kLeaderID,
         MotorAlignmentValue.Aligned
-      ));
+      )); */
 
       m_positionalMotor.getConfigurator().apply(Constants.Collector.slot0());
       m_positionalMotor.getConfigurator().apply(Constants.Collector.RotatinalCurrentConfigs);
@@ -79,7 +79,7 @@ public class Collector extends SubsystemBase {
   }
 
   public void deploy(double angle) {
-    m_positionalMotor.
+    m_positionalMotor.setControl(Constants.Collector.kRequest.withPosition(angle));
   }
   
   public void collect() {

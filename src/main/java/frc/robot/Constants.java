@@ -11,10 +11,12 @@ import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
+import com.ctre.phoenix6.controls.MotionMagicVoltage;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
+import edu.wpi.first.math.util.Units;
 import frc.robot.generated.TunerConstants;
 
 
@@ -70,9 +72,10 @@ public final class Constants {
         .withRotorToSensorRatio(25)
         .withSensorToMechanismRatio(1);
 
-        public static final double endPos = 90;
+        public static final double endPos = Units.degreesToRotations(90);
         
         public static final double startPos = 0; 
+        public static final MotionMagicVoltage kRequest = new MotionMagicVoltage(0);
     };
 
     public static class Feeder {
