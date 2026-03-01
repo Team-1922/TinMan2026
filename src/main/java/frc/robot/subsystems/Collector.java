@@ -6,6 +6,7 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -36,7 +37,7 @@ public class Collector extends SubsystemBase {
     .withInverted(InvertedValue.CounterClockwise_Positive)
     .withNeutralMode(NeutralModeValue.Coast);
 
-      MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
+    MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
     .withInverted(InvertedValue.Clockwise_Positive)
     .withNeutralMode(NeutralModeValue.Brake);
     
@@ -46,13 +47,10 @@ public class Collector extends SubsystemBase {
 
     m_pivotEncoder.getConfigurator().apply(Constants.Collector.kPivotCanCoderConfig);
 
-    m_pivotMotor.getConfigurator().apply(Constants.Collector.slot0());
+    m_pivotMotor.getConfigurator().apply(Constants.Collector.pivotSlot0());
     m_pivotMotor.getConfigurator().apply(Constants.Collector.kPivotCurrentConfigs);
     m_pivotMotor.getConfigurator().apply(pivotMotorConfig);
-    m_pivotMotor.getConfigurator().apply(Constants.Collector.kPivotFeedbackConfig);
-    m_pivotMotor.getConfigurator().apply(Constants.Collector.kPivotMotionMagicConfigs);
-
-    m_pivotMotor.setPosition(Constants.Collector.startPos);
+    m_pivotMotor.getConfigurator().apply(Constants.Collector.kPivotFeedbackConfig);  
   }
 
   @Override
@@ -65,11 +63,15 @@ public class Collector extends SubsystemBase {
   }
 
   public void deploy() {
-    m_pivotMotor.setControl(Constants.Collector.kRequest.withPosition(Constants.Collector.endPos));
+    pivotCollector(Constants.Collector.kDeployedPosition);
   }
 
   public void retract() {
-    m_pivotMotor.setControl(Constants.Collector.kRequest.withPosition(0));
+    pivotCollector(Constants.Collector.kRetractedPosition);
+  }
+
+  private void pivotCollector(double position) {
+    m_pivotMotor.setControl(new PositionDutyCycle(position));
   }
   
   public void collect() {

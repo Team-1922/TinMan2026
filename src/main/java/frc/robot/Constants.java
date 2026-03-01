@@ -11,13 +11,11 @@ import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.MagnetSensorConfigs;
-import com.ctre.phoenix6.configs.MotionMagicConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
-import com.ctre.phoenix6.controls.MotionMagicExpoDutyCycle;
 import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
+import com.ctre.phoenix6.signals.SensorDirectionValue;
 
-import edu.wpi.first.math.util.Units;
 import frc.robot.generated.TunerConstants;
 
 
@@ -49,6 +47,14 @@ public final class Constants {
             return slot0Configs;
         }
 
+        public static Slot0Configs pivotSlot0() {
+            Slot0Configs slot0Configs = new Slot0Configs();
+            slot0Configs.kP = 5;
+            slot0Configs.kS = 2;
+            return slot0Configs;
+        }
+
+
         public static final CurrentLimitsConfigs kRollerCurrentConfigs = new CurrentLimitsConfigs()
         .withStatorCurrentLimitEnable(true)
         .withStatorCurrentLimit(20)
@@ -73,18 +79,13 @@ public final class Constants {
 
         public static final CANcoderConfiguration kPivotCanCoderConfig = new CANcoderConfiguration().withMagnetSensor(
                 new MagnetSensorConfigs()
-                .withMagnetOffset(-0.477783203125)
+                .withMagnetOffset(-0.6208500625)
                 .withAbsoluteSensorDiscontinuityPoint(.5)
-        );
+                .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive));
 
-        public static final MotionMagicConfigs kPivotMotionMagicConfigs = new MotionMagicConfigs()
-        .withMotionMagicExpo_kV(2)
-        .withMotionMagicExpo_kA(2);
+        public static final double kRetractedPosition = -0.36;
 
-        public static final double endPos = Units.degreesToRotations(90);
-        
-        public static final double startPos = 0; 
-        public static final MotionMagicExpoDutyCycle kRequest = new MotionMagicExpoDutyCycle(0);
+        public static final double kDeployedPosition = -0.0024;
     };
 
     public static class Feeder {
