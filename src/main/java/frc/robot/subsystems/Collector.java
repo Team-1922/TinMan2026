@@ -62,11 +62,14 @@ public class Collector extends SubsystemBase {
         MotorAlignmentValue.Aligned
       )); */
 
+      m_armEncoder.getConfigurator().apply(Constants.Collector.colectorCANcoderConfig);
+
       m_positionalMotor.getConfigurator().apply(Constants.Collector.slot0());
       m_positionalMotor.getConfigurator().apply(Constants.Collector.RotatinalCurrentConfigs);
       m_positionalMotor.getConfigurator().apply(positinalMotorConfig);
-      m_positionalMotor.setPosition(Constants.Collector.startPos);
       m_positionalMotor.getConfigurator().apply(Constants.Collector.collectorFeedbackConfig);
+
+      m_positionalMotor.setPosition(Constants.Collector.startPos);
   }
 
   @Override

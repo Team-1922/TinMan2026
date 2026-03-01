@@ -7,8 +7,10 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.CANBus;
+import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.MagnetSensorConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.MotionMagicVoltage;
@@ -71,6 +73,12 @@ public final class Constants {
         .withFeedbackRemoteSensorID(kCANcoderID)
         .withRotorToSensorRatio(25)
         .withSensorToMechanismRatio(1);
+
+        public static final CANcoderConfiguration colectorCANcoderConfig = new CANcoderConfiguration().withMagnetSensor(
+                new MagnetSensorConfigs()
+                .withMagnetOffset(null)
+                .withAbsoluteSensorDiscontinuityPoint(null)
+        );
 
         public static final double endPos = Units.degreesToRotations(90);
         
