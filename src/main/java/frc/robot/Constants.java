@@ -8,10 +8,12 @@ import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.configs.CurrentLimitsConfigs;
+import com.ctre.phoenix6.configs.FeedbackConfigs;
 import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.VelocityTorqueCurrentFOC;
+import com.ctre.phoenix6.signals.FeedbackSensorSourceValue;
 
 import frc.robot.generated.TunerConstants;
 
@@ -32,11 +34,12 @@ public final class Constants {
         };
 
     public static class Collector {
-        public static final int kLEeaderID = 14;
+        public static final int kLeaderID = 14;
         public static final int kFollowerID = 15;
-        public static final int kPositinalId3 = 16;
+        public static final int kPositinalId = 16;
         public static final int kMotorId4 = 17;
         public static final double kGearRatio = 2;
+        public static final int kCANcoderID = 22;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
@@ -61,7 +64,15 @@ public final class Constants {
         .withSupplyCurrentLowerLimit(20)
         .withSupplyCurrentLowerTime(.75);
 
-        public static final double startPose = 0; 
+        public static final FeedbackConfigs collectorFeedbackConfig = new FeedbackConfigs()
+        .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
+        .withFeedbackRemoteSensorID(kCANcoderID)
+        .withRotorToSensorRatio(25)
+        .withSensorToMechanismRatio(1);
+
+        public static final double endPos = 90;
+        
+        public static final double startPos = 0; 
     };
 
     public static class Feeder {
