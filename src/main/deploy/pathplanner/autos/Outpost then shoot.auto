@@ -13,19 +13,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "OutpostToDepot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DepotToShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ShootToClimb"
+            "pathName": "OutpostToShoot"
           }
         },
         {

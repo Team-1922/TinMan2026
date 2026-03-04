@@ -7,25 +7,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightStartToOutpost"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "OutpostToDepot"
+            "pathName": "LeftStartToDepot"
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "DepotToShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ShootToClimb"
           }
         },
         {
