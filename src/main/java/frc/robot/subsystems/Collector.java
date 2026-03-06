@@ -27,6 +27,7 @@ public class Collector extends SubsystemBase {
   );
 
  private double m_rps = 0;
+ private boolean isRetracted = false;
  private final CANcoder m_pivotEncoder = new CANcoder(Constants.Collector.kPivotCanCoderId, Constants.superstructureCanbus);
  private final VelocityDutyCycle m_collectorDutyCycle = new VelocityDutyCycle(0).
     withSlot(0);
@@ -58,24 +59,23 @@ public class Collector extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void setTargetRps(double rps) {
-    m_rps = rps;
-  }
-
   public void deploy() {
     pivotCollector(Constants.Collector.kDeployedPosition);
+    isRetracted = false;
   }
 
   public void retract() {
     pivotCollector(Constants.Collector.kRetractedPosition);
+    isRetracted = true;
   }
 
   private void pivotCollector(double position) {
     m_pivotMotor.setControl(new PositionDutyCycle(position));
   }
   
-  public void collect() {
-   if(m_rps > 0) {
+  public void collect(double rps) {
+    m_rps = rps;
+    if(!isRetracted && m_rps > 0) {
       m_rollerMotor.setControl(m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
     }
   }
