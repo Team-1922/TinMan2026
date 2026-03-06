@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -77,6 +78,14 @@ public class RobotContainer {
         NamedCommands.registerCommand("setBotPose", drivetrain.runOnce(drivetrain::seedFieldCentric));
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        LimelightHelpers.setCameraPose_RobotSpace(Constants.middleLimeLight, 
+            Units.inchesToMeters(3.5), 
+            Units.inchesToMeters(7.5), 
+            Units.inchesToMeters(20.25), 
+            0, 
+            30, 
+            0);
     }
     
     private void configureBindings() {
