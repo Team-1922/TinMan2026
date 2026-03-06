@@ -5,6 +5,7 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.subsystems.Collector;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
@@ -12,10 +13,12 @@ public class Collect extends Command {
   /** Creates a new Collect. */
   Collector m_collector;
   private double m_collectorRps = 25;
+  private boolean m_isAuto = false;
 
-  public Collect(Collector collector) {
+  public Collect(Collector collector, boolean isAuto) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_collector = collector;
+    m_isAuto = isAuto;
     addRequirements(collector);
   }
 
@@ -29,6 +32,9 @@ public class Collect extends Command {
   @Override
   public void execute() {
     m_collector.collect();
+    if(m_isAuto){
+      new WaitCommand(1).execute();
+    }
   }
 
   // Called once the command ends or is interrupted.
