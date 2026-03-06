@@ -17,7 +17,7 @@ public class Shoot extends Command {
   private final Shooter m_shooter;
   private double m_spindexerRps = 21.7;
   private double m_feederRps = 50;
-  private double m_shooterRps = 20;
+  private double m_shooterRps = 23;
   private double m_yawThreshold = .01;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
