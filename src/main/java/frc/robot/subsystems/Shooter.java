@@ -18,12 +18,12 @@ import frc.robot.Constants;
 public class Shooter extends SubsystemBase {
   private final TalonFX m_leaderMotor = new TalonFX(
       Constants.Shooter.kLeaderMotorId,
-      Constants.topsideCanbus
+      Constants.superstructureCanbus
   );
 
   private final TalonFX m_followerMotor = new TalonFX(
       Constants.Shooter.kFollowerMotorId,
-      Constants.topsideCanbus
+      Constants.superstructureCanbus
   );
 
   private VelocityDutyCycle m_shooterDutyCycle = new VelocityDutyCycle(0)
