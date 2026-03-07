@@ -14,6 +14,7 @@ import com.pathplanner.lib.commands.PathPlannerAuto;
 import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -24,6 +25,7 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.RetractCollector;
 import frc.robot.commands.Shoot;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -59,21 +61,55 @@ public class RobotContainer {
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
-    public final Localization localization = new Localization(drivetrain);
-    public final Collector collector = new Collector();  
+    public final Localization localization = new Localization(
+        drivetrain
+    );
+    public final Collector collector = new Collector();
     private final SendableChooser<Command> autoChooser;
     private final Signaling signaling = new Signaling();
     public final LEDs leds = new LEDs();
 
-    public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
-    public final Collect collect = new Collect(collector);
-    public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
-    public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization, signaling);
+    public final Collect collect = new Collect(
+        collector
+    );
+    public final IdleSpindexer idleSpindexer = new IdleSpindexer(
+        spindexer
+    );
+    public final AutoAlign autoAlign = new AutoAlign(
+        drivetrain, localization
+    );
+    public final AutoAlign autoAutoAlign = new AutoAlign(
+        drivetrain,
+        localization
+    );
+    public final Shoot shoot = new Shoot(
+        shooter, 
+        feeder, 
+        spindexer, 
+        localization
+    );
+    public final Shoot autoShoot = new Shoot(
+        shooter, 
+        feeder, 
+        spindexer, 
+        localization
+    );
+    public final RetractCollector retractCollector = new RetractCollector(
+        collector
+    );
 
     public RobotContainer() {
         configureBindings();
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
+
+        LimelightHelpers.setCameraPose_RobotSpace(Constants.middleLimeLight, 
+            Units.inchesToMeters(3.5), 
+            Units.inchesToMeters(7.5), 
+            Units.inchesToMeters(20.25), 
+            0, 
+            30, 
+            0);
     }
     
     private void configureBindings() {
@@ -97,12 +133,17 @@ public class RobotContainer {
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
                 .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
+
         DriverController.leftTrigger().whileTrue(collect);
+        
         DriverController.rightTrigger().whileTrue( 
             new ParallelCommandGroup(
                 autoAlign, 
                 new Shoot(shooter, feeder, spindexer, localization)
         ));
+
+        DriverController.povDown().whileTrue(retractCollector);
+        
         DriverController.rightBumper().whileTrue(
             new Shoot(shooter, feeder, spindexer, localization)
         );
