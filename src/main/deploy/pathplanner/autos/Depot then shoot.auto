@@ -7,31 +7,25 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightStartToOutpost"
+            "pathName": "LeftStartToDepot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "collect"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "OutpostToDepot"
+            "waitTime": 1.0
           }
         },
         {
           "type": "path",
           "data": {
             "pathName": "DepotToShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ShootToClimb"
           }
         },
         {
