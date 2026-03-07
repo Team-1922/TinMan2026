@@ -90,7 +90,7 @@ public class Collector extends SubsystemBase {
     if(!isRetracted && m_rps > 0) {
       m_rollerMotor.setControl(
           m_collectorDutyCycle.withVelocity(
-              m_rps * Constants.Collector.kGearRatio
+              m_rps * Constants.Collector.kRollerGearRatio
          )
       );
     }

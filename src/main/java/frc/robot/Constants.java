@@ -38,7 +38,7 @@ public final class Constants {
         public static final int kRollerMotorId = 14;
         public static final int kPivotMotorId = 16;
         public static final int kPivotCanCoderId = 22;
-        public static final double kGearRatio = 2;
+        public static final double kRollerGearRatio = 2;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
@@ -76,7 +76,7 @@ public final class Constants {
         public static final FeedbackConfigs kPivotFeedbackConfig = new FeedbackConfigs()
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
             .withFeedbackRemoteSensorID(kPivotCanCoderId)
-            .withRotorToSensorRatio(25)
+            .withRotorToSensorRatio(48)
             .withSensorToMechanismRatio(1);
 
         public static final CANcoderConfiguration kPivotCanCoderConfig =
