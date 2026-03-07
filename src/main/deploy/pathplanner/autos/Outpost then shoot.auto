@@ -5,9 +5,22 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "race",
           "data": {
-            "pathName": "RightStartToOutpost"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "RightStartToOutpost"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "collect"
+                }
+              }
+            ]
           }
         },
         {
