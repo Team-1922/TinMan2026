@@ -5,21 +5,9 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "setBotPose"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "StraightBack"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "setBotPose"
           }
         },
         {
