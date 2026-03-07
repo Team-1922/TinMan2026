@@ -59,7 +59,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void disabledInit() {
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-        m_leds.Red();
+        m_leds.yellow();
     }
 
     @Override
