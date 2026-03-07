@@ -13,31 +13,19 @@
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 2.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "OutpostToDepot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "DepotToShoot"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "ShootToClimb"
+            "pathName": "OutpostToShoot"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "shoot"
+            "name": "alignAndShoot"
           }
         }
       ]

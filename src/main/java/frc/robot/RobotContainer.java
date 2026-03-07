@@ -7,19 +7,14 @@ package frc.robot;
 import static edu.wpi.first.units.Units.*;
 
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
-import com.ctre.phoenix6.CANBus;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.PathPlannerPath;
 
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -37,7 +32,6 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
 import com.pathplanner.lib.auto.NamedCommands;
-import frc.robot.commands.IdleSpindexer;
 import frc.robot.subsystems.LEDs;
 
 public class RobotContainer {
@@ -57,59 +51,51 @@ public class RobotContainer {
 
     private final CommandXboxController DriverController = new CommandXboxController(0);
 
-    public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
+    public final CommandSwerveDrivetrain drivetrain = 
+            TunerConstants.createDrivetrain();
+
     public final Shooter shooter = new Shooter();
     public final Spindexer spindexer = new Spindexer();
     public final Feeder feeder = new Feeder();
-    public final Localization localization = new Localization(
-        drivetrain
-    );
+    public final Localization localization = new Localization(drivetrain);
     public final Collector collector = new Collector();
     private final SendableChooser<Command> autoChooser;
     private final Signaling signaling = new Signaling();
     public final LEDs leds = new LEDs();
 
-    public final Collect collect = new Collect(
-        collector
-    );
-    public final IdleSpindexer idleSpindexer = new IdleSpindexer(
-        spindexer
-    );
-    public final AutoAlign autoAlign = new AutoAlign(
-        drivetrain, localization
-    );
-    public final AutoAlign autoAutoAlign = new AutoAlign(
-        drivetrain,
-        localization
-    );
-    public final Shoot shoot = new Shoot(
-        shooter, 
-        feeder, 
-        spindexer, 
-        localization
-    );
-    public final Shoot autoShoot = new Shoot(
-        shooter, 
-        feeder, 
-        spindexer, 
-        localization
-    );
-    public final RetractCollector retractCollector = new RetractCollector(
-        collector
-    );
-
     public RobotContainer() {
         configureBindings();
+        
+        NamedCommands.registerCommand(
+                "alignAndShoot",
+                new ParallelCommandGroup(
+                        new AutoAlign(drivetrain, localization),
+                        new Shoot(
+                                shooter,
+                                feeder,
+                                spindexer,
+                                localization
+                        )
+                )
+        );
+        NamedCommands.registerCommand(
+                "autoAlign",
+                new AutoAlign(drivetrain, localization)
+        );
+        NamedCommands.registerCommand("collect", new Collect(collector));
+
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
-        LimelightHelpers.setCameraPose_RobotSpace(Constants.middleLimeLight, 
-            Units.inchesToMeters(3.5), 
-            Units.inchesToMeters(7.5), 
-            Units.inchesToMeters(20.25), 
-            0, 
-            30, 
-            0);
+        LimelightHelpers.setCameraPose_RobotSpace(
+                Constants.middleLimeLight, 
+                Units.inchesToMeters(3.5), 
+                Units.inchesToMeters(7.5), 
+                Units.inchesToMeters(20.25), 
+                0, 
+                30, 
+                0
+        );
     }
     
     private void configureBindings() {
@@ -122,27 +108,35 @@ public class RobotContainer {
                         .withVelocityX(-DriverController.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
                         .withVelocityY(-DriverController.getLeftX() * MaxSpeed) // Drive left with negative X (left)
                         .withRotationalRate(-DriverController.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-                ));
+                )
+        );
 
         // Idle while the robot is disabled. This ensures the configured
         // neutral mode is applied to the drive motors while disabled.
         final var idle = new SwerveRequest.Idle();
         RobotModeTriggers.disabled().whileTrue(
-                drivetrain.applyRequest(() -> idle).ignoringDisable(true));
+                drivetrain.applyRequest(() -> idle).ignoringDisable(true)
+        );
 
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
         DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
-                .withModuleDirection(new Rotation2d(-DriverController.getLeftY(), -DriverController.getLeftX()))));
-
-        DriverController.leftTrigger().whileTrue(collect);
-        
-        DriverController.rightTrigger().whileTrue( 
-            new ParallelCommandGroup(
-                autoAlign, 
-                new Shoot(shooter, feeder, spindexer, localization)
+                .withModuleDirection(new Rotation2d(
+                        -DriverController.getLeftY(),
+                        -DriverController.getLeftX()
+                ))
         ));
 
-        DriverController.povDown().whileTrue(retractCollector);
+        DriverController.leftTrigger().whileTrue(new Collect(collector));
+        
+        DriverController.rightTrigger().whileTrue( 
+                new ParallelCommandGroup(
+                        new AutoAlign(drivetrain, localization), 
+                        new Shoot(shooter, feeder, spindexer, localization)
+        ));
+
+        DriverController.povDown().whileTrue(
+                new RetractCollector(collector)
+        );
         
         DriverController.rightBumper().whileTrue(
             new Shoot(shooter, feeder, spindexer, localization)
