@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
@@ -19,9 +20,8 @@ public class Signaling extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
-  public void isTheBotAlined(boolean aligned){
-    if(aligned) {
+  public void startRotatingBack(){
+    
       DriverController.setRumble(RumbleType.kBothRumble, 1);
-    }
   }
 }

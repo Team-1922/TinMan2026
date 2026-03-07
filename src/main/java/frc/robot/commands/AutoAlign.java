@@ -50,12 +50,6 @@ public class AutoAlign extends Command {
     double vYaw = m_localization.getM_errorYaw() * m_yawKp;
     
     m_drivetrain.Move(vX, vY, vYaw);
-    if (
-      Math.abs(distFromHub- Constants.targetDistanceToHub)
-          < Constants.autoAlignDistanceThreshold
-    ) {
-      m_signaling.isTheBotAlined(false);
-    }
   }
 
   // Called once the command ends or is interrupted.

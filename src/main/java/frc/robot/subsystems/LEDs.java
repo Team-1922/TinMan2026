@@ -22,10 +22,11 @@ public class LEDs extends SubsystemBase {
   /** Creates a new LEDs. */
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
+  LEDPattern m_red = LEDPattern.solid(Color.kRed);
  
   public LEDs() {
-    m_led = new AddressableLED(2);
-    m_ledBuffer = new AddressableLEDBuffer(66);
+    m_led = new AddressableLED(0);
+    m_ledBuffer = new AddressableLEDBuffer(6);
 
     m_led.setLength(m_ledBuffer.getLength());
     m_led.start();
@@ -39,8 +40,7 @@ public class LEDs extends SubsystemBase {
   }
 
   public void Red() {
-    LEDPattern red = LEDPattern.solid(Color.kRed);
-    red.applyTo(m_ledBuffer);
+    m_red.applyTo(m_ledBuffer);
     m_led.setData(m_ledBuffer);
   }
 

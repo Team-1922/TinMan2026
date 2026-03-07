@@ -63,6 +63,7 @@ public class RobotContainer {
     public final Collector collector = new Collector();  
     private final SendableChooser<Command> autoChooser;
     private final Signaling signaling = new Signaling();
+    public final LEDs leds = new LEDs();
 
     public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
     public final Collect collect = new Collect(collector);
