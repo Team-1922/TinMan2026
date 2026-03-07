@@ -74,8 +74,8 @@ public class RobotContainer {
     public RobotContainer() {
         configureBindings();
         
-        NamedCommands.registerCommand("shoot", new ParallelCommandGroup(autoAutoAlign, autoShoot));
-        NamedCommands.registerCommand("AutoAlign", autoAutoAlign);
+        NamedCommands.registerCommand("alignAndShoot", new ParallelCommandGroup(autoAutoAlign, autoShoot));
+        NamedCommands.registerCommand("autoAlign", autoAutoAlign);
         NamedCommands.registerCommand("setBotPose", drivetrain.runOnce(drivetrain::seedFieldCentric));
         NamedCommands.registerCommand("collect", autoCollect);
 
