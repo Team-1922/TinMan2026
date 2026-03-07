@@ -27,11 +27,12 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class Signaling extends SubsystemBase {
   /** Creates a new Signaling. */
-  private String m_gameData = DriverStation.getGameSpecificMessage();
-  double m_matchTime = DriverStation.getMatchTime();
+  String m_gameData;
+  double m_matchTime;
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
   LEDPattern m_yellow = LEDPattern.solid(Color.kYellow);
+  LEDPattern m_red = LEDPattern.solid(Color.kRed);
   private final CommandXboxController DriverController = new CommandXboxController(0);
   
   public Signaling() {
@@ -46,6 +47,15 @@ public class Signaling extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     m_led.setData(m_ledBuffer);
+    m_gameData = DriverStation.getGameSpecificMessage();
+    m_matchTime = DriverStation.getMatchTime();
+
+    if(isHubActive()){
+      yellow();
+      startRotatingBack();
+    } else if(!isHubActive()){
+      red();
+    }
   }
 
   public void startRotatingBack(){
@@ -53,8 +63,12 @@ public class Signaling extends SubsystemBase {
       DriverController.setRumble(RumbleType.kBothRumble, 1);
   }
 
-   public void yellow() {
+  public void yellow() {
     m_yellow.applyTo(m_ledBuffer);
+  }
+
+  public void red() {
+    m_red.applyTo(m_ledBuffer);
   }
 
   public void yellowScroll(){
