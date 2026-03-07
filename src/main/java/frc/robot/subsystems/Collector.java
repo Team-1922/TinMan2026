@@ -26,13 +26,15 @@ public class Collector extends SubsystemBase {
       Constants.superstructureCanbus
   );
 
- private double m_rps = 0;
- private boolean isRetracted = false;
- private final CANcoder m_pivotEncoder = new CANcoder(
-    Constants.Collector.kPivotCanCoderId, Constants.superstructureCanbus);
- private final VelocityDutyCycle m_collectorDutyCycle = 
- new VelocityDutyCycle(0)
-    .withSlot(0);
+  private double m_rps = 0;
+  private boolean isRetracted = false;
+  private final CANcoder m_pivotEncoder = new CANcoder(
+      Constants.Collector.kPivotCanCoderId,
+      Constants.superstructureCanbus
+  );
+  private final VelocityDutyCycle m_collectorDutyCycle = 
+  new VelocityDutyCycle(0)
+     .withSlot(0);
 
   /** Creates a new Collector. */
   public Collector() {
@@ -87,7 +89,7 @@ public class Collector extends SubsystemBase {
       m_rollerMotor.setControl(
           m_collectorDutyCycle.withVelocity(
               m_rps * Constants.Collector.kGearRatio
-        )
+         )
       );
     }
   }
