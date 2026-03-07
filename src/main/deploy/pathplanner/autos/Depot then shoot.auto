@@ -5,15 +5,41 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "LeftStartToDepot"
+            "commands": [
+              {
+                "type": "wait",
+                "data": {
+                  "waitTime": 1.0
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "collect"
+                }
+              }
+            ]
           }
         },
         {
-          "type": "named",
+          "type": "deadline",
           "data": {
-            "name": "collect"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftStartToDepot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "collect"
+                }
+              }
+            ]
           }
         },
         {
