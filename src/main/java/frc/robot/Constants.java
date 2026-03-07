@@ -26,10 +26,11 @@ public final class Constants {
     public static final double targetDistanceToHub = Meters.of(2.7).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
-    public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
-            case TinmanV2 -> TunerConstants.kCANBus;
+    public static final CANBus drivebaseCanbus =  switch(Constants.robotType) {
+            case TinmanV2 -> TunerConstants.kDrivebaseCANBus;
             case TinmanV1 ->  CANBus.roboRIO();
         };
+    public static final CANBus topsideCanbus = TunerConstants.kTopsideCANBus;
 
     public static class Collector {
         public static final int kMotorId1 = 14;
