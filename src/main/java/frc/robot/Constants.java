@@ -55,21 +55,23 @@ public final class Constants {
         }
 
 
-        public static final CurrentLimitsConfigs kRollerCurrentConfigs = new CurrentLimitsConfigs()
-            .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(20)
-            .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(20)
-            .withSupplyCurrentLowerLimit(20)
-            .withSupplyCurrentLowerTime(.75);
+        public static final CurrentLimitsConfigs kRollerCurrentConfigs = 
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(20)
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(20)
+                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLowerTime(.75);
 
-        public static final CurrentLimitsConfigs kPivotCurrentConfigs = new CurrentLimitsConfigs()
-            .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(20)
-            .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(20)
-            .withSupplyCurrentLowerLimit(20)
-            .withSupplyCurrentLowerTime(.75);
+        public static final CurrentLimitsConfigs kPivotCurrentConfigs = 
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(20)
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(20)
+                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLowerTime(.75);
 
         public static final FeedbackConfigs kPivotFeedbackConfig = new FeedbackConfigs()
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
@@ -77,11 +79,15 @@ public final class Constants {
             .withRotorToSensorRatio(25)
             .withSensorToMechanismRatio(1);
 
-        public static final CANcoderConfiguration kPivotCanCoderConfig = new CANcoderConfiguration().withMagnetSensor(
-            new MagnetSensorConfigs()
-            .withMagnetOffset(-0.6208500625)
-            .withAbsoluteSensorDiscontinuityPoint(.5)
-            .withSensorDirection(SensorDirectionValue.CounterClockwise_Positive));
+        public static final CANcoderConfiguration kPivotCanCoderConfig =
+            new CANcoderConfiguration().withMagnetSensor(
+                    new MagnetSensorConfigs()
+                        .withMagnetOffset(-0.6208500625)
+                        .withAbsoluteSensorDiscontinuityPoint(.5)
+                        .withSensorDirection(
+                                SensorDirectionValue.CounterClockwise_Positive
+                        )
+            );
 
         public static final double kRetractedPosition = -0.36;
 
@@ -99,26 +105,28 @@ public final class Constants {
             return slot0Configs;
         }
 
-        public static final CurrentLimitsConfigs FeederCurrentConfigs = new CurrentLimitsConfigs()
-            .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(20)
-            .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(20)
-            .withSupplyCurrentLowerLimit(20)
-            .withSupplyCurrentLowerTime(.75);
+        public static final CurrentLimitsConfigs FeederCurrentConfigs = 
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(20)
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(20)
+                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLowerTime(.75);
     };
 
     public static class Shooter{
         public static final int kLeaderMotorId = 19;
         public static final int kFollowerMotorId = 20;
         
-        public static final CurrentLimitsConfigs ShooterCurrentConfigs = new CurrentLimitsConfigs()
-            .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(20)
-            .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(20)
-            .withSupplyCurrentLowerLimit(20)
-            .withSupplyCurrentLowerTime(.75);
+        public static final CurrentLimitsConfigs ShooterCurrentConfigs = 
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(20)
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(20)
+                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLowerTime(.75);
         public static final double kGearRatio = 1;
 
         public static TalonFXConfiguration configs(){
@@ -144,13 +152,14 @@ public final class Constants {
             return slot0Configs;
         }
 
-        public static final CurrentLimitsConfigs SpindedxerCurrentConfigs = new CurrentLimitsConfigs()
-            .withStatorCurrentLimitEnable(true)
-            .withStatorCurrentLimit(20)
-            .withSupplyCurrentLimitEnable(true)
-            .withSupplyCurrentLimit(20)
-            .withSupplyCurrentLowerLimit(20)
-            .withSupplyCurrentLowerTime(.75);
+        public static final CurrentLimitsConfigs SpindedxerCurrentConfigs = 
+            new CurrentLimitsConfigs()
+                .withStatorCurrentLimitEnable(true)
+                .withStatorCurrentLimit(20)
+                .withSupplyCurrentLimitEnable(true)
+                .withSupplyCurrentLimit(20)
+                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLowerTime(.75);
     };
 
     
