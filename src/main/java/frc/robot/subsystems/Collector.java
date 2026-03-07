@@ -17,41 +17,47 @@ import frc.robot.Constants;
 
 public class Collector extends SubsystemBase {
   private final TalonFX m_rollerMotor = new TalonFX(
-    Constants.Collector.kRollerMotorId, 
-    Constants.superstructureCanbus
+      Constants.Collector.kRollerMotorId, 
+      Constants.superstructureCanbus
   );
 
   private final TalonFX m_pivotMotor = new TalonFX(
-    Constants.Collector.kPivotMotorId, 
-    Constants.superstructureCanbus
+      Constants.Collector.kPivotMotorId, 
+      Constants.superstructureCanbus
   );
 
  private double m_rps = 0;
  private boolean isRetracted = false;
- private final CANcoder m_pivotEncoder = new CANcoder(Constants.Collector.kPivotCanCoderId, Constants.superstructureCanbus);
- private final VelocityDutyCycle m_collectorDutyCycle = new VelocityDutyCycle(0).
-    withSlot(0);
+ private final CANcoder m_pivotEncoder = new CANcoder(
+    Constants.Collector.kPivotCanCoderId, Constants.superstructureCanbus);
+ private final VelocityDutyCycle m_collectorDutyCycle = 
+ new VelocityDutyCycle(0)
+    .withSlot(0);
 
   /** Creates a new Collector. */
   public Collector() {
     MotorOutputConfigs rollerMotorConfig = new MotorOutputConfigs()
-    .withInverted(InvertedValue.CounterClockwise_Positive)
-    .withNeutralMode(NeutralModeValue.Coast);
+        .withInverted(InvertedValue.CounterClockwise_Positive)
+        .withNeutralMode(NeutralModeValue.Coast);
 
     MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
-    .withInverted(InvertedValue.Clockwise_Positive)
-    .withNeutralMode(NeutralModeValue.Brake);
+        .withInverted(InvertedValue.Clockwise_Positive)
+        .withNeutralMode(NeutralModeValue.Brake);
     
     m_rollerMotor.getConfigurator().apply(Constants.Collector.slot0());
-    m_rollerMotor.getConfigurator().apply(Constants.Collector.kRollerCurrentConfigs);
+    m_rollerMotor.getConfigurator().apply(
+        Constants.Collector.kRollerCurrentConfigs);
     m_rollerMotor.getConfigurator().apply(rollerMotorConfig);
 
-    m_pivotEncoder.getConfigurator().apply(Constants.Collector.kPivotCanCoderConfig);
+    m_pivotEncoder.getConfigurator().apply(
+        Constants.Collector.kPivotCanCoderConfig);
 
     m_pivotMotor.getConfigurator().apply(Constants.Collector.pivotSlot0());
-    m_pivotMotor.getConfigurator().apply(Constants.Collector.kPivotCurrentConfigs);
+    m_pivotMotor.getConfigurator().apply(
+        Constants.Collector.kPivotCurrentConfigs);
     m_pivotMotor.getConfigurator().apply(pivotMotorConfig);
-    m_pivotMotor.getConfigurator().apply(Constants.Collector.kPivotFeedbackConfig);  
+    m_pivotMotor.getConfigurator().apply(
+        Constants.Collector.kPivotFeedbackConfig);  
   }
 
   @Override
@@ -76,7 +82,11 @@ public class Collector extends SubsystemBase {
   public void collect(double rps) {
     m_rps = rps;
     if(!isRetracted && m_rps > 0) {
-      m_rollerMotor.setControl(m_collectorDutyCycle.withVelocity(m_rps * Constants.Collector.kGearRatio));
+      m_rollerMotor.setControl(
+        m_collectorDutyCycle.withVelocity(
+          m_rps * Constants.Collector.kGearRatio
+        )
+      );
     }
   }
 

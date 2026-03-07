@@ -57,20 +57,32 @@ public class RobotContainer {
     private final CommandXboxController DriverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
-    public final Shooter shooter = new Shooter();
-    public final Spindexer spindexer = new Spindexer();
-    public final Feeder feeder = new Feeder();
-    public final Localization localization = new Localization(drivetrain);
-    public final Collector collector = new Collector();
+    public final Shooter shooter = 
+        new Shooter();
+    public final Spindexer spindexer = 
+        new Spindexer();
+    public final Feeder feeder = 
+        new Feeder();
+    public final Localization localization = 
+        new Localization(drivetrain);
+    public final Collector collector = 
+        new Collector();
     private final SendableChooser<Command> autoChooser;
 
-    public final Collect collect = new Collect(collector);
-    public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
-    public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
-    public final AutoAlign autoAutoAlign = new AutoAlign(drivetrain, localization);
-    public final Shoot shoot = new Shoot(shooter, feeder, spindexer, localization);
-    public final Shoot autoShoot = new Shoot(shooter, feeder, spindexer, localization);
-    public final RetractCollector retractCollector = new RetractCollector(collector);
+    public final Collect collect = 
+        new Collect(collector);
+    public final IdleSpindexer idleSpindexer = 
+        new IdleSpindexer(spindexer);
+    public final AutoAlign autoAlign = 
+        new AutoAlign(drivetrain, localization);
+    public final AutoAlign autoAutoAlign = 
+        new AutoAlign(drivetrain, localization);
+    public final Shoot shoot = 
+        new Shoot(shooter, feeder, spindexer, localization);
+    public final Shoot autoShoot = 
+        new Shoot(shooter, feeder, spindexer, localization);
+    public final RetractCollector retractCollector = 
+        new RetractCollector(collector);
 
     public RobotContainer() {
         configureBindings();
