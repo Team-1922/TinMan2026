@@ -33,8 +33,8 @@ public class Collector extends SubsystemBase {
       Constants.superstructureCanbus
   );
   private final VelocityDutyCycle m_collectorDutyCycle = 
-  new VelocityDutyCycle(0)
-     .withSlot(0);
+    new VelocityDutyCycle(0)
+      .withSlot(0);
 
   /** Creates a new Collector. */
   public Collector() {
@@ -58,10 +58,12 @@ public class Collector extends SubsystemBase {
 
     m_pivotMotor.getConfigurator().apply(Constants.Collector.pivotSlot0());
     m_pivotMotor.getConfigurator().apply(
-        Constants.Collector.kPivotCurrentConfigs);
+        Constants.Collector.kPivotCurrentConfigs
+    );
     m_pivotMotor.getConfigurator().apply(pivotMotorConfig);
     m_pivotMotor.getConfigurator().apply(
-        Constants.Collector.kPivotFeedbackConfig);  
+        Constants.Collector.kPivotFeedbackConfig
+    );  
   }
 
   @Override

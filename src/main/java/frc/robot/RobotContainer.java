@@ -76,13 +76,20 @@ public class RobotContainer {
         drivetrain, localization
     );
     public final AutoAlign autoAutoAlign = new AutoAlign(
-        drivetrain, localization
+        drivetrain,
+        localization
     );
     public final Shoot shoot = new Shoot(
-        shooter, feeder, spindexer, localization
+        shooter, 
+        feeder, 
+        spindexer, 
+        localization
     );
     public final Shoot autoShoot = new Shoot(
-        shooter, feeder, spindexer, localization
+        shooter, 
+        feeder, 
+        spindexer, 
+        localization
     );
     public final RetractCollector retractCollector = new RetractCollector(
         collector
