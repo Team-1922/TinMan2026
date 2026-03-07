@@ -27,10 +27,12 @@ import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
 import frc.robot.subsystems.Localization;
 import frc.robot.subsystems.Shooter;
+import frc.robot.subsystems.Signaling;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
 import com.pathplanner.lib.auto.NamedCommands;
+import frc.robot.subsystems.LEDs;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
@@ -57,8 +59,9 @@ public class RobotContainer {
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
     public final Collector collector = new Collector();
-
     private final SendableChooser<Command> autoChooser;
+    private final Signaling signaling = new Signaling();
+    public final LEDs leds = new LEDs();
 
     public RobotContainer() {
         configureBindings();
@@ -66,7 +69,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "alignAndShoot",
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization),
+                        new AutoAlign(drivetrain, localization, signaling),
                         new Shoot(
                                 shooter,
                                 feeder,
@@ -77,7 +80,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
                 "autoAlign",
-                new AutoAlign(drivetrain, localization)
+                new AutoAlign(drivetrain, localization, signaling)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
 
@@ -127,7 +130,7 @@ public class RobotContainer {
         
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization), 
+                        new AutoAlign(drivetrain, localization, signaling), 
                         new Shoot(shooter, feeder, spindexer, localization)
         ));
 
