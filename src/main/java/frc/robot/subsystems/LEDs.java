@@ -41,7 +41,6 @@ public class LEDs extends SubsystemBase {
 
   public void Red() {
     m_red.applyTo(m_ledBuffer);
-    m_led.setData(m_ledBuffer);
   }
 
   public void yellowScroll(){
