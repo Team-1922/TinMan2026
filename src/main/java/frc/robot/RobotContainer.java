@@ -63,8 +63,8 @@ public class RobotContainer {
     public final Collector collector = new Collector();
     private final SendableChooser<Command> autoChooser;
 
-    public final Collect collect = new Collect(collector, false);
-    public final Collect autoCollect = new Collect(collector, true);
+    public final Collect collect = new Collect(collector);
+    public final Collect autoCollect = new Collect(collector);
     public final IdleSpindexer idleSpindexer = new IdleSpindexer(spindexer);
     public final AutoAlign autoAlign = new AutoAlign(drivetrain, localization);
     public final AutoAlign autoAutoAlign = new AutoAlign(drivetrain, localization);

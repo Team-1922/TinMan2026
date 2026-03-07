@@ -13,12 +13,10 @@ public class Collect extends Command {
   /** Creates a new Collect. */
   Collector m_collector;
   private double m_collectorRps = 25;
-  private boolean m_isAuto = false;
 
-  public Collect(Collector collector, boolean isAuto) {
+  public Collect(Collector collector) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_collector = collector;
-    m_isAuto = isAuto;
     addRequirements(collector);
   }
 
@@ -32,9 +30,6 @@ public class Collect extends Command {
   @Override
   public void execute() {
     m_collector.collect();
-    if(m_isAuto){
-      new WaitCommand(1).execute();
-    }
   }
 
   // Called once the command ends or is interrupted.
