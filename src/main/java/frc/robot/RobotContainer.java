@@ -69,7 +69,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "alignAndShoot",
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization),
+                        new AutoAlign(drivetrain, localization, signaling),
                         new Shoot(
                                 shooter,
                                 feeder,
@@ -80,7 +80,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
                 "autoAlign",
-                new AutoAlign(drivetrain, localization)
+                new AutoAlign(drivetrain, localization, signaling)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
 
@@ -130,7 +130,7 @@ public class RobotContainer {
         
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization), 
+                        new AutoAlign(drivetrain, localization, signaling), 
                         new Shoot(shooter, feeder, spindexer, localization)
         ));
 
