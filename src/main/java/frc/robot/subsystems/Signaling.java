@@ -38,6 +38,7 @@ public class Signaling extends SubsystemBase {
   private final CommandXboxController m_DriverController;
   private final Timer m_rumbleTimer = new Timer();
   private boolean m_alerted = false;
+  private final double m_earlyWarning = 5;
   
   public Signaling(CommandXboxController commandXboxController) {
     m_DriverController = commandXboxController;
@@ -129,15 +130,15 @@ public class Signaling extends SubsystemBase {
         case Blue -> redInactiveFirst;
       };
 
-      if(m_matchTime > 130 ) {
+      if(m_matchTime > 130 - m_earlyWarning) {
         return true;
-      } else if (m_matchTime > 105) {
+      } else if (m_matchTime > 105 - m_earlyWarning) {
         return shift1Active;
-      } else if (m_matchTime > 80) {
+      } else if (m_matchTime > 80 - m_earlyWarning) {
         return !shift1Active;
-      } else if (m_matchTime > 55) {
+      } else if (m_matchTime > 55 - m_earlyWarning) {
         return shift1Active;
-      } else if (m_matchTime > 30) {
+      } else if (m_matchTime > 30 - m_earlyWarning) {
         return !shift1Active;
       } else {
         return true;
