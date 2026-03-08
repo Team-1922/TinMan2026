@@ -26,8 +26,8 @@ public class Localization extends SubsystemBase {
   private double m_errorX;
   private double m_errorY;
   private final Pose2d m_hubpose;
-  private final Pose2d m_blueHubPose2d = new Pose2d(5.22, 4.035, null);
-  private final Pose2d m_redHubPose2d = new Pose2d(11.32, 4.035, null);
+  private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
+  private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
