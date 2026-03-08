@@ -47,12 +47,14 @@ public class Localization extends SubsystemBase {
     // This method will be called once per scheduler run
     
     LimelightHelpers.SetRobotOrientation("limelight-front", getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate mt2_estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+    LimelightHelpers.PoseEstimate mt2_estimateFront = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+    LimelightHelpers.PoseEstimate mt2_estimateRight = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right");
     Boolean doRejectUpdate = false;
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
+    // Values for the front limelight 
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
-      || mt2_estimate == null
-      || mt2_estimate.tagCount == 0)
+      || mt2_estimateFront == null
+      || mt2_estimateFront.tagCount == 0)
     {
       doRejectUpdate = true;
     }
@@ -60,9 +62,25 @@ public class Localization extends SubsystemBase {
     {
       m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
       m_drivetrain.addVisionMeasurement(
-        mt2_estimate.pose,
-        mt2_estimate.timestampSeconds);
+        mt2_estimateFront.pose,
+        mt2_estimateFront.timestampSeconds);
     }
+
+    // Values for the right limelight
+    if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
+      || mt2_estimateRight == null
+      || mt2_estimateRight.tagCount == 0)
+    {
+      doRejectUpdate = true;
+    }
+    if(!doRejectUpdate)
+    {
+      m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
+      m_drivetrain.addVisionMeasurement(
+        mt2_estimateRight.pose,
+        mt2_estimateRight.timestampSeconds);
+    }
+    
     m_Field2d.setRobotPose(getPose2dEstimate());
     SmartDashboard.putData("Field2d", m_Field2d);
 
