@@ -49,8 +49,8 @@ public final class Constants {
 
         public static Slot0Configs pivotSlot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 5;
-            slot0Configs.kS = 2;
+            slot0Configs.kP = 2.5;
+            slot0Configs.kS = 0;
             return slot0Configs;
         }
 
@@ -82,16 +82,16 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.6208500625)
-                        .withAbsoluteSensorDiscontinuityPoint(.5)
+                        .withMagnetOffset(-0.620849609375)
+                        .withAbsoluteSensorDiscontinuityPoint(-.5)
                         .withSensorDirection(
                                 SensorDirectionValue.CounterClockwise_Positive
                         )
             );
 
-        public static final double kRetractedPosition = -0.36;
+        public static final double kRetractedPosition = 0.624268;
 
-        public static final double kDeployedPosition = -0.0024;
+        public static final double kDeployedPosition = 0.999512;
     };
 
     public static class Feeder {
