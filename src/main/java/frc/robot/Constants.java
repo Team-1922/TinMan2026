@@ -142,7 +142,7 @@ public final class Constants {
     
     public static class Spindexer {
         public static final int kMotorId1 = 21;
-        public static final double kGearRatio = 6;
+        public static final double kGearRatio = 15;
         public static final double spindexerIdleSpeed = 0;
         
         public static Slot0Configs slot0() {
