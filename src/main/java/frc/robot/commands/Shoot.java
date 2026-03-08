@@ -71,15 +71,16 @@ public class Shoot extends Command {
         )
      {
       m_shooter.setTargetRps(m_shooterRps);
-      m_spindexer.setTargetRps(m_spindexerRps);
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
         m_isReadyToShoot = true;
       }
       if (m_isReadyToShoot) {
         m_feeder.setTargetRps(m_feederRps);
+      m_spindexer.setTargetRps(m_spindexerRps);
       }
     } else if (m_feeder.getSpeed() > 0) {
       m_feeder.stop();
+      m_spindexer.setTargetRps(0);
     }
   }
 
