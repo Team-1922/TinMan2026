@@ -45,6 +45,8 @@ public class Feeder extends SubsystemBase {
       );
     }
     SmartDashboard.putNumber("Feeder Motor RPS", m_rps * Constants.Feeder.kGearRatio);
+    SmartDashboard.putNumber("Feeder Motor Velocity", m_Feeder.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Feeder Duty Cycle Velocity", m_feederDutyCycle.getVelocityMeasure().magnitude());
   }
 
   public void setTargetRps(double rps) {

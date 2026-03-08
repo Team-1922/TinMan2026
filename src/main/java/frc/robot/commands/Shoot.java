@@ -4,6 +4,8 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.units.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -15,16 +17,18 @@ import frc.robot.subsystems.Localization;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
   private final Shooter m_shooter;
-  private double m_spindexerRps = 21.7;
+  private double m_spindexerRps = 4.5;
   private double m_feederRps = 100;
   private double m_shooterRps = 20;
-  private double m_yawThreshold = .05;
+  private double m_yawThreshold = .045;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
   private final double m_shooterSpeedThreshold = 2;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
+  private final double m_spindexerDelayInSeconds = .25;
+  private Timer m_spindexerTimer = new Timer();
 
   /** Creates a new Shoot. */
   public Shoot(
@@ -49,7 +53,6 @@ public class Shoot extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-
     m_isReadyToShoot = false;
   }
 
@@ -65,7 +68,7 @@ public class Shoot extends Command {
     if (
         !m_requireAlign
         || (
-            Math.abs(distFromHub- Constants.targetDistanceToHub)
+            Math.abs(distFromHub - Constants.targetDistanceToHub)
               < Constants.autoAlignDistanceThreshold 
             && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold)
         )
@@ -74,13 +77,22 @@ public class Shoot extends Command {
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
         m_isReadyToShoot = true;
       }
+
       if (m_isReadyToShoot) {
+        if(!m_spindexerTimer.isRunning()) {
+          m_spindexerTimer.restart();
+        }        
+
         m_feeder.setTargetRps(m_feederRps);
-      m_spindexer.setTargetRps(m_spindexerRps);
+
+        if(m_spindexerTimer.hasElapsed(m_spindexerDelayInSeconds)) {
+          m_spindexer.setTargetRps(m_spindexerRps);
+        }        
       }
     } else if (m_feeder.getSpeed() > 0) {
       m_feeder.stop();
-      m_spindexer.setTargetRps(0);
+      m_spindexer.stop();
+      m_spindexerTimer.stop();
     }
   }
 
@@ -88,7 +100,8 @@ public class Shoot extends Command {
   @Override
   public void end(boolean interrupted) {
     m_shooter.stop();
-    m_spindexer.setIdleSpeed();
+    m_spindexer.stop();
+    m_spindexerTimer.stop();
     m_feeder.stop();
   }
 
