@@ -32,7 +32,6 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
 import com.pathplanner.lib.auto.NamedCommands;
-import frc.robot.subsystems.LEDs;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
@@ -49,7 +48,7 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController DriverController = new CommandXboxController(0);
+    public final CommandXboxController DriverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = 
             TunerConstants.createDrivetrain();
@@ -59,9 +58,9 @@ public class RobotContainer {
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
     public final Collector collector = new Collector();
+    public final Signaling signaling = new Signaling(DriverController);
     private final SendableChooser<Command> autoChooser;
-    private final Signaling signaling = new Signaling();
-    public final LEDs leds = new LEDs();
+    
 
     public RobotContainer() {
         configureBindings();

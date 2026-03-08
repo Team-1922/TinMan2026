@@ -16,13 +16,13 @@ import com.pathplanner.lib.commands.FollowPathCommand;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import frc.robot.subsystems.LEDs;
+import frc.robot.subsystems.Signaling;
 
 public class Robot extends LoggedRobot {
     private Command m_autonomousCommand;
 
     private final RobotContainer m_robotContainer;
-    private final LEDs m_leds;
+    private final Signaling m_signaling;
 
     /* log and replay timestamp and joystick data */
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
@@ -32,7 +32,7 @@ public class Robot extends LoggedRobot {
     public Robot() {
         Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
         m_robotContainer = new RobotContainer();
-        m_leds = m_robotContainer.leds;
+        m_signaling = m_robotContainer.signaling;
 
         if (isReal()) {
             // Logger.addDataReceiver(new WPILOGWriter()); // Log to a USB stick ("/U/logs")
@@ -59,7 +59,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void disabledInit() {
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-        m_leds.yellow();
+        m_signaling.yellow();
     }
 
     @Override
