@@ -55,7 +55,7 @@ public class Signaling extends SubsystemBase {
     m_gameData = DriverStation.getGameSpecificMessage();
     m_matchTime = DriverStation.getMatchTime();
 
-    if(isHubActive() && DriverStation.isTeleopEnabled()){
+    if(DriverStation.isTeleopEnabled() && isHubActive()){
       yellow();
       rumble();
     } else if(!isHubActive() && DriverStation.isEnabled()){
