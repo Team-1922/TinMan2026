@@ -58,7 +58,7 @@ public class Signaling extends SubsystemBase {
     if(DriverStation.isTeleopEnabled() && isHubActive()){
       yellow();
       rumble();
-    } else if(!isHubActive() && DriverStation.isEnabled()){
+    } else if(DriverStation.isEnabled() && !isHubActive()){
       red();
       m_alerted = false;
     }
