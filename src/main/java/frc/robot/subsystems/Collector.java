@@ -43,7 +43,7 @@ public class Collector extends SubsystemBase {
         .withNeutralMode(NeutralModeValue.Coast);
 
     MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
-        .withInverted(InvertedValue.Clockwise_Positive)
+        .withInverted(InvertedValue.CounterClockwise_Positive)
         .withNeutralMode(NeutralModeValue.Brake);
     
     m_rollerMotor.getConfigurator().apply(Constants.Collector.slot0());
@@ -90,7 +90,7 @@ public class Collector extends SubsystemBase {
     if(!isRetracted && m_rps > 0) {
       m_rollerMotor.setControl(
           m_collectorDutyCycle.withVelocity(
-              m_rps * Constants.Collector.kGearRatio
+              m_rps * Constants.Collector.kRollerGearRatio
          )
       );
     }
