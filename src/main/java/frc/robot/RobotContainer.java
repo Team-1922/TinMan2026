@@ -48,7 +48,7 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController DriverController = new CommandXboxController(0);
+    public final CommandXboxController DriverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = 
             TunerConstants.createDrivetrain();
@@ -58,7 +58,7 @@ public class RobotContainer {
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
     public final Collector collector = new Collector();
-    public final Signaling signaling = new Signaling();
+    public final Signaling signaling = new Signaling(DriverController);
     private final SendableChooser<Command> autoChooser;
     
 

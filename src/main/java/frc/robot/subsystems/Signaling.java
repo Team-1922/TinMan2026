@@ -12,12 +12,14 @@ import static edu.wpi.first.units.Units.Second;
 import java.util.Optional;
 
 import edu.wpi.first.units.measure.Distance;
+import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.LEDPattern;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -27,16 +29,19 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 
 public class Signaling extends SubsystemBase {
   /** Creates a new Signaling. */
-  String m_gameData;
-  double m_matchTime;
+  private String m_gameData;
+  private double m_matchTime;
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
-  LEDPattern m_yellow = LEDPattern.solid(Color.kYellow);
-  LEDPattern m_red = LEDPattern.solid(Color.kRed);
-  private final CommandXboxController DriverController = new CommandXboxController(0);
+  private LEDPattern m_yellow = LEDPattern.solid(Color.kYellow);
+  private LEDPattern m_red = LEDPattern.solid(Color.kRed);
+  private final CommandXboxController m_DriverController;
+  private final Timer m_rumbleTimer = new Timer();
+  private boolean m_alerted = false;
   
-  public Signaling() {
-     m_led = new AddressableLED(2);
+  public Signaling(CommandXboxController commandXboxController) {
+    m_DriverController = commandXboxController;
+    m_led = new AddressableLED(2);
     m_ledBuffer = new AddressableLEDBuffer(66);
 
     m_led.setLength(m_ledBuffer.getLength());
@@ -52,15 +57,23 @@ public class Signaling extends SubsystemBase {
 
     if(isHubActive()){
       yellow();
-      startRotatingBack();
-    } else if(!isHubActive()){
+      rumble();
+    } else if(!isHubActive() && DriverStation.isEnabled()){
       red();
+      m_alerted = false;
     }
   }
 
-  public void startRotatingBack(){
-    
-      DriverController.setRumble(RumbleType.kBothRumble, 1);
+  public void rumble(){  
+    if(!m_rumbleTimer.isRunning() && !m_alerted) {
+        m_rumbleTimer.restart();
+        m_DriverController.setRumble(RumbleType.kBothRumble, 1);
+      }
+    if(m_rumbleTimer.hasElapsed(1)) {
+        m_rumbleTimer.stop();
+        m_DriverController.setRumble(RumbleType.kBothRumble, 0);
+        m_alerted = true;
+      }
   }
 
   public void yellow() {
