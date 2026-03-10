@@ -27,7 +27,8 @@ public final class Constants {
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
     public static final double targetDistanceToHub = Meters.of(2.7).in(Meters);
-    public static String middleLimeLight = "limelight-front";
+    public static String middleLimelightName = "limelight-front";
+    public static String rightLimelightName = "limelight-right";
     public static String drivebaseCanbusName = "Drivebase";
     public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
             case TinmanV2 -> TunerConstants.kCANBus;
