@@ -42,7 +42,7 @@ public class Signaling extends SubsystemBase {
   private final Timer m_rumbleTimer = new Timer();
   private boolean m_alerted = false;
   private final double m_earlyWarningBlink = 1;
-  private final double m_earlyWarningProgressBar = 4;
+  private final double m_earlyWarningProgressBar = 5;
   
   public Signaling(CommandXboxController commandXboxController) {
     m_DriverController = commandXboxController;
@@ -64,17 +64,17 @@ public class Signaling extends SubsystemBase {
       if(m_matchTime > 130 - m_earlyWarningBlink && m_matchTime < 130){
         doubleYellowBlink();
         rumble();
-      } else if(m_matchTime> 130 - m_earlyWarningProgressBar && m_matchTime < 130){
+      } else if(m_matchTime> 124 - m_earlyWarningProgressBar && m_matchTime < 124){
         yellowProgressBar();
       } else if(m_matchTime > 105 - m_earlyWarningBlink && m_matchTime < 105){
         doubleYellowBlink();
         rumble();
-      } else if(m_matchTime> 105 - m_earlyWarningProgressBar && m_matchTime < 105){
+      } else if(m_matchTime> 100 - m_earlyWarningProgressBar && m_matchTime < 100){
         yellowProgressBar();
       } else if(m_matchTime > 55 - m_earlyWarningBlink && m_matchTime < 55){
         doubleYellowBlink();
         rumble();
-      } else if(m_matchTime> 55 - m_earlyWarningProgressBar && m_matchTime < 55){
+      } else if(m_matchTime> 50 - m_earlyWarningProgressBar && m_matchTime < 50){
         yellowProgressBar();
       } else{
         yellow();
@@ -82,12 +82,12 @@ public class Signaling extends SubsystemBase {
     } else if(DriverStation.isEnabled() && !isHubActive()){
       
       if(m_matchTime > 80 - m_earlyWarningBlink && m_matchTime < 80){
-        redBlink();
-      } else if(m_matchTime > 80 - m_earlyWarningProgressBar && m_matchTime < 80){
+        doubleRedBlink();
+      } else if(m_matchTime > 75 - m_earlyWarningProgressBar && m_matchTime < 75){
         redProgressBar();
       } else if(m_matchTime > 30 - m_earlyWarningBlink && m_matchTime < 30){
-        redBlink();
-      } else if(m_matchTime > 30 - m_earlyWarningProgressBar && m_matchTime < 30){
+        doubleRedBlink();
+      } else if(m_matchTime > 25 - m_earlyWarningProgressBar && m_matchTime < 25){
         redProgressBar(); 
       } else {
         red();
@@ -124,14 +124,14 @@ public class Signaling extends SubsystemBase {
   }
 
   public void yellowProgressBar(){
-    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kYellow, Color.kRed);
-    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 4)/4 );
-    LEDPattern somethingThatMakesABitOfSense = base.mask(mask);
+    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kYellow);
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> 1 - (m_matchTime % 5)/m_earlyWarningProgressBar );
+    LEDPattern blink = base.mask(mask);
 
-    somethingThatMakesABitOfSense.applyTo(m_ledBuffer);
+    blink.applyTo(m_ledBuffer);
   }
 
-  public void redBlink(){
+  public void doubleRedBlink(){
     LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kRed);
     LEDPattern pattern = base.blink(Seconds.of(0.5), Seconds.of(0.5));
 
@@ -139,11 +139,11 @@ public class Signaling extends SubsystemBase {
   }
 
   public void redProgressBar(){
-    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kRed, Color.kYellow);
-    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 5)/5 );
-    LEDPattern somethingThatMakesABitOfSense = base.mask(mask);
+    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kRed);
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> 1 - (m_matchTime % 5)/m_earlyWarningProgressBar );
+    LEDPattern blink = base.mask(mask);
 
-    somethingThatMakesABitOfSense.applyTo(m_ledBuffer);
+    blink.applyTo(m_ledBuffer);
   }
 
    public Command runPattern(LEDPattern pattern) {
