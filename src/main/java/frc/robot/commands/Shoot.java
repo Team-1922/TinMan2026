@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.units.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -85,7 +84,7 @@ public class Shoot extends Command {
 
         m_feeder.setTargetRps(m_feederRps);
 
-        if(m_spindexerTimer.hasElapsed(m_spindexerDelayInSeconds)) {
+        if (m_spindexerTimer.hasElapsed(m_spindexerDelayInSeconds)) {
           m_spindexer.setTargetRps(m_spindexerRps);
         }        
       }
