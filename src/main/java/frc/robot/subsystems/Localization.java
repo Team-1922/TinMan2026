@@ -63,8 +63,13 @@ public class Localization extends SubsystemBase {
       m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
       m_drivetrain.addVisionMeasurement(
         mt2_estimateFront.pose,
-        mt2_estimateFront.timestampSeconds);
+        mt2_estimateFront.timestampSeconds
+      );
     }
+    else{
+      doRejectUpdate = false;
+    }
+    
 
     // Values for the right limelight
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
