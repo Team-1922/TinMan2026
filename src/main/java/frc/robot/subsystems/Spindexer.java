@@ -12,6 +12,9 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Fahrenheit;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 
@@ -56,6 +59,14 @@ public class Spindexer extends SubsystemBase {
     else if(m_Spindexer.getVelocity().getValueAsDouble() != 0){
       m_Spindexer.stopMotor();
     }
+    
+    putDataOnDashboard();
+  }
+
+  private void putDataOnDashboard() {
+    double motorTemp = m_Spindexer.getDeviceTemp().getValue().magnitude();
+
+    SmartDashboard.putNumber("Motor Temps/Spindexer", Celsius.of(motorTemp).in(Fahrenheit));
     SmartDashboard.putNumber("Spindexer Motor RPS", m_rps * Constants.Spindexer.kGearRatio);
   }
 }
