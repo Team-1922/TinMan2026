@@ -26,7 +26,7 @@ public final class Constants {
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
-    public static final double targetDistanceToHub = Meters.of(2.7).in(Meters);
+    public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
     public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
@@ -142,7 +142,7 @@ public final class Constants {
     
     public static class Spindexer {
         public static final int kMotorId1 = 21;
-        public static final double kGearRatio = 6;
+        public static final double kGearRatio = 15;
         public static final double spindexerIdleSpeed = 0;
         
         public static Slot0Configs slot0() {

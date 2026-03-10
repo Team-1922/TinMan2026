@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Fahrenheit;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
@@ -12,6 +15,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -70,6 +74,18 @@ public class Shooter extends SubsystemBase {
         m_rps * Constants.Shooter.kGearRatio
         )
       );
+    }
+
+    logMotorTemps();
+  }
+
+  private void logMotorTemps() {
+    TalonFX[] motorArray = {m_leaderMotor, m_followerMotor};
+
+    for (TalonFX talonFX : motorArray) {
+      double motorTemp = talonFX.getDeviceTemp().getValue().magnitude();
+      String key = "Shooter - " + talonFX.getDescription() + " motor temp";
+      SmartDashboard.putString(key, Celsius.of(motorTemp).in(Fahrenheit) + " F");
     }
   }
 }
