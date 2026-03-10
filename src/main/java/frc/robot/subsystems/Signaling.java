@@ -41,8 +41,8 @@ public class Signaling extends SubsystemBase {
   private final CommandXboxController m_DriverController;
   private final Timer m_rumbleTimer = new Timer();
   private boolean m_alerted = false;
-  private final double m_earlyWarningBlink = 3;
-  private final double m_earlyWarningProgressBar = 2;
+  private final double m_earlyWarningBlink = 1;
+  private final double m_earlyWarningProgressBar = 4;
   
   public Signaling(CommandXboxController commandXboxController) {
     m_DriverController = commandXboxController;
@@ -83,11 +83,11 @@ public class Signaling extends SubsystemBase {
       
       if(m_matchTime > 80 - m_earlyWarningBlink && m_matchTime < 80){
         redBlink();
-      } else if(m_matchTime > 80 - m_earlyWarningBlink && m_matchTime < 80){
+      } else if(m_matchTime > 80 - m_earlyWarningProgressBar && m_matchTime < 80){
         redProgressBar();
       } else if(m_matchTime > 30 - m_earlyWarningBlink && m_matchTime < 30){
         redBlink();
-      } else if(m_matchTime > 30 - m_earlyWarningBlink && m_matchTime < 30){
+      } else if(m_matchTime > 30 - m_earlyWarningProgressBar && m_matchTime < 30){
         redProgressBar(); 
       } else {
         red();
@@ -118,14 +118,14 @@ public class Signaling extends SubsystemBase {
 
   public void doubleYellowBlink(){
     LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kYellow);
-    LEDPattern pattern = base.blink(Seconds.of(0.5), Seconds.of(0.5));
+    LEDPattern pattern = base.blink(Seconds.of(0.25), Seconds.of(0.25));
 
     pattern.applyTo(m_ledBuffer);
   }
 
   public void yellowProgressBar(){
     LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kYellow, Color.kRed);
-    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 5)/5 );
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 4)/4 );
     LEDPattern somethingThatMakesABitOfSense = base.mask(mask);
 
     somethingThatMakesABitOfSense.applyTo(m_ledBuffer);
