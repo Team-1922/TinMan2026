@@ -8,8 +8,11 @@ import static edu.wpi.first.units.Units.Centimeter;
 import static edu.wpi.first.units.Units.Meters;
 import static edu.wpi.first.units.Units.Percent;
 import static edu.wpi.first.units.Units.Second;
+import static edu.wpi.first.units.Units.Seconds;
 
 import java.util.Optional;
+
+import com.ctre.phoenix6.signals.Led1OffColorValue;
 
 import edu.wpi.first.units.measure.Distance;
 import edu.wpi.first.util.WPIUtilJNI;
@@ -38,7 +41,8 @@ public class Signaling extends SubsystemBase {
   private final CommandXboxController m_DriverController;
   private final Timer m_rumbleTimer = new Timer();
   private boolean m_alerted = false;
-  private final double m_earlyWarning = 5;
+  private final double m_earlyWarningBlink = 3;
+  private final double m_earlyWarningProgressBar = 2;
   
   public Signaling(CommandXboxController commandXboxController) {
     m_DriverController = commandXboxController;
@@ -57,10 +61,37 @@ public class Signaling extends SubsystemBase {
     m_matchTime = DriverStation.getMatchTime();
 
     if(DriverStation.isTeleopEnabled() && isHubActive()){
-      yellow();
-      rumble();
+      if(m_matchTime > 130 - m_earlyWarningBlink && m_matchTime < 130){
+        doubleYellowBlink();
+        rumble();
+      } else if(m_matchTime> 130 - m_earlyWarningProgressBar && m_matchTime < 130){
+        yellowProgressBar();
+      } else if(m_matchTime > 105 - m_earlyWarningBlink && m_matchTime < 105){
+        doubleYellowBlink();
+        rumble();
+      } else if(m_matchTime> 105 - m_earlyWarningProgressBar && m_matchTime < 105){
+        yellowProgressBar();
+      } else if(m_matchTime > 55 - m_earlyWarningBlink && m_matchTime < 55){
+        doubleYellowBlink();
+        rumble();
+      } else if(m_matchTime> 55 - m_earlyWarningProgressBar && m_matchTime < 55){
+        yellowProgressBar();
+      } else{
+        yellow();
+      }
     } else if(DriverStation.isEnabled() && !isHubActive()){
-      red();
+      
+      if(m_matchTime > 80 - m_earlyWarningBlink && m_matchTime < 80){
+        redBlink();
+      } else if(m_matchTime > 80 - m_earlyWarningBlink && m_matchTime < 80){
+        redProgressBar();
+      } else if(m_matchTime > 30 - m_earlyWarningBlink && m_matchTime < 30){
+        redBlink();
+      } else if(m_matchTime > 30 - m_earlyWarningBlink && m_matchTime < 30){
+        redProgressBar(); 
+      } else {
+        red();
+      }
       m_alerted = false;
     }
   }
@@ -85,13 +116,34 @@ public class Signaling extends SubsystemBase {
     m_red.applyTo(m_ledBuffer);
   }
 
-  public void yellowScroll(){
-    Distance ledSpacing = Meters.of(1 / 120.0);
-    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kYellow, Color.kBlack);
-    LEDPattern pattern = base.scrollAtRelativeSpeed(Percent.per(Second).of(25));
-    LEDPattern absolute = base.scrollAtAbsoluteSpeed(Centimeter.per(Second).of(12.5), ledSpacing);
+  public void doubleYellowBlink(){
+    LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kYellow);
+    LEDPattern pattern = base.blink(Seconds.of(0.5), Seconds.of(0.5));
 
     pattern.applyTo(m_ledBuffer);
+  }
+
+  public void yellowProgressBar(){
+    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kYellow, Color.kRed);
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 5)/5 );
+    LEDPattern somethingThatMakesABitOfSense = base.mask(mask);
+
+    somethingThatMakesABitOfSense.applyTo(m_ledBuffer);
+  }
+
+  public void redBlink(){
+    LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kRed);
+    LEDPattern pattern = base.blink(Seconds.of(0.5), Seconds.of(0.5));
+
+    pattern.applyTo(m_ledBuffer);
+  }
+
+  public void redProgressBar(){
+    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kRed, Color.kYellow);
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 5)/5 );
+    LEDPattern somethingThatMakesABitOfSense = base.mask(mask);
+
+    somethingThatMakesABitOfSense.applyTo(m_ledBuffer);
   }
 
    public Command runPattern(LEDPattern pattern) {
@@ -130,15 +182,15 @@ public class Signaling extends SubsystemBase {
         case Blue -> redInactiveFirst;
       };
 
-      if(m_matchTime > 130 - m_earlyWarning) {
+      if(m_matchTime > 130) {
         return true;
-      } else if (m_matchTime > 105 - m_earlyWarning) {
+      } else if (m_matchTime > 105) {
         return shift1Active;
-      } else if (m_matchTime > 80 - m_earlyWarning) {
+      } else if (m_matchTime > 80) {
         return !shift1Active;
-      } else if (m_matchTime > 55 - m_earlyWarning) {
+      } else if (m_matchTime > 55 ) {
         return shift1Active;
-      } else if (m_matchTime > 30 - m_earlyWarning) {
+      } else if (m_matchTime > 30) {
         return !shift1Active;
       } else {
         return true;
