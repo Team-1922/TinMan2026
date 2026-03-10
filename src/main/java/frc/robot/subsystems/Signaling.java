@@ -36,13 +36,15 @@ public class Signaling extends SubsystemBase {
   private double m_matchTime;
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
-  private LEDPattern m_yellow = LEDPattern.solid(Color.kYellow);
-  private LEDPattern m_red = LEDPattern.solid(Color.kRed);
+  private final LEDPattern m_yellow = LEDPattern.solid(Color.kYellow);
+  private final LEDPattern m_blue = LEDPattern.solid(Color.kBlue);
+  private final LEDPattern m_red = LEDPattern.solid(Color.kRed);
+  private final LEDPattern m_black = LEDPattern.solid(Color.kBlack);
   private final CommandXboxController m_DriverController;
   private final Timer m_rumbleTimer = new Timer();
   private boolean m_alerted = false;
-  private final double m_earlyWarningBlink = 1;
-  private final double m_earlyWarningProgressBar = 5;
+  private boolean m_shift1Active = false;
+  private Optional <Alliance> m_alliance;
   
   public Signaling(CommandXboxController commandXboxController) {
     m_DriverController = commandXboxController;
@@ -59,40 +61,13 @@ public class Signaling extends SubsystemBase {
     m_led.setData(m_ledBuffer);
     m_gameData = DriverStation.getGameSpecificMessage();
     m_matchTime = DriverStation.getMatchTime();
+    m_alliance = DriverStation.getAlliance();
 
-    if(DriverStation.isTeleopEnabled() && isHubActive()){
-      if(m_matchTime > 130 - m_earlyWarningBlink && m_matchTime < 130){
-        doubleYellowBlink();
-        rumble();
-      } else if(m_matchTime> 124 - m_earlyWarningProgressBar && m_matchTime < 124){
-        yellowProgressBar();
-      } else if(m_matchTime > 105 - m_earlyWarningBlink && m_matchTime < 105){
-        doubleYellowBlink();
-        rumble();
-      } else if(m_matchTime> 100 - m_earlyWarningProgressBar && m_matchTime < 100){
-        yellowProgressBar();
-      } else if(m_matchTime > 55 - m_earlyWarningBlink && m_matchTime < 55){
-        doubleYellowBlink();
-        rumble();
-      } else if(m_matchTime> 50 - m_earlyWarningProgressBar && m_matchTime < 50){
-        yellowProgressBar();
-      } else{
-        yellow();
-      }
-    } else if(DriverStation.isEnabled() && !isHubActive()){
-      
-      if(m_matchTime > 80 - m_earlyWarningBlink && m_matchTime < 80){
-        doubleRedBlink();
-      } else if(m_matchTime > 75 - m_earlyWarningProgressBar && m_matchTime < 75){
-        redProgressBar();
-      } else if(m_matchTime > 30 - m_earlyWarningBlink && m_matchTime < 30){
-        doubleRedBlink();
-      } else if(m_matchTime > 25 - m_earlyWarningProgressBar && m_matchTime < 25){
-        redProgressBar(); 
-      } else {
-        red();
-      }
-      m_alerted = false;
+    if(isHubActive()){
+      setAlianceColor();
+      setAlianceColorMask();
+    } else {
+        off();
     }
   }
 
@@ -108,51 +83,64 @@ public class Signaling extends SubsystemBase {
       }
   }
 
-  public void yellow() {
-    m_yellow.applyTo(m_ledBuffer);
+  private void blue() {
+    m_blue.applyTo(m_ledBuffer);
   }
 
-  public void red() {
+  private void blueMask(){
+    LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kBlue);
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 5) / 5);
+    LEDPattern changing = base.mask(mask);
+
+    changing.applyTo(m_ledBuffer);
+  }
+
+  private void red() {
     m_red.applyTo(m_ledBuffer);
   }
 
-  public void doubleYellowBlink(){
-    LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kYellow);
-    LEDPattern pattern = base.blink(Seconds.of(0.25), Seconds.of(0.25));
-
-    pattern.applyTo(m_ledBuffer);
-  }
-
-  public void yellowProgressBar(){
-    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kYellow);
-    LEDPattern mask = LEDPattern.progressMaskLayer(() -> 1 - (m_matchTime % 5)/m_earlyWarningProgressBar );
-    LEDPattern blink = base.mask(mask);
-
-    blink.applyTo(m_ledBuffer);
-  }
-
-  public void doubleRedBlink(){
+  private void redMask(){
     LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kRed);
-    LEDPattern pattern = base.blink(Seconds.of(0.5), Seconds.of(0.5));
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 5) / 5);
+    LEDPattern changing = base.mask(mask);
 
-    pattern.applyTo(m_ledBuffer);
+    changing.applyTo(m_ledBuffer);
   }
 
-  public void redProgressBar(){
-    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kRed);
-    LEDPattern mask = LEDPattern.progressMaskLayer(() -> 1 - (m_matchTime % 5)/m_earlyWarningProgressBar );
-    LEDPattern blink = base.mask(mask);
-
-    blink.applyTo(m_ledBuffer);
+  public void yellow(){
+    m_yellow.applyTo(m_ledBuffer);
   }
 
-   public Command runPattern(LEDPattern pattern) {
+  private void off(){
+    m_black.applyTo(m_ledBuffer);
+  }
+
+  private void setAlianceColor() {
+    if(m_alliance.get() == Alliance.Red){
+      red();
+    } else if(m_alliance.get() == Alliance.Blue) {
+      blue();
+    } else {
+      yellow();
+    }
+  }
+
+  private void setAlianceColorMask() {
+    if(m_alliance.get() == Alliance.Red){
+      redMask();
+    } else if(m_alliance.get() == Alliance.Blue) {
+      blueMask();
+    } else {
+      yellow();
+    }
+  }
+
+  public Command runPattern(LEDPattern pattern) {
     return run(() -> pattern.applyTo(m_ledBuffer));
   }
 
   private boolean isHubActive(){
-    Optional <Alliance> alliance = DriverStation.getAlliance();
-    if(alliance.isEmpty()){
+    if(m_alliance.isEmpty()){
       return false;
     }
 
@@ -177,7 +165,7 @@ public class Signaling extends SubsystemBase {
         }
       }
 
-      boolean shift1Active = switch (alliance.get()) {
+      m_shift1Active = switch (m_alliance.get()) {
         case Red -> !redInactiveFirst;
         case Blue -> redInactiveFirst;
       };
@@ -185,13 +173,13 @@ public class Signaling extends SubsystemBase {
       if(m_matchTime > 130) {
         return true;
       } else if (m_matchTime > 105) {
-        return shift1Active;
+        return m_shift1Active;
       } else if (m_matchTime > 80) {
-        return !shift1Active;
+        return !m_shift1Active;
       } else if (m_matchTime > 55 ) {
-        return shift1Active;
+        return m_shift1Active;
       } else if (m_matchTime > 30) {
-        return !shift1Active;
+        return !m_shift1Active;
       } else {
         return true;
       }
