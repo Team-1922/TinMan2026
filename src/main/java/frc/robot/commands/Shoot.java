@@ -77,6 +77,7 @@ public class Shoot extends Command {
       }
       if (m_isReadyToShoot) {
         m_feeder.setTargetRps(m_feederRps);
+        //x-lock here
       }
     } else if (m_feeder.getSpeed() > 0) {
       m_feeder.stop();
