@@ -11,13 +11,14 @@ import frc.robot.subsystems.Shooter;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shuttling extends Command {
   /** Creates a new Shuttleing. */
-  Shooter m_shooter;
+  private Shooter m_shooter;
   private double m_shuttlerRPS = 40;
 
   public Shuttling(Shooter shooter) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
-    SmartDashboard.putNumber("Shutler RPS", m_shuttlerRPS);
+    SmartDashboard.putNumber("Shuttler RPS", m_shuttlerRPS);
+    
   }
 
   // Called when the command is initially scheduled.
@@ -27,12 +28,15 @@ public class Shuttling extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.getNumber("Shutler RPS", m_shuttlerRPS);
+    SmartDashboard.getNumber("Shuttler RPS", m_shuttlerRPS);
+    m_shooter.setTargetRps(m_shuttlerRPS);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_shooter.stop();
+  }
 
   // Returns true when the command should end.
   @Override
