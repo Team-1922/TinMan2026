@@ -43,11 +43,6 @@ public class Spindexer extends SubsystemBase {
     m_rps = Constants.Spindexer.spindexerIdleSpeed;
   }
 
-  public void stop() {
-    m_rps = 0;
-    m_Spindexer.stopMotor();
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run   
