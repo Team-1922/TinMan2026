@@ -7,7 +7,10 @@ import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
 import com.ctre.phoenix6.Utils;
+import com.ctre.phoenix6.hardware.CANcoder;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.swerve.SwerveDrivetrainConstants;
+import com.ctre.phoenix6.swerve.SwerveModule;
 import com.ctre.phoenix6.swerve.SwerveModuleConstants;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -24,6 +27,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.Subsystem;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
@@ -259,6 +263,7 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
                 m_hasAppliedOperatorPerspective = true;
             });
         }
+        putDataOnDashboard();
     }
 
     private void startSimThread() {
@@ -395,4 +400,15 @@ private void autoBuildConfig() {
         this // Reference to this subsystem to set requirements
     );
     }
+
+    private void putDataOnDashboard() {
+    SwerveModule<TalonFX, TalonFX, CANcoder>[] swerveModules = this.getModules();
+
+    for (int i = 0; i < swerveModules.length; i++) {
+      double driveMotorTemp = swerveModules[i].getDriveMotor().getDeviceTemp().getValue().magnitude();
+      double steerMotorTemp = swerveModules[i].getSteerMotor().getDeviceTemp().getValue().magnitude();
+      SmartDashboard.putNumber("Motor Temps/SwerveModule" + i + "/Drive Motor", Celsius.of(driveMotorTemp).in(Fahrenheit));
+      SmartDashboard.putNumber("Motor Temps/SwerveModule" + i + "/Steer Motor", Celsius.of(steerMotorTemp).in(Fahrenheit));
+    }
+  }
 }
