@@ -76,16 +76,14 @@ public class Shooter extends SubsystemBase {
       );
     }
 
-    logMotorTemps();
+    putDataOnDashboard();
   }
 
-  private void logMotorTemps() {
-    TalonFX[] motorArray = {m_leaderMotor, m_followerMotor};
+  private void putDataOnDashboard() {
+    double leaderMotorTemp = m_leaderMotor.getDeviceTemp().getValue().magnitude();
+    double followerMotorTemp = m_followerMotor.getDeviceTemp().getValue().magnitude();
 
-    for (TalonFX talonFX : motorArray) {
-      double motorTemp = talonFX.getDeviceTemp().getValue().magnitude();
-      String key = "Shooter - " + talonFX.getDescription() + " motor temp";
-      SmartDashboard.putString(key, Celsius.of(motorTemp).in(Fahrenheit) + " F");
-    }
+    SmartDashboard.putNumber("Motor Temps/Shooter/Leader", Celsius.of(leaderMotorTemp).in(Fahrenheit));
+    SmartDashboard.putNumber("Motor Temps/Shooter/Follower", Celsius.of(followerMotorTemp).in(Fahrenheit));
   }
 }
