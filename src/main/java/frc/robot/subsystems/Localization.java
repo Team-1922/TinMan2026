@@ -2,7 +2,6 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
@@ -41,7 +40,6 @@ public class Localization extends SubsystemBase {
     return m_drivetrain.getPose();
   }
 
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
@@ -50,6 +48,7 @@ public class Localization extends SubsystemBase {
     LimelightHelpers.PoseEstimate mt2_estimateFront = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
     LimelightHelpers.PoseEstimate mt2_estimateRight = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right");
     Boolean doRejectUpdate = false;
+    Boolean poseCalculated = false;
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
     // Values for the front limelight 
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
@@ -70,7 +69,6 @@ public class Localization extends SubsystemBase {
       doRejectUpdate = false;
     }
     
-
     // Values for the right limelight
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
       || mt2_estimateRight == null
@@ -78,7 +76,7 @@ public class Localization extends SubsystemBase {
     {
       doRejectUpdate = true;
     }
-    if(!doRejectUpdate)
+    if(!doRejectUpdate && !poseCalculated)
     {
       m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
       m_drivetrain.addVisionMeasurement(
@@ -86,7 +84,7 @@ public class Localization extends SubsystemBase {
         mt2_estimateRight.timestampSeconds);
     }
     
-    m_Field2d.setRobotPose(getPose2dEstimate());
+    m_Field2d.setRobotPose(getPose2dEstimate()); 
     SmartDashboard.putData("Field2d", m_Field2d);
 
     Pose2d robotPose = m_drivetrain.getPose();
