@@ -83,7 +83,7 @@ public class Signaling extends SubsystemBase {
         || gameTimeBetween(Constants.Signaling.kShift4Start, Constants.Signaling.kShift4StartOffset);
   }
 
-  public void rumble(){  
+  public void rumble() {  
     if(!m_rumbleTimer.isRunning() && !m_alerted) {
         m_rumbleTimer.restart();
         m_DriverController.setRumble(RumbleType.kBothRumble, 1);
@@ -99,7 +99,7 @@ public class Signaling extends SubsystemBase {
     m_blue.applyTo(m_ledBuffer);
   }
 
-  private void blueMask(MaskDirections maskDirection){
+  private void blueMask(MaskDirections maskDirection) {
     applyMask(Color.kBlue, maskDirection);
   }
 
@@ -107,7 +107,7 @@ public class Signaling extends SubsystemBase {
     m_red.applyTo(m_ledBuffer);
   }
 
-  private void redMask(MaskDirections maskDirection){
+  private void redMask(MaskDirections maskDirection) {
     applyMask(Color.kRed, maskDirection);
   }
 
@@ -128,11 +128,11 @@ public class Signaling extends SubsystemBase {
     changing.applyTo(m_ledBuffer);
   }
 
-  public void yellow(){
+  public void yellow() {
     m_yellow.applyTo(m_ledBuffer);
   }
 
-  private void off(){
+  private void off() {
     m_black.applyTo(m_ledBuffer);
   }
 
@@ -160,25 +160,25 @@ public class Signaling extends SubsystemBase {
     return run(() -> pattern.applyTo(m_ledBuffer));
   }
 
-  private boolean isHubActive(){
-    if(m_alliance.isEmpty()){
+  private boolean isHubActive() {
+    if(m_alliance.isEmpty()) {
       return false;
     }
 
-    if(DriverStation.isAutonomousEnabled()){
+    if(DriverStation.isAutonomousEnabled()) {
       return true;
     }
 
-    if(!DriverStation.isTeleopEnabled()){
+    if(!DriverStation.isTeleopEnabled()) {
       return false;
     }
 
-    if(m_gameData.isEmpty()){
+    if(m_gameData.isEmpty()) {
       return true;
     }
 
     boolean redInactiveFirst = false;
-      switch (m_gameData.charAt(0)){
+      switch (m_gameData.charAt(0)) {
         case 'R' -> redInactiveFirst = true;
         case 'B' -> redInactiveFirst = false;
         default -> {
@@ -206,7 +206,7 @@ public class Signaling extends SubsystemBase {
       }
   }
 
-  private boolean gameTimeBetween(double minTime, double maxTime){
+  private boolean gameTimeBetween(double minTime, double maxTime) {
     return m_matchTime > minTime && m_matchTime < maxTime;
   }
 
