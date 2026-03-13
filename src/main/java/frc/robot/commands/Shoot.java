@@ -19,6 +19,7 @@ public class Shoot extends Command {
   private double m_spindexerRps = 8;
   private double m_feederRps = 100;
   private double m_shooterRps = 20;
+  private double m_shuttleRps = 30;
   private double m_yawThreshold = .045;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
@@ -29,18 +30,26 @@ public class Shoot extends Command {
   private final double m_spindexerDelayInSeconds = .25;
   private Timer m_spindexerTimer = new Timer();
 
+  private ShootActions m_shootAction = ShootActions.Shoot;
+  public enum ShootActions {
+    Shoot,
+    Shuttle
+  }
+
   /** Creates a new Shoot. */
   public Shoot(
       Shooter shooter,
       Feeder feeder,
       Spindexer spindexer,
-      Localization localization
+      Localization localization,
+      ShootActions shootAction
       ) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_feeder = feeder;
     m_spindexer = spindexer;
     m_localization = localization;
+    m_shootAction = shootAction;
     SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
@@ -63,6 +72,11 @@ public class Shoot extends Command {
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
     m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
+
+    if(m_shootAction == ShootActions.Shuttle) {
+        m_shooterRps = m_shuttleRps;
+        m_requireAlign = false;
+      }
 
     if (
         !m_requireAlign
