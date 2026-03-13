@@ -44,9 +44,10 @@ public class Localization extends SubsystemBase {
   public void periodic() {
     // This method will be called once per scheduler run
     
-    LimelightHelpers.SetRobotOrientation("limelight-front", getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate mt2_estimateFront = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
-    LimelightHelpers.PoseEstimate mt2_estimateRight = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-right");
+    LimelightHelpers.SetRobotOrientation(Constants.middleLimelightName, getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation(Constants.rightLimelightName, getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate mt2_estimateFront = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.middleLimelightName);
+    LimelightHelpers.PoseEstimate mt2_estimateRight = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.rightLimelightName);
     Boolean doRejectUpdate = false;
     Boolean poseCalculated = false;
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
