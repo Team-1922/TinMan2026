@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.RetractCollector;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.Shoot.ShootActions;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
@@ -73,7 +74,8 @@ public class RobotContainer {
                                 shooter,
                                 feeder,
                                 spindexer,
-                                localization
+                                localization,
+                                ShootActions.Shoot
                         )
                 )
         );
@@ -130,7 +132,7 @@ public class RobotContainer {
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
                         new AutoAlign(drivetrain, localization, signaling), 
-                        new Shoot(shooter, feeder, spindexer, localization)
+                        new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shoot)
         ));
 
         DriverController.povDown().whileTrue(
@@ -138,7 +140,7 @@ public class RobotContainer {
         );
         
         DriverController.rightBumper().whileTrue(
-            new Shoot(shooter, feeder, spindexer, localization)
+            new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shuttle)
         );
 
         // Run SysId routines when holding back/start and X/Y.
