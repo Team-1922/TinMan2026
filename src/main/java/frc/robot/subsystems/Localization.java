@@ -25,16 +25,12 @@ public class Localization extends SubsystemBase {
   private double m_errorYaw;
   private double m_errorX;
   private double m_errorY;
-  private final Pose2d m_hubpose;
-  private final Pose2d m_blueHubPose2d = new Pose2d(5.22, 4.035, null);
-  private final Pose2d m_redHubPose2d = new Pose2d(11.32, 4.035, null);
+  private Pose2d m_hubpose = new Pose2d();
+  private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
+  private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
-    
-    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
-    ? m_blueHubPose2d 
-    : m_redHubPose2d;
   };
  
   public Pose2d getPose2dEstimate() {
@@ -45,6 +41,10 @@ public class Localization extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+
+    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
+    ? m_blueHubPose2d 
+    : m_redHubPose2d;
     
     LimelightHelpers.SetRobotOrientation("limelight-front", getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2_estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
