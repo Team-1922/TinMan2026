@@ -17,7 +17,7 @@ import frc.robot.subsystems.Localization;
 public class Shoot extends Command {
   private final Shooter m_shooter;
   private double m_spindexerRps = 20;
-  private double m_feederRps = 100;
+  private double m_feederRps = 25;
   private double m_shooterRps = 20;
   private double m_shuttleRps = 30;
   private double m_yawThreshold = .045;

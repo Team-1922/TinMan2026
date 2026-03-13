@@ -97,7 +97,7 @@ public final class Constants {
 
     public static class Feeder {
         public static final int kMotorId1 = 18;
-        public static final double kGearRatio = 4;
+        public static final double kGearRatio = 1;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
