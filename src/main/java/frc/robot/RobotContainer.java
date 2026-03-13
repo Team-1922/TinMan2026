@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.RetractCollector;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SpinCollectorBars;
 import frc.robot.commands.Shoot.ShootActions;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -143,6 +144,10 @@ public class RobotContainer {
             new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shuttle)
         );
 
+        DriverController.leftBumper().whileTrue(
+                new SpinCollectorBars(collector)
+        );
+
         // Run SysId routines when holding back/start and X/Y.
         // Note that each routine should be run exactly once in a single log.
         DriverController.back().and(DriverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));
@@ -151,7 +156,7 @@ public class RobotContainer {
         DriverController.start().and(DriverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        DriverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        DriverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }
