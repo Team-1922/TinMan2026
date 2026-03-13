@@ -31,7 +31,6 @@ public class Collector extends SubsystemBase {
   );
 
   private double m_rps = 0;
-  private boolean isRetracted = false;
   private final CANcoder m_pivotEncoder = new CANcoder(
       Constants.Collector.kPivotCanCoderId,
       Constants.superstructureCanbus
@@ -77,12 +76,14 @@ public class Collector extends SubsystemBase {
 
   public void deploy() {
     pivotCollector(Constants.Collector.kDeployedPosition);
-    isRetracted = false;
   }
 
   public void retract() {
     pivotCollector(Constants.Collector.kRetractedPosition);
-    isRetracted = true;
+  }
+
+  public void spinCollectorBars() {
+    collect(Constants.Collector.krps);
   }
 
   private void pivotCollector(double position) {
@@ -91,7 +92,7 @@ public class Collector extends SubsystemBase {
   
   public void collect(double rps) {
     m_rps = rps;
-    if(!isRetracted && m_rps > 0) {
+    if( m_rps > 0) {
       m_rollerMotor.setControl(
           m_collectorDutyCycle.withVelocity(
               m_rps * Constants.Collector.kRollerGearRatio
