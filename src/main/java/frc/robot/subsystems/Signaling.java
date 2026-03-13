@@ -24,6 +24,7 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -45,6 +46,11 @@ public class Signaling extends SubsystemBase {
   private boolean m_alerted = false;
   private boolean m_shift1Active = false;
   private Optional <Alliance> m_alliance;
+
+  private enum MaskDirections {
+    Up,
+    Down
+  }
   
   public Signaling(CommandXboxController commandXboxController) {
     m_DriverController = commandXboxController;
@@ -62,13 +68,28 @@ public class Signaling extends SubsystemBase {
     m_gameData = DriverStation.getGameSpecificMessage();
     m_matchTime = DriverStation.getMatchTime();
     m_alliance = DriverStation.getAlliance();
+    SmartDashboard.putNumber("Time", m_matchTime);
 
-    if(isHubActive()){
-      setAlianceColor();
-      setAlianceColorMask();
+    if(isHubActive()) {
+       if(shouldSetColorMask()) {
+          setAlianceColorMask(MaskDirections.Down);     
+      } else {
+        setAlianceColor();
+      }
     } else {
+      if(shouldSetColorMask()) {
+          setAlianceColorMask(MaskDirections.Up);     
+      } else {
         off();
+      }
     }
+  }
+
+  private boolean shouldSetColorMask() {
+    return gameTimeBetween(130,135)
+        || gameTimeBetween(105, 110)
+        || gameTimeBetween(80, 85)
+        || gameTimeBetween(55, 60);
   }
 
   public void rumble(){  
@@ -87,21 +108,28 @@ public class Signaling extends SubsystemBase {
     m_blue.applyTo(m_ledBuffer);
   }
 
-  private void blueMask(){
-    LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kBlue);
-    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 5) / 5);
-    LEDPattern changing = base.mask(mask);
-
-    changing.applyTo(m_ledBuffer);
+  private void blueMask(MaskDirections maskDirection){
+    applyMask(Color.kBlue, maskDirection);
   }
 
   private void red() {
     m_red.applyTo(m_ledBuffer);
   }
 
-  private void redMask(){
-    LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, Color.kRed);
-    LEDPattern mask = LEDPattern.progressMaskLayer(() -> (m_matchTime % 5) / 5);
+  private void redMask(MaskDirections maskDirection){
+    applyMask(Color.kRed, maskDirection);
+  }
+
+  private void applyMask(Color color, MaskDirections maskDirection) {
+    LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, color);
+    
+    double progress = (m_matchTime % 5) / 5;
+    if(maskDirection == MaskDirections.Up) {
+      progress = 1 - progress;
+    }
+
+    double appliedProgress = progress;
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> appliedProgress);
     LEDPattern changing = base.mask(mask);
 
     changing.applyTo(m_ledBuffer);
@@ -116,7 +144,7 @@ public class Signaling extends SubsystemBase {
   }
 
   private void setAlianceColor() {
-    if(m_alliance.get() == Alliance.Red){
+    if(m_alliance.get() == Alliance.Red) {
       red();
     } else if(m_alliance.get() == Alliance.Blue) {
       blue();
@@ -125,11 +153,11 @@ public class Signaling extends SubsystemBase {
     }
   }
 
-  private void setAlianceColorMask() {
-    if(m_alliance.get() == Alliance.Red){
-      redMask();
+  private void setAlianceColorMask(MaskDirections maskDirection) {
+    if(m_alliance.get() == Alliance.Red) {
+      redMask(maskDirection);
     } else if(m_alliance.get() == Alliance.Blue) {
-      blueMask();
+      blueMask(maskDirection);
     } else {
       yellow();
     }
@@ -183,6 +211,10 @@ public class Signaling extends SubsystemBase {
       } else {
         return true;
       }
+  }
+
+  private boolean gameTimeBetween(double minTime, double maxTime){
+    return m_matchTime > minTime && m_matchTime < maxTime;
   }
 
 }
