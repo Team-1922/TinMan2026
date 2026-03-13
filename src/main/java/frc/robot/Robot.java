@@ -59,11 +59,11 @@ public class Robot extends LoggedRobot {
     @Override
     public void disabledInit() {
         CommandScheduler.getInstance().schedule(FollowPathCommand.warmupCommand());
-        m_signaling.yellow();
     }
 
     @Override
     public void disabledPeriodic() {
+        m_signaling.yellow();
     }
 
     @Override

@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Fahrenheit;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -12,6 +15,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -94,10 +98,19 @@ public class Collector extends SubsystemBase {
          )
       );
     }
+    putDataOnDashboard();
   }
 
   public void stopCollector() {
     m_rps = 0;
     m_rollerMotor.stopMotor();
+  }
+
+  private void putDataOnDashboard() {
+    double rollorMotorTemp = m_rollerMotor.getDeviceTemp().getValue().magnitude();
+    double pivotMotorTemp = m_pivotMotor.getDeviceTemp().getValue().magnitude();
+
+    SmartDashboard.putNumber("Motor Temps/Collector/Roller", Celsius.of(rollorMotorTemp).in(Fahrenheit));
+    SmartDashboard.putNumber("Motor Temps/Collector/Pivot", Celsius.of(pivotMotorTemp).in(Fahrenheit));
   }
 }
