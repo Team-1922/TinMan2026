@@ -4,18 +4,8 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Centimeter;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Percent;
-import static edu.wpi.first.units.Units.Second;
-import static edu.wpi.first.units.Units.Seconds;
-
 import java.util.Optional;
 
-import com.ctre.phoenix6.signals.Led1OffColorValue;
-
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -29,6 +19,7 @@ import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 
 
 public class Signaling extends SubsystemBase {
@@ -72,13 +63,13 @@ public class Signaling extends SubsystemBase {
 
     if(isHubActive()) {
        if(shouldSetColorMask()) {
-          setAlianceColorMask(MaskDirections.Down);     
+          setAlianceColorMask(MaskDirections.Down);
       } else {
         setAlianceColor();
       }
     } else {
       if(shouldSetColorMask()) {
-          setAlianceColorMask(MaskDirections.Up);     
+          setAlianceColorMask(MaskDirections.Up);
       } else {
         off();
       }
@@ -86,10 +77,10 @@ public class Signaling extends SubsystemBase {
   }
 
   private boolean shouldSetColorMask() {
-    return gameTimeBetween(130,135)
-        || gameTimeBetween(105, 110)
-        || gameTimeBetween(80, 85)
-        || gameTimeBetween(55, 60);
+    return (gameTimeBetween(Constants.Signaling.kShift1Start, Constants.Signaling.kShift1StartOffset ) && !m_shift1Active)
+        || gameTimeBetween(Constants.Signaling.kShift2Start, Constants.Signaling.kShift2StartOffset)
+        || gameTimeBetween(Constants.Signaling.kShift3Start, Constants.Signaling.kShift3StartOffset)
+        || gameTimeBetween(Constants.Signaling.kShift4Start, Constants.Signaling.kShift4StartOffset);
   }
 
   public void rumble(){  
@@ -123,15 +114,17 @@ public class Signaling extends SubsystemBase {
   private void applyMask(Color color, MaskDirections maskDirection) {
     LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, color);
     
-    double progress = (m_matchTime % 5) / 5;
+    double warningTime = Constants.Signaling.kShiftChangeWarningTime;
+    double progress = (m_matchTime % warningTime) / warningTime;
+
     if(maskDirection == MaskDirections.Up) {
       progress = 1 - progress;
     }
 
     double appliedProgress = progress;
     LEDPattern mask = LEDPattern.progressMaskLayer(() -> appliedProgress);
-    LEDPattern changing = base.mask(mask);
 
+    LEDPattern changing = base.mask(mask);
     changing.applyTo(m_ledBuffer);
   }
 
@@ -198,15 +191,15 @@ public class Signaling extends SubsystemBase {
         case Blue -> redInactiveFirst;
       };
 
-      if(m_matchTime > 130) {
+      if(m_matchTime > Constants.Signaling.kShift1Start) {
         return true;
-      } else if (m_matchTime > 105) {
+      } else if (m_matchTime > Constants.Signaling.kShift2Start) {
         return m_shift1Active;
-      } else if (m_matchTime > 80) {
+      } else if (m_matchTime > Constants.Signaling.kShift3Start) {
         return !m_shift1Active;
-      } else if (m_matchTime > 55 ) {
+      } else if (m_matchTime > Constants.Signaling.kShift4Start ) {
         return m_shift1Active;
-      } else if (m_matchTime > 30) {
+      } else if (m_matchTime > Constants.Signaling.kEndGameStart) {
         return !m_shift1Active;
       } else {
         return true;
