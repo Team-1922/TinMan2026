@@ -167,4 +167,19 @@ public final class Constants {
         TinmanV2,
         TinmanV1
     }
+
+    public static class Signaling {
+        public static double kShiftChangeWarningTime = 5;
+
+        public static double kShift1Start = 130;
+        public static double kShift2Start = 105;
+        public static double kShift3Start = 80;
+        public static double kShift4Start = 55;
+        public static double kEndGameStart = 30;
+
+        public static double kShift1StartOffset = kShift1Start + kShiftChangeWarningTime;
+        public static double kShift2StartOffset = kShift2Start + kShiftChangeWarningTime;
+        public static double kShift3StartOffset = kShift3Start + kShiftChangeWarningTime;
+        public static double kShift4StartOffset = kShift4Start + kShiftChangeWarningTime;
+    }
 }
