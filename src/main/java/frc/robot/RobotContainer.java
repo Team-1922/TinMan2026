@@ -139,7 +139,7 @@ public class RobotContainer {
         );
         
         DriverController.rightBumper().whileTrue(
-            new Shoot(shooter, feeder, spindexer, localization)
+                new Shoot(shooter, feeder, spindexer, localization)
         );
 
         DriverController.leftBumper().whileTrue(
