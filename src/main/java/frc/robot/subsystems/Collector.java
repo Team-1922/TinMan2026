@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -39,6 +40,8 @@ public class Collector extends SubsystemBase {
     new VelocityDutyCycle(0)
       .withSlot(0);
 
+  private Timer m_deployTimer = new Timer();
+
   /** Creates a new Collector. */
   public Collector() {
     MotorOutputConfigs rollerMotorConfig = new MotorOutputConfigs()
@@ -47,7 +50,7 @@ public class Collector extends SubsystemBase {
 
     MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
         .withInverted(InvertedValue.CounterClockwise_Positive)
-        .withNeutralMode(NeutralModeValue.Brake);
+        .withNeutralMode(NeutralModeValue.Coast);
     
     m_rollerMotor.getConfigurator().apply(Constants.Collector.slot0());
     m_rollerMotor.getConfigurator().apply(
@@ -66,7 +69,7 @@ public class Collector extends SubsystemBase {
     m_pivotMotor.getConfigurator().apply(pivotMotorConfig);
     m_pivotMotor.getConfigurator().apply(
         Constants.Collector.kPivotFeedbackConfig
-    );  
+    );
   }
 
   @Override
@@ -76,6 +79,7 @@ public class Collector extends SubsystemBase {
 
   public void deploy() {
     pivotCollector(Constants.Collector.kDeployedPosition);
+    m_deployTimer.reset();
   }
 
   public void retract() {
@@ -103,6 +107,11 @@ public class Collector extends SubsystemBase {
          )
       );
     }
+
+    if(m_deployTimer.hasElapsed(.25)) {
+      m_pivotMotor.stopMotor();
+    }
+
     putDataOnDashboard();
   }
 

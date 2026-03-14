@@ -33,7 +33,8 @@ public class Shoot extends Command {
   private ShootActions m_shootAction = ShootActions.Shoot;
   public enum ShootActions {
     Shoot,
-    Shuttle
+    Shuttle,
+    JustShoot
   }
 
   /** Creates a new Shoot. */
@@ -77,6 +78,10 @@ public class Shoot extends Command {
         m_shooterRps = m_shuttleRps;
         m_requireAlign = false;
       }
+
+    if(m_shootAction == ShootActions.JustShoot) {
+      m_requireAlign = false;
+    }
 
     if (
         !m_requireAlign

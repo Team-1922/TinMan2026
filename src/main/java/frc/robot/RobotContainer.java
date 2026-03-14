@@ -138,6 +138,10 @@ public class RobotContainer {
                         new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shoot)
         ));
 
+        DriverController.x().whileTrue(
+                new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot)
+        );
+
         DriverController.povDown().whileTrue(
                 new RetractCollector(collector)
         );
