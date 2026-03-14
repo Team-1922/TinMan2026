@@ -82,6 +82,10 @@ public class Collector extends SubsystemBase {
     pivotCollector(Constants.Collector.kRetractedPosition);
   }
 
+  public void halfCollector() {
+    pivotCollector(Constants.Collector.kHalfDeployedPosition);
+  }
+
   public void spinCollectorBars() {
     collect(Constants.Collector.krps);
   }

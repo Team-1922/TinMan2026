@@ -33,6 +33,8 @@ import frc.robot.subsystems.Signaling;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
+import frc.robot.commands.HalfCollect;
+
 import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
@@ -138,6 +140,10 @@ public class RobotContainer {
 
         DriverController.povDown().whileTrue(
                 new RetractCollector(collector)
+        );
+
+        DriverController.povLeft().whileTrue(
+                new HalfCollect(collector)
         );
         
         DriverController.rightBumper().whileTrue(

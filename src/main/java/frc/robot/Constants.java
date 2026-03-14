@@ -93,6 +93,8 @@ public final class Constants {
         public static final double kRetractedPosition = 0.375;
 
         public static final double kDeployedPosition = 0;
+
+        public static final double kHalfDeployedPosition = 0.264160;
     };
 
     public static class Feeder {
