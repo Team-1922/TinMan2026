@@ -99,11 +99,11 @@ public final class Constants {
 
     public static class Feeder {
         public static final int kMotorId1 = 18;
-        public static final double kGearRatio = 4;
+        public static final double kGearRatio = 5;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 0.11;
+            slot0Configs.kP = 0.005;
             slot0Configs.kS = 0.60;
             return slot0Configs;
         }
