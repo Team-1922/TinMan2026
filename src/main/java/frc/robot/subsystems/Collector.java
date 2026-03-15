@@ -40,6 +40,9 @@ public class Collector extends SubsystemBase {
     new VelocityDutyCycle(0)
       .withSlot(0);
 
+  private final PositionDutyCycle m_collectorPostionDutyCycle = 
+    new PositionDutyCycle(Constants.Collector.kRetractedPosition);
+
   private Timer m_deployTimer = new Timer();
 
   /** Creates a new Collector. */
@@ -95,7 +98,7 @@ public class Collector extends SubsystemBase {
   }
 
   private void pivotCollector(double position) {
-    m_pivotMotor.setControl(new PositionDutyCycle(position));
+    m_pivotMotor.setControl( m_collectorPostionDutyCycle.withPosition(position));
   }
   
   public void collect(double rps) {

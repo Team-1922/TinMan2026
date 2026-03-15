@@ -22,24 +22,6 @@
               }
             ]
           }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 2.5
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "OutpostToShoot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "alignAndShoot"
-          }
         }
       ]
     }
