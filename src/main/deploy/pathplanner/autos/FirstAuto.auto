@@ -33,12 +33,6 @@
           "data": {
             "pathName": "ShootToClimb"
           }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "shoot"
-          }
         }
       ]
     }

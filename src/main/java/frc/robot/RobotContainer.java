@@ -6,6 +6,8 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.*;
 
+import java.util.jar.Attributes.Name;
+
 import com.ctre.phoenix6.swerve.SwerveModule.DriveRequestType;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 import com.pathplanner.lib.auto.AutoBuilder;
@@ -87,6 +89,9 @@ public class RobotContainer {
                 new AutoAlign(drivetrain, localization, signaling)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
+        NamedCommands.registerCommand("shoot", new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot));
+        NamedCommands.registerCommand("Shootit", new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot));
+        NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);

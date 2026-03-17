@@ -5,15 +5,15 @@
     "data": {
       "commands": [
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "StraightBack"
+            "waitTime": 1.0
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "alignAndShoot"
+            "name": "shoot"
           }
         }
       ]
@@ -21,5 +21,5 @@
   },
   "resetOdom": true,
   "folder": null,
-  "choreoAuto": true
+  "choreoAuto": false
 }
