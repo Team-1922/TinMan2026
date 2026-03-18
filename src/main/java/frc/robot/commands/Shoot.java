@@ -86,11 +86,11 @@ public class Shoot extends Command {
     if (
         !m_requireAlign
         || (
-            Math.abs(distFromHub - Constants.targetDistanceToHub)
-              < Constants.autoAlignDistanceThreshold 
-            && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold)
+          Math.abs(distFromHub - Constants.targetDistanceToHub)
+          < Constants.autoAlignDistanceThreshold 
+          && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold
         )
-     {
+    ) {
       m_shooter.setTargetRps(m_shooterRps);
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
         m_isReadyToShoot = true;
