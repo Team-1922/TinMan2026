@@ -60,10 +60,7 @@ public class AutoAlign extends Command {
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-   // return false;
-    if(Math.abs( m_localization.getM_errorX()) > 3) {
-      return true;
-    } else return false;
+    return false;
   }
 
 }
