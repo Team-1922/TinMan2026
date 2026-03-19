@@ -15,6 +15,7 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -39,6 +40,9 @@ public class Collector extends SubsystemBase {
     new VelocityDutyCycle(0)
       .withSlot(0);
 
+  private final PositionDutyCycle m_collectorPostionDutyCycle = 
+    new PositionDutyCycle(Constants.Collector.kRetractedPosition);
+
   /** Creates a new Collector. */
   public Collector() {
     MotorOutputConfigs rollerMotorConfig = new MotorOutputConfigs()
@@ -47,7 +51,7 @@ public class Collector extends SubsystemBase {
 
     MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
         .withInverted(InvertedValue.CounterClockwise_Positive)
-        .withNeutralMode(NeutralModeValue.Brake);
+        .withNeutralMode(NeutralModeValue.Coast);
     
     m_rollerMotor.getConfigurator().apply(Constants.Collector.slot0());
     m_rollerMotor.getConfigurator().apply(
@@ -66,7 +70,7 @@ public class Collector extends SubsystemBase {
     m_pivotMotor.getConfigurator().apply(pivotMotorConfig);
     m_pivotMotor.getConfigurator().apply(
         Constants.Collector.kPivotFeedbackConfig
-    );  
+    );
   }
 
   @Override
@@ -75,11 +79,14 @@ public class Collector extends SubsystemBase {
   }
 
   public void deploy() {
-    pivotCollector(Constants.Collector.kDeployedPosition);
-  }
+    pivotCollector(Constants.Collector.kDeployedPosition);}
 
   public void retract() {
     pivotCollector(Constants.Collector.kRetractedPosition);
+  }
+
+  public void halfCollector() {
+    pivotCollector(Constants.Collector.kHalfDeployedPosition);
   }
 
   public void spinCollectorBars() {
@@ -87,7 +94,7 @@ public class Collector extends SubsystemBase {
   }
 
   private void pivotCollector(double position) {
-    m_pivotMotor.setControl(new PositionDutyCycle(position));
+    m_pivotMotor.setControl( m_collectorPostionDutyCycle.withPosition(position));
   }
   
   public void collect(double rps) {

@@ -33,6 +33,8 @@ import frc.robot.subsystems.Signaling;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
+import frc.robot.commands.HalfCollect;
+
 import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
@@ -85,6 +87,7 @@ public class RobotContainer {
                 new AutoAlign(drivetrain, localization, signaling)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
+        NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -136,8 +139,16 @@ public class RobotContainer {
                         new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shoot)
         ));
 
+        DriverController.x().whileTrue(
+                new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot)
+        );
+
         DriverController.povDown().whileTrue(
                 new RetractCollector(collector)
+        );
+
+        DriverController.povLeft().whileTrue(
+                new HalfCollect(collector)
         );
         
         DriverController.rightBumper().whileTrue(
