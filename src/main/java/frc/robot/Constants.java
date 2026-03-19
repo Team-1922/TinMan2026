@@ -35,7 +35,8 @@ public final class Constants {
         };
 
     public static class Collector {
-        public static final int kRollerMotorId = 14;
+        public static final int kRollerLeaderMotorId = 14;
+        public static final int kRollerFollowerMotorId = 15;
         public static final int kPivotMotorId = 16;
         public static final int kPivotCanCoderId = 22;
         public static final double kRollerGearRatio = 2;

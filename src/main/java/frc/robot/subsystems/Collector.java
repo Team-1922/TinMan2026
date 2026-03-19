@@ -21,9 +21,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
 public class Collector extends SubsystemBase {
-  private final TalonFX m_rollerMotor = new TalonFX(
-      Constants.Collector.kRollerMotorId, 
+  private final TalonFX m_rollerLeaderMotor = new TalonFX(
+      Constants.Collector.kRollerLeaderMotorId, 
       Constants.superstructureCanbus
+  );
+
+  private final TalonFX m_rollerFollowerMotor = new TalonFX(
+    Constants.Collector.kRollerFollowerMotorId,
+    Constants.superstructureCanbus
   );
 
   private final TalonFX m_pivotMotor = new TalonFX(
@@ -45,7 +50,7 @@ public class Collector extends SubsystemBase {
 
   /** Creates a new Collector. */
   public Collector() {
-    MotorOutputConfigs rollerMotorConfig = new MotorOutputConfigs()
+    MotorOutputConfigs rollerLeaderMotorConfig = new MotorOutputConfigs()
         .withInverted(InvertedValue.CounterClockwise_Positive)
         .withNeutralMode(NeutralModeValue.Coast);
 
@@ -53,11 +58,22 @@ public class Collector extends SubsystemBase {
         .withInverted(InvertedValue.CounterClockwise_Positive)
         .withNeutralMode(NeutralModeValue.Coast);
     
-    m_rollerMotor.getConfigurator().apply(Constants.Collector.slot0());
-    m_rollerMotor.getConfigurator().apply(
+    MotorOutputConfigs rollerFollowerMotorConfig = new MotorOutputConfigs()
+        .withInverted(InvertedValue.Clockwise_Positive)
+        .withNeutralMode(NeutralModeValue.Coast);
+    
+    m_rollerLeaderMotor.getConfigurator().apply(Constants.Collector.slot0());
+    m_rollerLeaderMotor.getConfigurator().apply(
         Constants.Collector.kRollerCurrentConfigs
     );
-    m_rollerMotor.getConfigurator().apply(rollerMotorConfig);
+    m_rollerLeaderMotor.getConfigurator().apply(rollerLeaderMotorConfig);
+
+    m_rollerFollowerMotor.getConfigurator().apply(Constants.Collector.slot0());
+    m_rollerFollowerMotor.getConfigurator().apply(
+        Constants.Collector.kRollerCurrentConfigs
+    );
+   
+    m_rollerFollowerMotor.getConfigurator().apply(rollerFollowerMotorConfig);
 
     m_pivotEncoder.getConfigurator().apply(
         Constants.Collector.kPivotCanCoderConfig
@@ -100,7 +116,7 @@ public class Collector extends SubsystemBase {
   public void collect(double rps) {
     m_rps = rps;
     if( m_rps > 0) {
-      m_rollerMotor.setControl(
+      m_rollerLeaderMotor.setControl(
           m_collectorDutyCycle.withVelocity(
               m_rps * Constants.Collector.kRollerGearRatio
          )
@@ -111,11 +127,11 @@ public class Collector extends SubsystemBase {
 
   public void stopCollector() {
     m_rps = 0;
-    m_rollerMotor.stopMotor();
+    m_rollerLeaderMotor.stopMotor();
   }
 
   private void putDataOnDashboard() {
-    double rollorMotorTemp = m_rollerMotor.getDeviceTemp().getValue().magnitude();
+    double rollorMotorTemp = m_rollerLeaderMotor.getDeviceTemp().getValue().magnitude();
     double pivotMotorTemp = m_pivotMotor.getDeviceTemp().getValue().magnitude();
 
     SmartDashboard.putNumber("Motor Temps/Collector/Roller", Celsius.of(rollorMotorTemp).in(Fahrenheit));
