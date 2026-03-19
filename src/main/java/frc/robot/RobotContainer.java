@@ -87,8 +87,6 @@ public class RobotContainer {
                 new AutoAlign(drivetrain, localization, signaling)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
-        NamedCommands.registerCommand("shoot", new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot));
-        NamedCommands.registerCommand("Shootit", new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot));
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         autoChooser = AutoBuilder.buildAutoChooser();
