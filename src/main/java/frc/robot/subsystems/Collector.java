@@ -43,8 +43,6 @@ public class Collector extends SubsystemBase {
   private final PositionDutyCycle m_collectorPostionDutyCycle = 
     new PositionDutyCycle(Constants.Collector.kRetractedPosition);
 
-  private Timer m_deployTimer = new Timer();
-
   /** Creates a new Collector. */
   public Collector() {
     MotorOutputConfigs rollerMotorConfig = new MotorOutputConfigs()
@@ -81,9 +79,7 @@ public class Collector extends SubsystemBase {
   }
 
   public void deploy() {
-    pivotCollector(Constants.Collector.kDeployedPosition);
-    m_deployTimer.reset();
-  }
+    pivotCollector(Constants.Collector.kDeployedPosition);}
 
   public void retract() {
     pivotCollector(Constants.Collector.kRetractedPosition);
@@ -110,11 +106,6 @@ public class Collector extends SubsystemBase {
          )
       );
     }
-
-    if(m_deployTimer.hasElapsed(.25)) {
-      m_pivotMotor.stopMotor();
-    }
-
     putDataOnDashboard();
   }
 
