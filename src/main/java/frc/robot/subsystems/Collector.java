@@ -9,9 +9,11 @@ import static edu.wpi.first.units.Units.Fahrenheit;
 
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
+import com.ctre.phoenix6.controls.Follower;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
+import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
 
@@ -48,7 +50,7 @@ public class Collector extends SubsystemBase {
   private final PositionDutyCycle m_collectorPostionDutyCycle = 
     new PositionDutyCycle(Constants.Collector.kRetractedPosition);
 
-  /** Creates a new Collector. */
+  /** Creates a new Collector.   */
   public Collector() {
     MotorOutputConfigs rollerLeaderMotorConfig = new MotorOutputConfigs()
         .withInverted(InvertedValue.CounterClockwise_Positive)
@@ -72,6 +74,7 @@ public class Collector extends SubsystemBase {
     m_rollerFollowerMotor.getConfigurator().apply(
         Constants.Collector.kRollerCurrentConfigs
     );
+    m_rollerFollowerMotor.setControl(new Follower(Constants.Collector.kRollerLeaderMotorId, MotorAlignmentValue.Opposed));
    
     m_rollerFollowerMotor.getConfigurator().apply(rollerFollowerMotorConfig);
 
