@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.LimelightHelpers.*;
 
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
@@ -32,6 +33,7 @@ public class Localization extends SubsystemBase {
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
+    m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   };
  
   public Pose2d getPose2dEstimate() {
@@ -42,7 +44,6 @@ public class Localization extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-
     m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
     ? m_blueHubPose2d 
     : m_redHubPose2d;
@@ -53,13 +54,18 @@ public class Localization extends SubsystemBase {
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
       || mt2_estimate == null
-      || mt2_estimate.tagCount == 0)
-    {
+      || mt2_estimate.tagCount == 0
+      || Math.abs(Math.sqrt(
+        Math.pow(m_Field2d.getRobotPose().getX() 
+        - getPose2dEstimate().getX(),2)
+        + Math.pow(m_Field2d.getRobotPose().getY() 
+        - getPose2dEstimate().getY(),2)
+      )) > 1 //pythagoreans theorum is so cool
+    ) {
       doRejectUpdate = true;
     }
     if(!doRejectUpdate)
     {
-      m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
       m_drivetrain.addVisionMeasurement(
         mt2_estimate.pose,
         mt2_estimate.timestampSeconds);
@@ -97,5 +103,4 @@ public class Localization extends SubsystemBase {
   public double distFromHub() {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
   }
-  
 }
