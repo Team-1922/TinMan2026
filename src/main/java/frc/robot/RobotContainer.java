@@ -95,7 +95,7 @@ public class RobotContainer {
         LimelightHelpers.setCameraPose_RobotSpace(
                 Constants.middleLimeLight, 
                 Units.inchesToMeters(3.5), 
-                Units.inchesToMeters(7.5), 
+                Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
                 30, 
