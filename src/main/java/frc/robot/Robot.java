@@ -55,7 +55,7 @@ public class Robot extends LoggedRobot {
     public void robotPeriodic() {
         m_timeAndJoystickReplay.update();
         if(DriverStation.isEnabled()) {
-            LimelightHelpers.SetIMUMode(Constants.middleLimeLight, 4);
+            LimelightHelpers.SetIMUMode(Constants.middleLimelightName, 4);
         }
         CommandScheduler.getInstance().run();
     }
@@ -68,7 +68,7 @@ public class Robot extends LoggedRobot {
     @Override
     public void disabledPeriodic() {
         m_signaling.yellow();
-        LimelightHelpers.SetIMUMode(Constants.middleLimeLight, 1);
+        LimelightHelpers.SetIMUMode(Constants.middleLimelightName, 1);
     }
 
     @Override
