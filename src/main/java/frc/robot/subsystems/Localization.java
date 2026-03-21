@@ -25,7 +25,7 @@ public class Localization extends SubsystemBase {
   private double m_errorX;
   private double m_errorY;
   private Pose2d m_hubpose = new Pose2d();
-  private Pose2d m_robotPose = new Pose2d();
+  private Pose2d m_initialRobotPose = new Pose2d();
   private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
   private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
   
@@ -42,8 +42,8 @@ public class Localization extends SubsystemBase {
     ? m_blueHubPose2d 
     : m_redHubPose2d;
 
-    m_robotPose = m_drivetrain.getPose();
-    double yaw = m_robotPose.getRotation().getDegrees();
+    m_initialRobotPose = m_drivetrain.getPose();
+    double yaw = m_initialRobotPose.getRotation().getDegrees();
     
     Boolean usingFront = processLimelight(Constants.middleLimelightName, yaw);
     
@@ -109,9 +109,9 @@ public class Localization extends SubsystemBase {
       || poseEstimate.tagCount <= 1
       || Math.abs(Math.sqrt(
         Math.pow(m_Field2d.getRobotPose().getX() 
-        - m_robotPose.getX(),2)
+        - m_initialRobotPose.getX(),2)
         + Math.pow(m_Field2d.getRobotPose().getY() 
-        - m_robotPose.getY(),2)
+        - m_initialRobotPose.getY(),2)
       )) > 1 //pythagoreans theorum is so cool
       || poseEstimate.avgTagDist < .7;
   }
