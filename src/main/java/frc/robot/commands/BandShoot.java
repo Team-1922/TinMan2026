@@ -18,7 +18,8 @@ public class BandShoot extends Command {
   private final Shooter m_shooter;
   private double m_spindexerRps = 45;
   private double m_feederRps = 60;
-  private double m_shooterRps = 20;
+  private double m_maxShooterRps = 20;
+  private double m_minShooterRps = 20;
   private double m_shuttleRps = 30;
   private double m_yawThreshold = .045;
   private final Spindexer m_spindexer;
@@ -51,7 +52,7 @@ public class BandShoot extends Command {
     m_spindexer = spindexer;
     m_localization = localization;
     m_shootAction = shootAction;
-    SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
+    SmartDashboard.putNumber("Shooter RPS", m_maxShooterRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
     SmartDashboard.putBoolean("Requires Align", m_requireAlign);
@@ -69,19 +70,10 @@ public class BandShoot extends Command {
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
-    m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
+    m_maxShooterRps = SmartDashboard.getNumber("Shooter RPS", m_maxShooterRps);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
     m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
-
-    if(m_shootAction == ShootActions.Shuttle) {
-        m_shooterRps = m_shuttleRps;
-        m_requireAlign = false;
-      }
-
-    if(m_shootAction == ShootActions.JustShoot) {
-      m_requireAlign = false;
-    }
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
@@ -90,13 +82,15 @@ public class BandShoot extends Command {
     if (
         !m_requireAlign
         || (
-          Math.abs(distFromHub - Constants.targetDistanceToHub)
-          < Constants.autoAlignDistanceThreshold 
+          Math.abs(distFromHub - Constants.maxTargetDistanceToHub)
+          < Constants.autoAlignDistanceThreshold
+          && Math.abs(distFromHub - Constants.minTargetDistanceToHub)
+          > -Constants.autoAlignDistanceThreshold
           && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold
         )
     ) {
-      m_shooter.setTargetRps(m_shooterRps);
-      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
+      m_shooter.setTargetRps(m_maxShooterRps, m_minShooterRps);
+      if (m_shooter.getVelocity() >= m_maxShooterRps - m_shooterSpeedThreshold) {
         m_isReadyToShoot = true;
       }
 

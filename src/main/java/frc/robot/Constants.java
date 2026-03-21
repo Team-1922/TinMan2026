@@ -27,6 +27,7 @@ public final class Constants {
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
     public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
+    public static final double minTargetDistanceToHub = Meters.of(2.1).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
     public static final CANBus superstructureCanbus =  switch(Constants.robotType) {

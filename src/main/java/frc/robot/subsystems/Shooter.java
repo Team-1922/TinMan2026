@@ -58,8 +58,8 @@ public class Shooter extends SubsystemBase {
     return m_leaderMotor.getVelocity().getValueAsDouble();
   }
 
-  public void setTargetRps(double rps) {
-    m_rps = rps;
+  public void setTargetRps(double maxRps, double minRps) {
+    m_rps = maxRps;
   }
 
   public void stop(){
