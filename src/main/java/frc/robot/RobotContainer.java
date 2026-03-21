@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.RetractCollector;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SpinCollectorBars;
+import frc.robot.commands.Shoot.ShootActions;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
@@ -31,8 +33,9 @@ import frc.robot.subsystems.Signaling;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
+import frc.robot.commands.HalfCollect;
+
 import com.pathplanner.lib.auto.NamedCommands;
-import frc.robot.subsystems.LEDs;
 
 public class RobotContainer {
     private double MaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top
@@ -49,7 +52,7 @@ public class RobotContainer {
 
     private final Telemetry logger = new Telemetry(MaxSpeed);
 
-    private final CommandXboxController DriverController = new CommandXboxController(0);
+    public final CommandXboxController DriverController = new CommandXboxController(0);
 
     public final CommandSwerveDrivetrain drivetrain = 
             TunerConstants.createDrivetrain();
@@ -59,9 +62,9 @@ public class RobotContainer {
     public final Feeder feeder = new Feeder();
     public final Localization localization = new Localization(drivetrain);
     public final Collector collector = new Collector();
+    public final Signaling signaling = new Signaling(DriverController);
     private final SendableChooser<Command> autoChooser;
-    private final Signaling signaling = new Signaling();
-    public final LEDs leds = new LEDs();
+    
 
     public RobotContainer() {
         configureBindings();
@@ -74,8 +77,19 @@ public class RobotContainer {
                                 shooter,
                                 feeder,
                                 spindexer,
-                                localization
+                                localization,
+                                ShootActions.Shoot
                         )
+                )
+        );
+        NamedCommands.registerCommand(
+                "shoot", 
+                new Shoot(
+                        shooter,
+                        feeder,
+                        spindexer,
+                        localization,
+                        ShootActions.JustShoot
                 )
         );
         NamedCommands.registerCommand(
@@ -83,6 +97,7 @@ public class RobotContainer {
                 new AutoAlign(drivetrain, localization, signaling)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
+        NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -90,10 +105,10 @@ public class RobotContainer {
         LimelightHelpers.setCameraPose_RobotSpace(
                 Constants.middleLimeLight, 
                 Units.inchesToMeters(3.5), 
-                Units.inchesToMeters(7.5), 
+                Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
-                30, 
+                35, 
                 0
         );
     }
@@ -131,15 +146,27 @@ public class RobotContainer {
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
                         new AutoAlign(drivetrain, localization, signaling), 
-                        new Shoot(shooter, feeder, spindexer, localization)
+                        new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shoot)
         ));
+
+        DriverController.x().whileTrue(
+                new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot)
+        );
 
         DriverController.povDown().whileTrue(
                 new RetractCollector(collector)
         );
+
+        DriverController.povLeft().whileTrue(
+                new HalfCollect(collector)
+        );
         
         DriverController.rightBumper().whileTrue(
-            new Shoot(shooter, feeder, spindexer, localization)
+            new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shuttle)
+        );
+
+        DriverController.leftBumper().whileTrue(
+                new SpinCollectorBars(collector)
         );
 
         // Run SysId routines when holding back/start and X/Y.
@@ -150,7 +177,7 @@ public class RobotContainer {
         DriverController.start().and(DriverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        DriverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        DriverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

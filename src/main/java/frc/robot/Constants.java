@@ -26,7 +26,7 @@ public final class Constants {
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
-    public static final double targetDistanceToHub = Meters.of(2.7).in(Meters);
+    public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
     public static String middleLimeLight = "limelight-front";
     public static String drivebaseCanbusName = "Drivebase";
     public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
@@ -38,7 +38,8 @@ public final class Constants {
         public static final int kRollerMotorId = 14;
         public static final int kPivotMotorId = 16;
         public static final int kPivotCanCoderId = 22;
-        public static final double kGearRatio = 2;
+        public static final double kRollerGearRatio = 2;
+        public static final double krps = 100;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
@@ -49,8 +50,8 @@ public final class Constants {
 
         public static Slot0Configs pivotSlot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 5;
-            slot0Configs.kS = 2;
+            slot0Configs.kP = 2;
+            slot0Configs.kS = 0;
             return slot0Configs;
         }
 
@@ -60,7 +61,7 @@ public final class Constants {
                 .withStatorCurrentLimitEnable(true)
                 .withStatorCurrentLimit(20)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(20)
+                .withSupplyCurrentLimit(30)
                 .withSupplyCurrentLowerLimit(20)
                 .withSupplyCurrentLowerTime(.75);
 
@@ -76,31 +77,33 @@ public final class Constants {
         public static final FeedbackConfigs kPivotFeedbackConfig = new FeedbackConfigs()
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
             .withFeedbackRemoteSensorID(kPivotCanCoderId)
-            .withRotorToSensorRatio(25)
+            .withRotorToSensorRatio(48)
             .withSensorToMechanismRatio(1);
 
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.6208500625)
-                        .withAbsoluteSensorDiscontinuityPoint(.5)
+                        .withMagnetOffset(0.166748)
+                        .withAbsoluteSensorDiscontinuityPoint(0.5)
                         .withSensorDirection(
                                 SensorDirectionValue.CounterClockwise_Positive
                         )
             );
 
-        public static final double kRetractedPosition = -0.36;
+        public static final double kRetractedPosition = 0.375;
 
-        public static final double kDeployedPosition = -0.0024;
+        public static final double kDeployedPosition = 0;
+
+        public static final double kHalfDeployedPosition = 0.264160;
     };
 
     public static class Feeder {
         public static final int kMotorId1 = 18;
-        public static final double kGearRatio = 4;
+        public static final double kGearRatio = 5;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 0.11;
+            slot0Configs.kP = 0.005;
             slot0Configs.kS = 0.60;
             return slot0Configs;
         }
@@ -142,7 +145,7 @@ public final class Constants {
     
     public static class Spindexer {
         public static final int kMotorId1 = 21;
-        public static final double kGearRatio = 6;
+        public static final double kGearRatio = 15;
         public static final double spindexerIdleSpeed = 0;
         
         public static Slot0Configs slot0() {
@@ -166,5 +169,20 @@ public final class Constants {
     public enum RobotType{
         TinmanV2,
         TinmanV1
+    }
+
+    public static class Signaling {
+        public static double kShiftChangeWarningTime = 5;
+
+        public static double kShift1Start = 130;
+        public static double kShift2Start = 105;
+        public static double kShift3Start = 80;
+        public static double kShift4Start = 55;
+        public static double kEndGameStart = 30;
+
+        public static double kShift1StartOffset = kShift1Start + kShiftChangeWarningTime;
+        public static double kShift2StartOffset = kShift2Start + kShiftChangeWarningTime;
+        public static double kShift3StartOffset = kShift3Start + kShiftChangeWarningTime;
+        public static double kShift4StartOffset = kShift4Start + kShiftChangeWarningTime;
     }
 }
