@@ -45,14 +45,11 @@ public class Localization extends SubsystemBase {
     m_initialRobotPose = m_drivetrain.getPose();
     double yaw = m_initialRobotPose.getRotation().getDegrees();
     
-    Boolean usingFront = processLimelight(Constants.middleLimelightName, yaw);
+    processLimelight(Constants.frontLimelightName, yaw);
     
-    Boolean usingRight = false;
     if(Constants.useRightLimelight) {
-      usingRight = processLimelight(Constants.rightLimelightName, yaw);
-    }    
-    
-    SmartDashboard.putBoolean("Using vision", usingFront || usingRight);
+      processLimelight(Constants.rightLimelightName, yaw);
+    }
 
     Pose2d updatedRobotPose = m_drivetrain.getPose();
     m_Field2d.setRobotPose(updatedRobotPose);
@@ -88,7 +85,7 @@ public class Localization extends SubsystemBase {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
   }
 
-  private boolean processLimelight(String limelightName, double yaw) {
+  private void processLimelight(String limelightName, double yaw) {
     boolean usedLimelight = false;
     LimelightHelpers.SetRobotOrientation(limelightName, yaw, 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
@@ -99,7 +96,8 @@ public class Localization extends SubsystemBase {
 
       usedLimelight = true;
     }
-    return usedLimelight;
+
+    SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
   }
 
   private boolean shouldReject(LimelightHelpers.PoseEstimate poseEstimate) {
