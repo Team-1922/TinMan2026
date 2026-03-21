@@ -8,6 +8,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants;
@@ -51,6 +52,7 @@ public class Localization extends SubsystemBase {
     LimelightHelpers.SetRobotOrientation("limelight-front", getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.PoseEstimate mt2_estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
     Boolean doRejectUpdate = false;
+    SmartDashboard.putNumber("Dist from tag", mt2_estimate.avgTagDist);
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
       || mt2_estimate == null
@@ -61,6 +63,7 @@ public class Localization extends SubsystemBase {
         + Math.pow(m_Field2d.getRobotPose().getY() 
         - getPose2dEstimate().getY(),2)
       )) > 1 //pythagoreans theorum is so cool
+      || mt2_estimate.avgTagDist < .7
     ) {
       doRejectUpdate = true;
     }
@@ -70,6 +73,7 @@ public class Localization extends SubsystemBase {
         mt2_estimate.pose,
         mt2_estimate.timestampSeconds);
     }
+    SmartDashboard.putBoolean("Using vision", !doRejectUpdate);
     m_Field2d.setRobotPose(getPose2dEstimate());
     SmartDashboard.putData("Field2d", m_Field2d);
 
