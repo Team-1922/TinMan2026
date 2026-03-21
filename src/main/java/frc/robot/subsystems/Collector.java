@@ -75,8 +75,8 @@ public class Collector extends SubsystemBase {
     );
     m_rollerFollowerMotor.setControl(
         new Follower(
-          Constants.Collector.kRollerLeaderMotorId, 
-          MotorAlignmentValue.Opposed
+            Constants.Collector.kRollerLeaderMotorId, 
+            MotorAlignmentValue.Opposed
         )
     );
    
