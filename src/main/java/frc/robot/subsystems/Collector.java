@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Fahrenheit;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.controls.PositionDutyCycle;
@@ -12,6 +15,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
 
+import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -27,7 +32,6 @@ public class Collector extends SubsystemBase {
   );
 
   private double m_rps = 0;
-  private boolean isRetracted = false;
   private final CANcoder m_pivotEncoder = new CANcoder(
       Constants.Collector.kPivotCanCoderId,
       Constants.superstructureCanbus
@@ -35,6 +39,9 @@ public class Collector extends SubsystemBase {
   private final VelocityDutyCycle m_collectorDutyCycle = 
     new VelocityDutyCycle(0)
       .withSlot(0);
+
+  private final PositionDutyCycle m_collectorPostionDutyCycle = 
+    new PositionDutyCycle(Constants.Collector.kRetractedPosition);
 
   /** Creates a new Collector. */
   public Collector() {
@@ -44,7 +51,7 @@ public class Collector extends SubsystemBase {
 
     MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
         .withInverted(InvertedValue.CounterClockwise_Positive)
-        .withNeutralMode(NeutralModeValue.Brake);
+        .withNeutralMode(NeutralModeValue.Coast);
     
     m_rollerMotor.getConfigurator().apply(Constants.Collector.slot0());
     m_rollerMotor.getConfigurator().apply(
@@ -63,7 +70,7 @@ public class Collector extends SubsystemBase {
     m_pivotMotor.getConfigurator().apply(pivotMotorConfig);
     m_pivotMotor.getConfigurator().apply(
         Constants.Collector.kPivotFeedbackConfig
-    );  
+    );
   }
 
   @Override
@@ -72,32 +79,46 @@ public class Collector extends SubsystemBase {
   }
 
   public void deploy() {
-    pivotCollector(Constants.Collector.kDeployedPosition);
-    isRetracted = false;
-  }
+    pivotCollector(Constants.Collector.kDeployedPosition);}
 
   public void retract() {
     pivotCollector(Constants.Collector.kRetractedPosition);
-    isRetracted = true;
+  }
+
+  public void halfCollector() {
+    pivotCollector(Constants.Collector.kHalfDeployedPosition);
+  }
+
+  public void spinCollectorBars() {
+    collect(Constants.Collector.krps);
   }
 
   private void pivotCollector(double position) {
-    m_pivotMotor.setControl(new PositionDutyCycle(position));
+    m_pivotMotor.setControl( m_collectorPostionDutyCycle.withPosition(position));
   }
   
   public void collect(double rps) {
     m_rps = rps;
-    if(!isRetracted && m_rps > 0) {
+    if( m_rps > 0) {
       m_rollerMotor.setControl(
           m_collectorDutyCycle.withVelocity(
               m_rps * Constants.Collector.kRollerGearRatio
          )
       );
     }
+    putDataOnDashboard();
   }
 
   public void stopCollector() {
     m_rps = 0;
     m_rollerMotor.stopMotor();
+  }
+
+  private void putDataOnDashboard() {
+    double rollorMotorTemp = m_rollerMotor.getDeviceTemp().getValue().magnitude();
+    double pivotMotorTemp = m_pivotMotor.getDeviceTemp().getValue().magnitude();
+
+    SmartDashboard.putNumber("Motor Temps/Collector/Roller", Celsius.of(rollorMotorTemp).in(Fahrenheit));
+    SmartDashboard.putNumber("Motor Temps/Collector/Pivot", Celsius.of(pivotMotorTemp).in(Fahrenheit));
   }
 }

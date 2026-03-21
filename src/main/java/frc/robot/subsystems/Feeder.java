@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Celsius;
+import static edu.wpi.first.units.Units.Fahrenheit;
+
 import com.ctre.phoenix6.configs.MotorOutputConfigs;
 import com.ctre.phoenix6.controls.VelocityDutyCycle;
 import com.ctre.phoenix6.hardware.TalonFX;
@@ -44,7 +47,7 @@ public class Feeder extends SubsystemBase {
           )
       );
     }
-    SmartDashboard.putNumber("Feeder Motor RPS", m_rps * Constants.Feeder.kGearRatio);
+    putDataOnDashboard();
   }
 
   public void setTargetRps(double rps) {
@@ -58,5 +61,12 @@ public class Feeder extends SubsystemBase {
 
   public double getSpeed(){
     return m_Feeder.getVelocity().getValueAsDouble();
+  }
+
+  private void putDataOnDashboard() {
+    double motorTemp = m_Feeder.getDeviceTemp().getValue().magnitude();
+
+    SmartDashboard.putNumber("Motor Temps/Feeder", Celsius.of(motorTemp).in(Fahrenheit));
+    SmartDashboard.putNumber("Feeder Motor RPS", m_rps * Constants.Feeder.kGearRatio);
   }
 }

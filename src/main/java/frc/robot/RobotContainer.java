@@ -22,6 +22,8 @@ import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.RetractCollector;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.SpinCollectorBars;
+import frc.robot.commands.Shoot.ShootActions;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Feeder;
@@ -31,6 +33,8 @@ import frc.robot.subsystems.Signaling;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
+import frc.robot.commands.HalfCollect;
+
 import com.pathplanner.lib.auto.NamedCommands;
 
 public class RobotContainer {
@@ -73,7 +77,8 @@ public class RobotContainer {
                                 shooter,
                                 feeder,
                                 spindexer,
-                                localization
+                                localization,
+                                ShootActions.Shoot
                         )
                 )
         );
@@ -82,6 +87,7 @@ public class RobotContainer {
                 new AutoAlign(drivetrain, localization, signaling)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
+        NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -89,7 +95,7 @@ public class RobotContainer {
         LimelightHelpers.setCameraPose_RobotSpace(
                 Constants.middleLimelightName, 
                 Units.inchesToMeters(3.5), 
-                Units.inchesToMeters(7.5), 
+                Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
                 30, 
@@ -140,15 +146,27 @@ public class RobotContainer {
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
                         new AutoAlign(drivetrain, localization, signaling), 
-                        new Shoot(shooter, feeder, spindexer, localization)
+                        new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shoot)
         ));
+
+        DriverController.x().whileTrue(
+                new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot)
+        );
 
         DriverController.povDown().whileTrue(
                 new RetractCollector(collector)
         );
+
+        DriverController.povLeft().whileTrue(
+                new HalfCollect(collector)
+        );
         
         DriverController.rightBumper().whileTrue(
-            new Shoot(shooter, feeder, spindexer, localization)
+            new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shuttle)
+        );
+
+        DriverController.leftBumper().whileTrue(
+                new SpinCollectorBars(collector)
         );
 
         // Run SysId routines when holding back/start and X/Y.
@@ -159,7 +177,7 @@ public class RobotContainer {
         DriverController.start().and(DriverController.x()).whileTrue(drivetrain.sysIdQuasistatic(Direction.kReverse));
 
         // Reset the field-centric heading on left bumper press.
-        DriverController.leftBumper().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
+        DriverController.y().onTrue(drivetrain.runOnce(drivetrain::seedFieldCentric));
 
         drivetrain.registerTelemetry(logger::telemeterize);
     }

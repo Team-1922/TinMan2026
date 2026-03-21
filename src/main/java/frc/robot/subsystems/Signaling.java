@@ -4,15 +4,8 @@
 
 package frc.robot.subsystems;
 
-import static edu.wpi.first.units.Units.Centimeter;
-import static edu.wpi.first.units.Units.Meters;
-import static edu.wpi.first.units.Units.Percent;
-import static edu.wpi.first.units.Units.Second;
-
 import java.util.Optional;
 
-import edu.wpi.first.units.measure.Distance;
-import edu.wpi.first.util.WPIUtilJNI;
 import edu.wpi.first.wpilibj.AddressableLED;
 import edu.wpi.first.wpilibj.AddressableLEDBuffer;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -21,10 +14,12 @@ import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.LEDPattern;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.LEDPattern.GradientType;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants;
 
 
 public class Signaling extends SubsystemBase {
@@ -33,12 +28,20 @@ public class Signaling extends SubsystemBase {
   private double m_matchTime;
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
-  private LEDPattern m_yellow = LEDPattern.solid(Color.kYellow);
-  private LEDPattern m_red = LEDPattern.solid(Color.kRed);
+  private final LEDPattern m_yellow = LEDPattern.solid(Color.kYellow);
+  private final LEDPattern m_blue = LEDPattern.solid(Color.kBlue);
+  private final LEDPattern m_red = LEDPattern.solid(Color.kRed);
+  private final LEDPattern m_black = LEDPattern.solid(Color.kBlack);
   private final CommandXboxController m_DriverController;
   private final Timer m_rumbleTimer = new Timer();
   private boolean m_alerted = false;
-  private final double m_earlyWarning = 5;
+  private boolean m_shift1Active = false;
+  private Optional <Alliance> m_alliance;
+
+  private enum MaskDirections {
+    Up,
+    Down
+  }
   
   public Signaling(CommandXboxController commandXboxController) {
     m_DriverController = commandXboxController;
@@ -55,17 +58,32 @@ public class Signaling extends SubsystemBase {
     m_led.setData(m_ledBuffer);
     m_gameData = DriverStation.getGameSpecificMessage();
     m_matchTime = DriverStation.getMatchTime();
+    m_alliance = DriverStation.getAlliance();
+    SmartDashboard.putNumber("Time", m_matchTime);
 
-    if(DriverStation.isTeleopEnabled() && isHubActive()){
-      yellow();
-      rumble();
-    } else if(DriverStation.isEnabled() && !isHubActive()){
-      red();
-      m_alerted = false;
+    if(isHubActive()) {
+       if(shouldSetColorMask()) {
+          setAlianceColorMask(MaskDirections.Down);
+      } else {
+        setAlianceColor();
+      }
+    } else {
+      if(shouldSetColorMask()) {
+          setAlianceColorMask(MaskDirections.Up);
+      } else {
+        off();
+      }
     }
   }
 
-  public void rumble(){  
+  private boolean shouldSetColorMask() {
+    return (gameTimeBetween(Constants.Signaling.kShift1Start, Constants.Signaling.kShift1StartOffset ) && !m_shift1Active)
+        || gameTimeBetween(Constants.Signaling.kShift2Start, Constants.Signaling.kShift2StartOffset)
+        || gameTimeBetween(Constants.Signaling.kShift3Start, Constants.Signaling.kShift3StartOffset)
+        || gameTimeBetween(Constants.Signaling.kShift4Start, Constants.Signaling.kShift4StartOffset);
+  }
+
+  public void rumble() {  
     if(!m_rumbleTimer.isRunning() && !m_alerted) {
         m_rumbleTimer.restart();
         m_DriverController.setRumble(RumbleType.kBothRumble, 1);
@@ -77,47 +95,90 @@ public class Signaling extends SubsystemBase {
       }
   }
 
+  private void blue() {
+    m_blue.applyTo(m_ledBuffer);
+  }
+
+  private void blueMask(MaskDirections maskDirection) {
+    applyMask(Color.kBlue, maskDirection);
+  }
+
+  private void red() {
+    m_red.applyTo(m_ledBuffer);
+  }
+
+  private void redMask(MaskDirections maskDirection) {
+    applyMask(Color.kRed, maskDirection);
+  }
+
+  private void applyMask(Color color, MaskDirections maskDirection) {
+    LEDPattern base = LEDPattern.gradient(GradientType.kContinuous, color);
+    
+    double warningTime = Constants.Signaling.kShiftChangeWarningTime;
+    double progress = (m_matchTime % warningTime) / warningTime;
+
+    if(maskDirection == MaskDirections.Up) {
+      progress = 1 - progress;
+    }
+
+    double appliedProgress = progress;
+    LEDPattern mask = LEDPattern.progressMaskLayer(() -> appliedProgress);
+
+    LEDPattern changing = base.mask(mask);
+    changing.applyTo(m_ledBuffer);
+  }
+
   public void yellow() {
     m_yellow.applyTo(m_ledBuffer);
   }
 
-  public void red() {
-    m_red.applyTo(m_ledBuffer);
+  private void off() {
+    m_black.applyTo(m_ledBuffer);
   }
 
-  public void yellowScroll(){
-    Distance ledSpacing = Meters.of(1 / 120.0);
-    LEDPattern base = LEDPattern.gradient(GradientType.kDiscontinuous, Color.kYellow, Color.kBlack);
-    LEDPattern pattern = base.scrollAtRelativeSpeed(Percent.per(Second).of(25));
-    LEDPattern absolute = base.scrollAtAbsoluteSpeed(Centimeter.per(Second).of(12.5), ledSpacing);
-
-    pattern.applyTo(m_ledBuffer);
+  private void setAlianceColor() {
+    if(m_alliance.get() == Alliance.Red) {
+      red();
+    } else if(m_alliance.get() == Alliance.Blue) {
+      blue();
+    } else {
+      yellow();
+    }
   }
 
-   public Command runPattern(LEDPattern pattern) {
+  private void setAlianceColorMask(MaskDirections maskDirection) {
+    if(m_alliance.get() == Alliance.Red) {
+      redMask(maskDirection);
+    } else if(m_alliance.get() == Alliance.Blue) {
+      blueMask(maskDirection);
+    } else {
+      yellow();
+    }
+  }
+
+  public Command runPattern(LEDPattern pattern) {
     return run(() -> pattern.applyTo(m_ledBuffer));
   }
 
-  private boolean isHubActive(){
-    Optional <Alliance> alliance = DriverStation.getAlliance();
-    if(alliance.isEmpty()){
+  private boolean isHubActive() {
+    if(m_alliance.isEmpty()) {
       return false;
     }
 
-    if(DriverStation.isAutonomousEnabled()){
+    if(DriverStation.isAutonomousEnabled()) {
       return true;
     }
 
-    if(!DriverStation.isTeleopEnabled()){
+    if(!DriverStation.isTeleopEnabled()) {
       return false;
     }
 
-    if(m_gameData.isEmpty()){
+    if(m_gameData.isEmpty()) {
       return true;
     }
 
     boolean redInactiveFirst = false;
-      switch (m_gameData.charAt(0)){
+      switch (m_gameData.charAt(0)) {
         case 'R' -> redInactiveFirst = true;
         case 'B' -> redInactiveFirst = false;
         default -> {
@@ -125,24 +186,28 @@ public class Signaling extends SubsystemBase {
         }
       }
 
-      boolean shift1Active = switch (alliance.get()) {
+      m_shift1Active = switch (m_alliance.get()) {
         case Red -> !redInactiveFirst;
         case Blue -> redInactiveFirst;
       };
 
-      if(m_matchTime > 130 - m_earlyWarning) {
+      if(m_matchTime > Constants.Signaling.kShift1Start) {
         return true;
-      } else if (m_matchTime > 105 - m_earlyWarning) {
-        return shift1Active;
-      } else if (m_matchTime > 80 - m_earlyWarning) {
-        return !shift1Active;
-      } else if (m_matchTime > 55 - m_earlyWarning) {
-        return shift1Active;
-      } else if (m_matchTime > 30 - m_earlyWarning) {
-        return !shift1Active;
+      } else if (m_matchTime > Constants.Signaling.kShift2Start) {
+        return m_shift1Active;
+      } else if (m_matchTime > Constants.Signaling.kShift3Start) {
+        return !m_shift1Active;
+      } else if (m_matchTime > Constants.Signaling.kShift4Start ) {
+        return m_shift1Active;
+      } else if (m_matchTime > Constants.Signaling.kEndGameStart) {
+        return !m_shift1Active;
       } else {
         return true;
       }
+  }
+
+  private boolean gameTimeBetween(double minTime, double maxTime) {
+    return m_matchTime > minTime && m_matchTime < maxTime;
   }
 
 }

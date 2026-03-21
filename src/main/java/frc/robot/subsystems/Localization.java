@@ -24,16 +24,14 @@ public class Localization extends SubsystemBase {
   private double m_errorYaw;
   private double m_errorX;
   private double m_errorY;
-  private final Pose2d m_hubpose;
-  private final Pose2d m_blueHubPose2d = new Pose2d(5.22, 4.035, null);
-  private final Pose2d m_redHubPose2d = new Pose2d(11.32, 4.035, null);
+  private Pose2d m_hubpose = new Pose2d();
+  private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
+  private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
+  
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
-    
-    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
-    ? m_blueHubPose2d 
-    : m_redHubPose2d;
+    m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   };
  
   public Pose2d getPose2dEstimate() {
@@ -43,6 +41,9 @@ public class Localization extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
+    ? m_blueHubPose2d 
+    : m_redHubPose2d;
     
     LimelightHelpers.SetRobotOrientation(Constants.middleLimelightName, getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
     LimelightHelpers.SetRobotOrientation(Constants.rightLimelightName, getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
@@ -50,17 +51,24 @@ public class Localization extends SubsystemBase {
     LimelightHelpers.PoseEstimate mt2_estimateRight = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.rightLimelightName);
     Boolean doRejectUpdate = false;
     Boolean poseCalculated = false;
+    SmartDashboard.putNumber("Dist from tag", mt2_estimateFront.avgTagDist);
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
     // Values for the front limelight 
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
       || mt2_estimateFront == null
-      || mt2_estimateFront.tagCount == 0)
-    {
+      || mt2_estimateFront.tagCount == 0
+      || Math.abs(Math.sqrt(
+        Math.pow(m_Field2d.getRobotPose().getX() 
+        - getPose2dEstimate().getX(),2)
+        + Math.pow(m_Field2d.getRobotPose().getY() 
+        - getPose2dEstimate().getY(),2)
+      )) > 1 //pythagoreans theorum is so cool
+      || mt2_estimateFront.avgTagDist < .7
+    ) {
       doRejectUpdate = true;
     }
     if(!doRejectUpdate)
     {
-      m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
       m_drivetrain.addVisionMeasurement(
         mt2_estimateFront.pose,
         mt2_estimateFront.timestampSeconds
@@ -86,6 +94,8 @@ public class Localization extends SubsystemBase {
     }
     
     m_Field2d.setRobotPose(getPose2dEstimate()); 
+    SmartDashboard.putBoolean("Using vision", !doRejectUpdate);
+    m_Field2d.setRobotPose(getPose2dEstimate());
     SmartDashboard.putData("Field2d", m_Field2d);
 
     Pose2d robotPose = m_drivetrain.getPose();
@@ -118,5 +128,4 @@ public class Localization extends SubsystemBase {
   public double distFromHub() {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
   }
-  
 }
