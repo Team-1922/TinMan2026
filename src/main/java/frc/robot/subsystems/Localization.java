@@ -25,6 +25,7 @@ public class Localization extends SubsystemBase {
   private double m_errorX;
   private double m_errorY;
   private Pose2d m_hubpose = new Pose2d();
+  private Pose2d m_robotPose = new Pose2d();
   private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
   private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
   
@@ -34,76 +35,34 @@ public class Localization extends SubsystemBase {
     m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   };
  
-  public Pose2d getPose2dEstimate() {
-    return m_drivetrain.getPose();
-  }
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
     ? m_blueHubPose2d 
     : m_redHubPose2d;
+
+    m_robotPose = m_drivetrain.getPose();
+    double yaw = m_robotPose.getRotation().getDegrees();
     
-    LimelightHelpers.SetRobotOrientation(Constants.middleLimelightName, getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.SetRobotOrientation(Constants.rightLimelightName, getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate mt2_estimateFront = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.middleLimelightName);
-    LimelightHelpers.PoseEstimate mt2_estimateRight = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2(Constants.rightLimelightName);
-    Boolean doRejectUpdate = false;
-    Boolean poseCalculated = false;
-    SmartDashboard.putNumber("Dist from tag", mt2_estimateFront.avgTagDist);
-    // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
-    // Values for the front limelight 
-    if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
-      || mt2_estimateFront == null
-      || mt2_estimateFront.tagCount == 0
-      || Math.abs(Math.sqrt(
-        Math.pow(m_Field2d.getRobotPose().getX() 
-        - getPose2dEstimate().getX(),2)
-        + Math.pow(m_Field2d.getRobotPose().getY() 
-        - getPose2dEstimate().getY(),2)
-      )) > 1 //pythagoreans theorum is so cool
-      || mt2_estimateFront.avgTagDist < .7
-    ) {
-      doRejectUpdate = true;
-    }
-    if(!doRejectUpdate)
-    {
-      m_drivetrain.addVisionMeasurement(
-        mt2_estimateFront.pose,
-        mt2_estimateFront.timestampSeconds
-      );
-    }
-    else{
-      doRejectUpdate = false;
-    }
+    Boolean usingFront = processLimelight(Constants.middleLimelightName, yaw);
     
-    // Values for the right limelight
-    if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
-      || mt2_estimateRight == null
-      || mt2_estimateRight.tagCount == 0)
-    {
-      doRejectUpdate = true;
-    }
-    if(!doRejectUpdate && !poseCalculated)
-    {
-      m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-      m_drivetrain.addVisionMeasurement(
-        mt2_estimateRight.pose,
-        mt2_estimateRight.timestampSeconds);
-    }
+    Boolean usingRight = false;
+    if(Constants.useRightLimelight) {
+      usingRight = processLimelight(Constants.rightLimelightName, yaw);
+    }    
     
-    m_Field2d.setRobotPose(getPose2dEstimate()); 
-    SmartDashboard.putBoolean("Using vision", !doRejectUpdate);
-    m_Field2d.setRobotPose(getPose2dEstimate());
+    SmartDashboard.putBoolean("Using vision", usingFront || usingRight);
+
+    Pose2d updatedRobotPose = m_drivetrain.getPose();
+    m_Field2d.setRobotPose(updatedRobotPose);
     SmartDashboard.putData("Field2d", m_Field2d);
 
-    Pose2d robotPose = m_drivetrain.getPose();
-    m_deltaX = m_hubpose.getX() - robotPose.getX();
-    m_deltaY = m_hubpose.getY() - robotPose.getY();
+    m_deltaX = m_hubpose.getX() - updatedRobotPose.getX();
+    m_deltaY = m_hubpose.getY() - updatedRobotPose.getY();
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
     m_errorYaw = 
-      MathUtil.angleModulus(m_targetYaw - robotPose.getRotation().getRadians());
+      MathUtil.angleModulus(m_targetYaw - updatedRobotPose.getRotation().getRadians());
     m_errorX = m_deltaX - Constants.targetDistanceToHub * Math.cos(m_targetYaw);
     m_errorY = m_deltaY - Constants.targetDistanceToHub * Math.sin(m_targetYaw);
     
@@ -127,5 +86,33 @@ public class Localization extends SubsystemBase {
 
   public double distFromHub() {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
+  }
+
+  private boolean processLimelight(String limelightName, double yaw) {
+    boolean usedLimelight = false;
+    LimelightHelpers.SetRobotOrientation(limelightName, yaw, 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
+    if(!shouldReject(poseEstimate)) {
+      m_drivetrain.addVisionMeasurement(
+        poseEstimate.pose,
+        poseEstimate.timestampSeconds);
+
+      usedLimelight = true;
+    }
+    return usedLimelight;
+  }
+
+  private boolean shouldReject(LimelightHelpers.PoseEstimate poseEstimate) {
+    // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
+    return Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
+      || poseEstimate == null
+      || poseEstimate.tagCount <= 1
+      || Math.abs(Math.sqrt(
+        Math.pow(m_Field2d.getRobotPose().getX() 
+        - m_robotPose.getX(),2)
+        + Math.pow(m_Field2d.getRobotPose().getY() 
+        - m_robotPose.getY(),2)
+      )) > 1 //pythagoreans theorum is so cool
+      || poseEstimate.avgTagDist < .7;
   }
 }
