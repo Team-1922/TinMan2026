@@ -29,8 +29,8 @@ public class Collector extends SubsystemBase {
   );
 
   private final TalonFX m_rollerFollowerMotor = new TalonFX(
-    Constants.Collector.kRollerFollowerMotorId,
-    Constants.superstructureCanbus
+      Constants.Collector.kRollerFollowerMotorId,
+      Constants.superstructureCanbus
   );
 
   private final TalonFX m_pivotMotor = new TalonFX(
@@ -73,7 +73,12 @@ public class Collector extends SubsystemBase {
     m_rollerFollowerMotor.getConfigurator().apply(
         Constants.Collector.kRollerCurrentConfigs
     );
-    m_rollerFollowerMotor.setControl(new Follower(Constants.Collector.kRollerLeaderMotorId, MotorAlignmentValue.Opposed));
+    m_rollerFollowerMotor.setControl(
+        new Follower(
+          Constants.Collector.kRollerLeaderMotorId, 
+          MotorAlignmentValue.Opposed
+        )
+    );
    
     m_rollerFollowerMotor.getConfigurator().apply(rollerFollowerMotorConfig);
 
