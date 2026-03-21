@@ -52,8 +52,8 @@ public class Localization extends SubsystemBase {
     LimelightHelpers.SetRobotOrientation(
         "limelight-front", 
         getPose2dEstimate()
-            .getRotation()
-            .getDegrees(), 
+          .getRotation()
+          .getDegrees(), 
         0, 
         0,
         0,
