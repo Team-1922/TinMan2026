@@ -536,7 +536,7 @@ public class LimelightHelpers {
         public double avgTagArea;
 
         public RawFiducial[] rawFiducials;
-        public boolean isMegaTag2;
+        public boolean isMegaTag1;
 
         /**
          * Instantiates a PoseEstimate object with default values
@@ -550,7 +550,7 @@ public class LimelightHelpers {
             this.avgTagDist = 0;
             this.avgTagArea = 0;
             this.rawFiducials = new RawFiducial[] {};
-            this.isMegaTag2 = false;
+            this.isMegaTag1 = false;
         }
 
         public PoseEstimate(Pose2d pose, double timestampSeconds, double latency,
@@ -565,7 +565,7 @@ public class LimelightHelpers {
             this.avgTagDist = avgTagDist;
             this.avgTagArea = avgTagArea;
             this.rawFiducials = rawFiducials;
-            this.isMegaTag2 = isMegaTag2;
+            this.isMegaTag1 = isMegaTag1;
         }
 
     }
@@ -700,7 +700,7 @@ public class LimelightHelpers {
         return inData[position];
     }
 
-    private static PoseEstimate getBotPoseEstimate(String limelightName, String entryName, boolean isMegaTag2) {
+    private static PoseEstimate getBotPoseEstimate(String limelightName, String entryName, boolean isMegaTag1) {
         DoubleArrayEntry poseEntry = LimelightHelpers.getLimelightDoubleArrayEntry(limelightName, entryName);
 
         TimestampedDoubleArray tsValue = poseEntry.getAtomic();
@@ -743,7 +743,7 @@ public class LimelightHelpers {
         }
 
         return new PoseEstimate(pose, adjustedTimestamp, latency, tagCount, tagSpan, tagDist, tagArea, rawFiducials,
-                isMegaTag2);
+                isMegaTag1);
     }
 
     /**
@@ -839,7 +839,7 @@ public class LimelightHelpers {
         System.out.printf("Tag Span: %.2f meters%n", pose.tagSpan);
         System.out.printf("Average Tag Distance: %.2f meters%n", pose.avgTagDist);
         System.out.printf("Average Tag Area: %.2f%% of image%n", pose.avgTagArea);
-        System.out.printf("Is MegaTag2: %b%n", pose.isMegaTag2);
+        System.out.printf("Is MegaTag1: %b%n", pose.isMegaTag1);
         System.out.println();
 
         if (pose.rawFiducials == null || pose.rawFiducials.length == 0) {
@@ -1310,7 +1310,7 @@ public class LimelightHelpers {
      * @param limelightName
      * @return
      */
-    public static PoseEstimate getBotPoseEstimate_wpiBlue(String limelightName) {
+    public static PoseEstimate getBotPoseEstimate_wpiBlue_MegaTag1(String limelightName) {
         return getBotPoseEstimate(limelightName, "botpose_wpiblue", false);
     }
 
