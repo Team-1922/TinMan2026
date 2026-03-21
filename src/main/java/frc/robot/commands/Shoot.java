@@ -16,7 +16,7 @@ import frc.robot.subsystems.Localization;
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
   private final Shooter m_shooter;
-  private double m_spindexerRps = 15;
+  private double m_spindexerRps = 45;
   private double m_feederRps = 60;
   private double m_shooterRps = 20;
   private double m_shuttleRps = 30;
@@ -81,6 +81,10 @@ public class Shoot extends Command {
 
     if(m_shootAction == ShootActions.JustShoot) {
       m_requireAlign = false;
+    }
+
+    if(m_shootAction == ShootActions.Shoot) {
+      m_requireAlign = true;
     }
 
     if (

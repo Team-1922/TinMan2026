@@ -83,6 +83,16 @@ public class RobotContainer {
                 )
         );
         NamedCommands.registerCommand(
+                "shoot", 
+                new Shoot(
+                        shooter,
+                        feeder,
+                        spindexer,
+                        localization,
+                        ShootActions.JustShoot
+                )
+        );
+        NamedCommands.registerCommand(
                 "autoAlign",
                 new AutoAlign(drivetrain, localization, signaling)
         );
@@ -95,10 +105,10 @@ public class RobotContainer {
         LimelightHelpers.setCameraPose_RobotSpace(
                 Constants.middleLimeLight, 
                 Units.inchesToMeters(3.5), 
-                Units.inchesToMeters(7.5), 
+                Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
-                30, 
+                35, 
                 0
         );
     }
