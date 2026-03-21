@@ -26,7 +26,7 @@ public final class Constants {
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
-    public static final double targetDistanceToHub = Meters.of(2.7).in(Meters);
+    public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
     public static String middleLimelightName = "limelight-front";
     public static String rightLimelightName = "limelight-right";
     public static boolean useRightLimelight = true;
