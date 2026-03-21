@@ -53,15 +53,14 @@ public class Collector extends SubsystemBase {
   /** Creates a new Collector.   */
   public Collector() {
     MotorOutputConfigs rollerLeaderMotorConfig = new MotorOutputConfigs()
-        .withInverted(InvertedValue.CounterClockwise_Positive)
+        .withInverted(InvertedValue.Clockwise_Positive)
         .withNeutralMode(NeutralModeValue.Coast);
 
     MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
-        .withInverted(InvertedValue.CounterClockwise_Positive)
-        .withNeutralMode(NeutralModeValue.Coast);
+        .withInverted(InvertedValue.CounterClockwise_Positive);
     
     MotorOutputConfigs rollerFollowerMotorConfig = new MotorOutputConfigs()
-        .withInverted(InvertedValue.Clockwise_Positive)
+        .withInverted(InvertedValue.CounterClockwise_Positive)
         .withNeutralMode(NeutralModeValue.Coast);
     
     m_rollerLeaderMotor.getConfigurator().apply(Constants.Collector.slot0());
