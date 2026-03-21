@@ -83,6 +83,10 @@ public class Shoot extends Command {
       m_requireAlign = false;
     }
 
+    if(m_shootAction == ShootActions.Shoot) {
+      m_requireAlign = true;
+    }
+
     if (
         !m_requireAlign
         || (

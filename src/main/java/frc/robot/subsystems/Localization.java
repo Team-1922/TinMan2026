@@ -56,7 +56,7 @@ public class Localization extends SubsystemBase {
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
       || mt2_estimate == null
-      || mt2_estimate.tagCount == 0
+      || mt2_estimate.tagCount <= 1
       || Math.abs(Math.sqrt(
         Math.pow(m_Field2d.getRobotPose().getX() 
         - getPose2dEstimate().getX(),2)

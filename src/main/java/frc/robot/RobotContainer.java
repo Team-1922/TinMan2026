@@ -83,6 +83,16 @@ public class RobotContainer {
                 )
         );
         NamedCommands.registerCommand(
+                "shoot", 
+                new Shoot(
+                        shooter,
+                        feeder,
+                        spindexer,
+                        localization,
+                        ShootActions.JustShoot
+                )
+        );
+        NamedCommands.registerCommand(
                 "autoAlign",
                 new AutoAlign(drivetrain, localization, signaling)
         );
