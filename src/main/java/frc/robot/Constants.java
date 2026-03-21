@@ -95,7 +95,7 @@ public final class Constants {
 
         public static final double kDeployedPosition = 0;
 
-        public static final double kHalfDeployedPosition = 0.226074;
+        public static final double kHalfDeployedPosition = 0.292969;
     };
 
     public static class Feeder {
