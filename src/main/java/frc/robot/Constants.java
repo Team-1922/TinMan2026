@@ -35,7 +35,8 @@ public final class Constants {
         };
 
     public static class Collector {
-        public static final int kRollerMotorId = 14;
+        public static final int kRollerLeaderMotorId = 14;
+        public static final int kRollerFollowerMotorId = 15;
         public static final int kPivotMotorId = 16;
         public static final int kPivotCanCoderId = 22;
         public static final double kRollerGearRatio = 2;
@@ -83,18 +84,18 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(0.166748)
-                        .withAbsoluteSensorDiscontinuityPoint(0.5)
+                        .withMagnetOffset(-0.333008)
+                        .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
-                                SensorDirectionValue.CounterClockwise_Positive
+                                SensorDirectionValue.Clockwise_Positive
                         )
             );
 
-        public static final double kRetractedPosition = 0.375;
+        public static final double kRetractedPosition = 0.354248;
 
         public static final double kDeployedPosition = 0;
 
-        public static final double kHalfDeployedPosition = 0.264160;
+        public static final double kHalfDeployedPosition = 0.292969;
     };
 
     public static class Feeder {

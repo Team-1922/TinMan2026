@@ -98,6 +98,8 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
+        NamedCommands.registerCommand("Half Collector", new HalfCollect(collector));
+        NamedCommands.registerCommand("Spin Collector", new SpinCollectorBars(collector));        
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -111,6 +113,7 @@ public class RobotContainer {
                 35, 
                 0
         );
+
     }
     
     private void configureBindings() {
