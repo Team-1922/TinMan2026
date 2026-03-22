@@ -59,6 +59,7 @@ public class Signaling extends SubsystemBase {
     m_gameData = DriverStation.getGameSpecificMessage();
     m_matchTime = DriverStation.getMatchTime();
     m_alliance = DriverStation.getAlliance();
+    
     SmartDashboard.putNumber("Time", m_matchTime);
 
     if(isHubActive()) {

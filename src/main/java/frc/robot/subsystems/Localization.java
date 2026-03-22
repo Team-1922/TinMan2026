@@ -28,6 +28,7 @@ public class Localization extends SubsystemBase {
   private double m_errorX;
   private double m_errorY;
   private Pose2d m_hubpose = new Pose2d();
+  private boolean m_hasAppliedAlliance = false;
   private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
   private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
   
@@ -45,9 +46,15 @@ public class Localization extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
-    ? m_blueHubPose2d 
-    : m_redHubPose2d;
+
+    if(!m_hasAppliedAlliance || DriverStation.isDisabled()) {
+      DriverStation.getAlliance().ifPresent(alliance -> {
+        m_hubpose = alliance == Alliance.Blue
+          ? m_blueHubPose2d 
+          : m_redHubPose2d;
+        m_hasAppliedAlliance = true;
+      });
+    }
     
     LimelightHelpers.SetRobotOrientation(
         "limelight-front", 
