@@ -49,14 +49,25 @@ public class Localization extends SubsystemBase {
     ? m_blueHubPose2d 
     : m_redHubPose2d;
     
-    LimelightHelpers.SetRobotOrientation("limelight-front", getPose2dEstimate().getRotation().getDegrees(), 0, 0, 0, 0, 0);
-    LimelightHelpers.PoseEstimate mt2_estimate = LimelightHelpers.getBotPoseEstimate_wpiBlue_MegaTag2("limelight-front");
+    LimelightHelpers.SetRobotOrientation(
+        "limelight-front", 
+        getPose2dEstimate()
+          .getRotation()
+          .getDegrees(), 
+        0, 
+        0,
+        0,
+        0,
+        0
+    );
+    LimelightHelpers.PoseEstimate mt2_estimate = LimelightHelpers
+      .getBotPoseEstimate_wpiBlue("limelight-front");
     Boolean doRejectUpdate = false;
     SmartDashboard.putNumber("Dist from tag", mt2_estimate.avgTagDist);
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
     if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
       || mt2_estimate == null
-      || mt2_estimate.tagCount == 0
+      || mt2_estimate.tagCount <= 1
       || Math.abs(Math.sqrt(
         Math.pow(m_Field2d.getRobotPose().getX() 
         - getPose2dEstimate().getX(),2)

@@ -83,11 +83,23 @@ public class RobotContainer {
                 )
         );
         NamedCommands.registerCommand(
+                "shoot", 
+                new Shoot(
+                        shooter,
+                        feeder,
+                        spindexer,
+                        localization,
+                        ShootActions.JustShoot
+                )
+        );
+        NamedCommands.registerCommand(
                 "autoAlign",
                 new AutoAlign(drivetrain, localization, signaling)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
+        NamedCommands.registerCommand("Half Collector", new HalfCollect(collector));
+        NamedCommands.registerCommand("Spin Collector", new SpinCollectorBars(collector));        
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -98,9 +110,10 @@ public class RobotContainer {
                 Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
-                30, 
+                35, 
                 0
         );
+
     }
     
     private void configureBindings() {
