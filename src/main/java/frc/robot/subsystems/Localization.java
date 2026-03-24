@@ -110,7 +110,8 @@ public class Localization extends SubsystemBase {
         - m_initialRobotPose.getX(),2)
         + Math.pow(m_Field2d.getRobotPose().getY() 
         - m_initialRobotPose.getY(),2)
-      )) > 1 //pythagoreans theorum is so cool
+      )) > 1 //If the vision believes we are more than 1m from where the odometry thinks we are we should assume that it's wrong
       || poseEstimate.avgTagDist < .7;
+            // because it does not work and will destroy our bot pose
   }
 }
