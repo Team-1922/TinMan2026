@@ -102,16 +102,20 @@ public class Localization extends SubsystemBase {
 
   private boolean shouldReject(LimelightHelpers.PoseEstimate poseEstimate) {
     // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
-    return Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
+    return Math.abs(
+      m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()
+    ) > 720
       || poseEstimate == null
       || poseEstimate.tagCount <= 1
-      || Math.abs(Math.sqrt(
-        Math.pow(m_Field2d.getRobotPose().getX() 
-        - m_initialRobotPose.getX(),2)
-        + Math.pow(m_Field2d.getRobotPose().getY() 
-        - m_initialRobotPose.getY(),2)
-      )) > 1 //If the vision believes we are more than 1m from where the odometry thinks we are we should assume that it's wrong
-      || poseEstimate.avgTagDist < .7;
-            // because it does not work and will destroy our bot pose
+      || Math.sqrt(
+           Math.pow(
+             m_Field2d.getRobotPose().getX() - m_initialRobotPose.getX(),
+             2
+           ) +
+           Math.pow(
+             m_Field2d.getRobotPose().getY() - m_initialRobotPose.getY(),
+             2
+           )
+         ) > 1 ;//If the vision believes we are more than 1m from where the odometry thinks we are we should assume that it's wrong
   }
 }
