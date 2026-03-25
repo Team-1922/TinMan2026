@@ -105,7 +105,7 @@ public class RobotContainer {
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         LimelightHelpers.setCameraPose_RobotSpace(
-                Constants.middleLimeLight, 
+                Constants.frontLimelightName, 
                 Units.inchesToMeters(3.5), 
                 Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
@@ -113,7 +113,16 @@ public class RobotContainer {
                 35, 
                 0
         );
-
+        
+          LimelightHelpers.setCameraPose_RobotSpace(
+                Constants.rightLimelightName, 
+                -0.168275, 
+                -0.034925, 
+                0.669925, 
+                0, 
+                0, 
+                -90
+        );
     }
     
     private void configureBindings() {
