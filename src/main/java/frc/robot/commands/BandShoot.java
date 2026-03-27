@@ -88,7 +88,7 @@ public class BandShoot extends Command {
     if (
         !m_requireAlign
         || (
-          distFromHub > Constants.maxTargetDistanceToHub
+          distFromHub < Constants.maxTargetDistanceToHub
           && Math.abs(m_localization.getM_errorYaw()) < m_yawThreshold
         )
     ) {

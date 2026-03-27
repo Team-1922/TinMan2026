@@ -74,23 +74,23 @@ public class RobotContainer {
                 "alignAndShoot",
                 new ParallelCommandGroup(
                         new AutoAlign(drivetrain, localization, signaling),
-                        new Shoot(
+                        new BandShoot(
                                 shooter,
                                 feeder,
                                 spindexer,
                                 localization,
-                                ShootActions.Shoot
+                                BandShoot.ShootActions.Shoot
                         )
                 )
         );
         NamedCommands.registerCommand(
                 "shoot", 
-                new Shoot(
+                new BandShoot(
                         shooter,
                         feeder,
                         spindexer,
                         localization,
-                        ShootActions.JustShoot
+                        BandShoot.ShootActions.JustShoot
                 )
         );
         NamedCommands.registerCommand(

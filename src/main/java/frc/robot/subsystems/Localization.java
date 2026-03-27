@@ -60,8 +60,8 @@ public class Localization extends SubsystemBase {
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
     m_errorYaw = 
       MathUtil.angleModulus(m_targetYaw - updatedRobotPose.getRotation().getRadians());
-    m_errorX = m_deltaX - Constants.targetDistanceToHub * Math.cos(m_targetYaw);
-    m_errorY = m_deltaY - Constants.targetDistanceToHub * Math.sin(m_targetYaw);
+    m_errorX = m_deltaX - Constants.maxTargetDistanceToHub * Math.cos(m_targetYaw);
+    m_errorY = m_deltaY - Constants.maxTargetDistanceToHub * Math.sin(m_targetYaw);
     
     SmartDashboard.putNumber("target_yaw", m_targetYaw);
     SmartDashboard.putNumber("error_x", m_errorX);
