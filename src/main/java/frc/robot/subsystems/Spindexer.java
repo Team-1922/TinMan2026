@@ -23,7 +23,6 @@ public class Spindexer extends SubsystemBase {
     Constants.Spindexer.kMotorId1,
     Constants.superstructureCanbus
   );
-  private double m_rps = 0;
   private VelocityDutyCycle m_spindexerDutyCycle = new VelocityDutyCycle(0)
     .withSlot(0);
 
@@ -37,28 +36,27 @@ public class Spindexer extends SubsystemBase {
     m_Spindexer.getConfigurator().apply(Constants.Spindexer.SpindedxerCurrentConfigs);
   }
 
-  
+
   public void setTargetRps(double rps) {
-    m_rps = rps;
-  }
 
-  public void setIdleSpeed() {
-    m_rps = Constants.Spindexer.spindexerIdleSpeed;
-  }
-
-  @Override
-  public void periodic() {
-    // This method will be called once per scheduler run   
-    if(m_rps != 0) {
-      m_Spindexer.setControl(
+    if(rps != 0) {
+      m_Spindexer.setControl( 
         m_spindexerDutyCycle.withVelocity(
-          m_rps * Constants.Spindexer.kGearRatio
+          rps * Constants.Spindexer.kGearRatio
         )
       );
     }
     else if(m_Spindexer.getVelocity().getValueAsDouble() != 0){
       m_Spindexer.stopMotor();
     }
+  }
+
+  
+
+  @Override
+  public void periodic() {
+    // This method will be called once per scheduler run   
+    
     
     putDataOnDashboard();
   }
@@ -67,6 +65,5 @@ public class Spindexer extends SubsystemBase {
     double motorTemp = m_Spindexer.getDeviceTemp().getValue().magnitude();
 
     SmartDashboard.putNumber("Motor Temps/Spindexer", Celsius.of(motorTemp).in(Fahrenheit));
-    SmartDashboard.putNumber("Spindexer Motor RPS", m_rps * Constants.Spindexer.kGearRatio);
   }
 }
