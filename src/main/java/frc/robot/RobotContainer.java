@@ -99,18 +99,30 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
+        NamedCommands.registerCommand("Half Collector", new HalfCollect(collector));
+        NamedCommands.registerCommand("Spin Collector", new SpinCollectorBars(collector));        
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
 
         LimelightHelpers.setCameraPose_RobotSpace(
-                Constants.middleLimeLight, 
+                Constants.frontLimelightName, 
                 Units.inchesToMeters(3.5), 
                 Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
                 35, 
                 0
+        );
+        
+          LimelightHelpers.setCameraPose_RobotSpace(
+                Constants.rightLimelightName, 
+                -0.168275, 
+                -0.034925, 
+                0.669925, 
+                0, 
+                0, 
+                -90
         );
     }
     
