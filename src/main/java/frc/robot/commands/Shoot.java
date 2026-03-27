@@ -91,7 +91,7 @@ public class Shoot extends Command {
     if (
         !m_requireAlign
         || (
-          Math.abs(distFromHub - Constants.maxTargetDistanceToHub)
+          Math.abs(distFromHub - Constants.targetDistanceToHub)
           < Constants.autoAlignDistanceThreshold 
           && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold
         )

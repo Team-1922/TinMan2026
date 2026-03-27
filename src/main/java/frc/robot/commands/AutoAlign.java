@@ -17,7 +17,7 @@ public class AutoAlign extends Command {
   CommandSwerveDrivetrain m_drivetrain;
   Localization m_localization;
   Signaling m_signaling;
-   
+  Boolean m_normalAutoAlign;
   double m_xKp = 5;
   double m_yKp = 5;
   double m_yawKp = 3.8;
@@ -25,12 +25,13 @@ public class AutoAlign extends Command {
 
 
   /** Creates a new AutoAlign. */
-  public AutoAlign(CommandSwerveDrivetrain drivetrain, Localization localization, Signaling signaling) {
+  public AutoAlign(CommandSwerveDrivetrain drivetrain, Localization localization, Signaling signaling, Boolean normalAutoAlign) {
     // Use addRequirements() here to declare subsystem dependencies.
     addRequirements(drivetrain);
     m_drivetrain = drivetrain;
     m_localization = localization;
     m_signaling = signaling;
+    m_normalAutoAlign = normalAutoAlign;
   }
 
   // Called when the command is initially scheduled.
@@ -44,7 +45,7 @@ public class AutoAlign extends Command {
   public void execute() {
     double vX = 0;
     double vY = 0;
-    if(m_localization.distFromHub() > Constants.maxTargetDistanceToHub
+    if(m_localization.distFromHub() > Constants.maxTargetDistanceToHub || normalAutoAlign
     ){
       vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
       vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;

@@ -73,7 +73,7 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "alignAndShoot",
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization, signaling),
+                        new AutoAlign(drivetrain, localization, signaling, false),
                         new BandShoot(
                                 shooter,
                                 feeder,
@@ -95,7 +95,7 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand(
                 "autoAlign",
-                new AutoAlign(drivetrain, localization, signaling)
+                new AutoAlign(drivetrain, localization, signaling, false)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
@@ -158,7 +158,7 @@ public class RobotContainer {
         
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization, signaling), 
+                        new AutoAlign(drivetrain, localization, signaling, false), 
                         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)
         ));
 
