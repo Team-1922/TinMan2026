@@ -15,14 +15,17 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
+import edu.wpi.first.wpilibj2.command.FunctionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import edu.wpi.first.wpilibj2.command.StartEndCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
-import frc.robot.commands.RetractCollector;
 import frc.robot.commands.Shoot;
-import frc.robot.commands.SpinCollectorBars;
 import frc.robot.commands.Shoot.ShootActions;
 import frc.robot.generated.TunerConstants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
@@ -33,7 +36,6 @@ import frc.robot.subsystems.Signaling;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
-import frc.robot.commands.HalfCollect;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -65,10 +67,12 @@ public class RobotContainer {
     public final Signaling signaling = new Signaling(DriverController);
     private final SendableChooser<Command> autoChooser;
     
-
+   
     public RobotContainer() {
         configureBindings();
-        
+  
+       
+  
         NamedCommands.registerCommand(
                 "alignAndShoot",
                 new ParallelCommandGroup(
@@ -98,8 +102,8 @@ public class RobotContainer {
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
-        NamedCommands.registerCommand("Half Collector", new HalfCollect(collector));
-        NamedCommands.registerCommand("Spin Collector", new SpinCollectorBars(collector));        
+        NamedCommands.registerCommand("Half Collector", Commands.run( () -> collector.halfCollector(), collector));
+        NamedCommands.registerCommand("Spin Collector", Commands.run( () -> collector.spinCollectorBars(), collector));        
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -166,11 +170,11 @@ public class RobotContainer {
         );
 
         DriverController.povDown().whileTrue(
-                new RetractCollector(collector)
+             Commands.run ( () -> collector.retract(), collector)
         );
 
         DriverController.povLeft().whileTrue(
-                new HalfCollect(collector)
+                Commands.run( () -> collector.halfCollector(), collector)
         );
         
         DriverController.rightBumper().whileTrue(
@@ -178,7 +182,7 @@ public class RobotContainer {
         );
 
         DriverController.leftBumper().whileTrue(
-                new SpinCollectorBars(collector)
+                Commands.run( () -> collector.spinCollectorBars(), collector)
         );
 
         // Run SysId routines when holding back/start and X/Y.

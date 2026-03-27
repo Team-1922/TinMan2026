@@ -17,7 +17,6 @@ import com.ctre.phoenix6.signals.MotorAlignmentValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.hardware.CANcoder;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -111,6 +110,7 @@ public class Collector extends SubsystemBase {
   public void halfCollector() {
     pivotCollector(Constants.Collector.kHalfDeployedPosition);
   }
+
 
   public void spinCollectorBars() {
     collect(Constants.Collector.krps);
