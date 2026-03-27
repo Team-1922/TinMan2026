@@ -34,6 +34,7 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
 import frc.robot.commands.HalfCollect;
+import frc.robot.commands.BandShoot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -146,11 +147,11 @@ public class RobotContainer {
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
                         new AutoAlign(drivetrain, localization, signaling), 
-                        new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shoot)
+                        new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)
         ));
 
         DriverController.x().whileTrue(
-                new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot)
+                new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
         );
 
         DriverController.povDown().whileTrue(
@@ -162,7 +163,7 @@ public class RobotContainer {
         );
         
         DriverController.rightBumper().whileTrue(
-            new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shuttle)
+            new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shuttle)
         );
 
         DriverController.leftBumper().whileTrue(

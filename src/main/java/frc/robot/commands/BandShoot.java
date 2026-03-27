@@ -15,21 +15,22 @@ import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class BandShoot extends Command {
-  private final Shooter m_shooter;
   private double m_spindexerRps = 45;
   private double m_feederRps = 60;
-  private double m_maxShooterRps = 20;
-  private double m_minShooterRps = 20;
+  private double m_shooterRps = 20;
   private double m_shuttleRps = 30;
   private double m_yawThreshold = .045;
+  private boolean m_isReadyToShoot;
+  private boolean m_requireAlign = true;
+  private Timer m_spindexerTimer = new Timer();
+  private final Shooter m_shooter;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
   private final double m_shooterSpeedThreshold = 2;
-  private boolean m_isReadyToShoot;
-  private boolean m_requireAlign = true;
   private final double m_spindexerDelayInSeconds = .15;
-  private Timer m_spindexerTimer = new Timer();
+  private final double tuningNumber = 4.75; //placeholder
+  private final double m_minShooterRps = 20; //placeholder, rps at min distance
 
   private ShootActions m_shootAction = ShootActions.Shoot;
   public enum ShootActions {
@@ -38,7 +39,7 @@ public class BandShoot extends Command {
     JustShoot
   }
 
-  /** Creates a new Shoot. */
+  /** Creates a new BandShoot. */
   public BandShoot(
       Shooter shooter,
       Feeder feeder,
@@ -52,7 +53,7 @@ public class BandShoot extends Command {
     m_spindexer = spindexer;
     m_localization = localization;
     m_shootAction = shootAction;
-    SmartDashboard.putNumber("Shooter RPS", m_maxShooterRps);
+    SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
     SmartDashboard.putBoolean("Requires Align", m_requireAlign);
@@ -70,7 +71,8 @@ public class BandShoot extends Command {
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
-    m_maxShooterRps = SmartDashboard.getNumber("Shooter RPS", m_maxShooterRps);
+    m_shooterRps = m_minShooterRps + tuningNumber * (distFromHub - 2.1);
+    SmartDashboard.putNumber("Distance From Hub", distFromHub);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
     m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
@@ -78,17 +80,20 @@ public class BandShoot extends Command {
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
     }
+    if(m_shootAction == ShootActions.JustShoot){
+      m_requireAlign = false;
+
+    }
 
     if (
         !m_requireAlign
         || (
           distFromHub > Constants.maxTargetDistanceToHub
-          && distFromHub < Constants.minTargetDistanceToHub
-          && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold
+          && Math.abs(m_localization.getM_errorYaw()) < m_yawThreshold
         )
     ) {
-      m_shooter.setTargetRps(m_maxShooterRps, m_minShooterRps);
-      if (m_shooter.getVelocity() >= m_maxShooterRps - m_shooterSpeedThreshold) {
+      m_shooter.setTargetRps(m_shooterRps, m_minShooterRps);
+      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
         m_isReadyToShoot = true;
       }
 

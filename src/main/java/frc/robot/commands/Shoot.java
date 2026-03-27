@@ -69,6 +69,7 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
+    SmartDashboard.putNumber("Distance From Hub", distFromHub);
     m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);

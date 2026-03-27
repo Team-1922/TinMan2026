@@ -7,6 +7,7 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
 import frc.robot.subsystems.CommandSwerveDrivetrain;
 import frc.robot.subsystems.Localization;
 import frc.robot.subsystems.Signaling;
@@ -41,10 +42,14 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
-    double vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
+    double vX = 0;
+    double vY = 0;
+    if(m_localization.distFromHub() > Constants.maxTargetDistanceToHub
+    ){
+      vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
+      vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
+    }
     double vYaw = m_localization.getM_errorYaw() * m_yawKp;
-    
     m_drivetrain.Move(vX, vY, vYaw);
   }
 
