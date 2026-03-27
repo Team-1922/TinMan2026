@@ -96,7 +96,7 @@ public class Shoot extends Command {
           && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold
         )
     ) {
-      m_shooter.setTargetRps(m_shooterRps, m_shooterRps);
+      m_shooter.setTargetRps(m_shooterRps);
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
         m_isReadyToShoot = true;
       }

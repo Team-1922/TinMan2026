@@ -45,7 +45,7 @@ public class AutoAlign extends Command {
   public void execute() {
     double vX = 0;
     double vY = 0;
-    if(m_localization.distFromHub() > Constants.maxTargetDistanceToHub || normalAutoAlign
+    if(m_localization.distFromHub() > Constants.maxTargetDistanceToHub || m_normalAutoAlign
     ){
       vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
       vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;

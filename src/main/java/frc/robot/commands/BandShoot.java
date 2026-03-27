@@ -92,7 +92,7 @@ public class BandShoot extends Command {
           && Math.abs(m_localization.getM_errorYaw()) < m_yawThreshold
         )
     ) {
-      m_shooter.setTargetRps(m_shooterRps, m_minShooterRps);
+      m_shooter.setTargetRps(m_shooterRps);
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
         m_isReadyToShoot = true;
       }
