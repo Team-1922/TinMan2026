@@ -117,7 +117,7 @@ public class Collector extends SubsystemBase {
   }
 
   public void reverseCollectorBars() {
-    collect(-Constants.Collector.krps);
+    collect(Constants.Collector.kreverseRps);
   }
 
   private void pivotCollector(double position) {

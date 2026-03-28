@@ -44,6 +44,7 @@ public final class Constants {
         public static final int kPivotCanCoderId = 22;
         public static final double kRollerGearRatio = 2;
         public static final double krps = 100;
+        public static final double kreverseRps = -60;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
