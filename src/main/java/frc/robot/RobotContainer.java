@@ -34,6 +34,7 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
 import frc.robot.commands.HalfCollect;
+import frc.robot.commands.BandShoot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -72,29 +73,29 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "alignAndShoot",
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization, signaling),
-                        new Shoot(
+                        new AutoAlign(drivetrain, localization, signaling, false),
+                        new BandShoot(
                                 shooter,
                                 feeder,
                                 spindexer,
                                 localization,
-                                ShootActions.Shoot
+                                BandShoot.ShootActions.Shoot
                         )
                 )
         );
         NamedCommands.registerCommand(
                 "shoot", 
-                new Shoot(
+                new BandShoot(
                         shooter,
                         feeder,
                         spindexer,
                         localization,
-                        ShootActions.JustShoot
+                        BandShoot.ShootActions.JustShoot
                 )
         );
         NamedCommands.registerCommand(
                 "autoAlign",
-                new AutoAlign(drivetrain, localization, signaling)
+                new AutoAlign(drivetrain, localization, signaling, false)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
@@ -157,12 +158,12 @@ public class RobotContainer {
         
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization, signaling), 
-                        new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shoot)
+                        new AutoAlign(drivetrain, localization, signaling, false), 
+                        new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)
         ));
 
         DriverController.x().whileTrue(
-                new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot)
+                new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
         );
 
         DriverController.povDown().whileTrue(
@@ -174,7 +175,7 @@ public class RobotContainer {
         );
         
         DriverController.rightBumper().whileTrue(
-            new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shuttle)
+            new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shuttle)
         );
 
         DriverController.leftBumper().whileTrue(
