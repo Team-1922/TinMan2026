@@ -183,7 +183,7 @@ public class RobotContainer {
         );
 
         DriverController.rightTrigger().whileTrue(
-                
+                Commands.run ( () -> collector.reverseCollectorBars(), collector)
         );
 
         // Run SysId routines when holding back/start and X/Y.
