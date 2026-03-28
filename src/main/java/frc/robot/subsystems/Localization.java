@@ -2,13 +2,11 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-
 package frc.robot.subsystems;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.LimelightHelpers;
 import frc.robot.Constants;
@@ -16,7 +14,6 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.LimelightHelpers.*;
 
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
@@ -28,6 +25,7 @@ public class Localization extends SubsystemBase {
   private double m_errorX;
   private double m_errorY;
   private Pose2d m_hubpose = new Pose2d();
+  private Pose2d m_initialRobotPose = new Pose2d();
   private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
   private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
   
@@ -37,65 +35,33 @@ public class Localization extends SubsystemBase {
     m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   };
  
-  public Pose2d getPose2dEstimate() {
-    return m_drivetrain.getPose();
-  }
-
-
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
     m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
     ? m_blueHubPose2d 
     : m_redHubPose2d;
+
+    m_initialRobotPose = m_drivetrain.getPose();
+    double yaw = m_initialRobotPose.getRotation().getDegrees();
     
-    LimelightHelpers.SetRobotOrientation(
-        "limelight-front", 
-        getPose2dEstimate()
-          .getRotation()
-          .getDegrees(), 
-        0, 
-        0,
-        0,
-        0,
-        0
-    );
-    LimelightHelpers.PoseEstimate mt2_estimate = LimelightHelpers
-      .getBotPoseEstimate_wpiBlue("limelight-front");
-    Boolean doRejectUpdate = false;
-    SmartDashboard.putNumber("Dist from tag", mt2_estimate.avgTagDist);
-    // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
-    if(Math.abs(m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()) > 720
-      || mt2_estimate == null
-      || mt2_estimate.tagCount <= 1
-      || Math.abs(Math.sqrt(
-        Math.pow(m_Field2d.getRobotPose().getX() 
-        - getPose2dEstimate().getX(),2)
-        + Math.pow(m_Field2d.getRobotPose().getY() 
-        - getPose2dEstimate().getY(),2)
-      )) > 1 //pythagoreans theorum is so cool
-      || mt2_estimate.avgTagDist < .7
-    ) {
-      doRejectUpdate = true;
+    processLimelight(Constants.frontLimelightName, yaw);
+    
+    if(Constants.useRightLimelight) {
+      processLimelight(Constants.rightLimelightName, yaw);
     }
-    if(!doRejectUpdate)
-    {
-      m_drivetrain.addVisionMeasurement(
-        mt2_estimate.pose,
-        mt2_estimate.timestampSeconds);
-    }
-    SmartDashboard.putBoolean("Using vision", !doRejectUpdate);
-    m_Field2d.setRobotPose(getPose2dEstimate());
+
+    Pose2d updatedRobotPose = m_drivetrain.getPose();
+    m_Field2d.setRobotPose(updatedRobotPose);
     SmartDashboard.putData("Field2d", m_Field2d);
 
-    Pose2d robotPose = m_drivetrain.getPose();
-    m_deltaX = m_hubpose.getX() - robotPose.getX();
-    m_deltaY = m_hubpose.getY() - robotPose.getY();
+    m_deltaX = m_hubpose.getX() - updatedRobotPose.getX();
+    m_deltaY = m_hubpose.getY() - updatedRobotPose.getY();
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
     m_errorYaw = 
-      MathUtil.angleModulus(m_targetYaw - robotPose.getRotation().getRadians());
-    m_errorX = m_deltaX - Constants.targetDistanceToHub * Math.cos(m_targetYaw);
-    m_errorY = m_deltaY - Constants.targetDistanceToHub * Math.sin(m_targetYaw);
+      MathUtil.angleModulus(m_targetYaw - updatedRobotPose.getRotation().getRadians());
+    m_errorX = m_deltaX - Constants.maxTargetDistanceToHub * Math.cos(m_targetYaw);
+    m_errorY = m_deltaY - Constants.maxTargetDistanceToHub * Math.sin(m_targetYaw);
     
     SmartDashboard.putNumber("target_yaw", m_targetYaw);
     SmartDashboard.putNumber("error_x", m_errorX);
@@ -117,5 +83,39 @@ public class Localization extends SubsystemBase {
 
   public double distFromHub() {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
+  }
+
+  private void processLimelight(String limelightName, double yaw) {
+    boolean usedLimelight = false;
+    LimelightHelpers.SetRobotOrientation(limelightName, yaw, 0, 0, 0, 0, 0);
+    LimelightHelpers.PoseEstimate poseEstimate = LimelightHelpers.getBotPoseEstimate_wpiBlue(limelightName);
+    if(!shouldReject(poseEstimate)) {
+      m_drivetrain.addVisionMeasurement(
+        poseEstimate.pose,
+        poseEstimate.timestampSeconds);
+
+      usedLimelight = true;
+    }
+
+    SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
+  }
+
+  private boolean shouldReject(LimelightHelpers.PoseEstimate poseEstimate) {
+    // if our angular velocity is greater than 360 degrees per second or if the limelight can't see any tags, ignore vision updates
+    return Math.abs(
+      m_drivetrain.getPigeon2().getAngularVelocityZWorld().getValueAsDouble()
+    ) > 720
+      || poseEstimate == null
+      || poseEstimate.tagCount <= 1
+      || Math.sqrt(
+           Math.pow(
+             m_Field2d.getRobotPose().getX() - m_initialRobotPose.getX(),
+             2
+           ) +
+           Math.pow(
+             m_Field2d.getRobotPose().getY() - m_initialRobotPose.getY(),
+             2
+           )
+         ) > 1 ;//If the vision believes we are more than 1m from where the odometry thinks we are we should assume that it's wrong
   }
 }
