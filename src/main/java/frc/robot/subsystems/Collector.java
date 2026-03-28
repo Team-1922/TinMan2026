@@ -116,6 +116,10 @@ public class Collector extends SubsystemBase {
     collect(Constants.Collector.krps);
   }
 
+  public void reverseCollectorBars() {
+    collect(-Constants.Collector.krps);
+  }
+
   private void pivotCollector(double position) {
     m_pivotMotor.setControl( m_collectorPostionDutyCycle.withPosition(position));
   }
