@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.RetractCollector;
+import frc.robot.commands.ReverseCollector;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.SpinCollectorBars;
 import frc.robot.commands.Shoot.ShootActions;
@@ -184,7 +185,7 @@ public class RobotContainer {
         );
 
         DriverController.rightTrigger().whileTrue(
-                Commands.run ( () -> collector.reverseCollectorBars(), collector)
+                new ReverseCollector(collector)
         );
 
         // Run SysId routines when holding back/start and X/Y.
