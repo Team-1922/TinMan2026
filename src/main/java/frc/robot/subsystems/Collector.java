@@ -126,7 +126,7 @@ public class Collector extends SubsystemBase {
   
   public void collect(double rps) {
     m_rps = rps;
-    if( m_rps > 0) {
+    if( m_rps > 0 || m_rps < 0 ) {
       m_rollerLeaderMotor.setControl(
           m_collectorDutyCycle.withVelocity(
               m_rps * Constants.Collector.kRollerGearRatio

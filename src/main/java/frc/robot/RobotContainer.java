@@ -103,6 +103,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
         NamedCommands.registerCommand("Half Collector", new HalfCollect(collector));
         NamedCommands.registerCommand("Spin Collector", new SpinCollectorBars(collector));        
+        NamedCommands.registerCommand("Full Collect", new RetractCollector(collector));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -164,9 +165,9 @@ public class RobotContainer {
                         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)
         ));
 
-        DriverController.x().whileTrue(
-                new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
-        );
+        // DriverController.x().whileTrue(
+        //         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
+        // );
 
         DriverController.povDown().whileTrue(
                 new RetractCollector(collector)
@@ -184,7 +185,7 @@ public class RobotContainer {
                 new SpinCollectorBars(collector)
         );
 
-        DriverController.rightTrigger().whileTrue(
+        DriverController.x().whileTrue(
                 new ReverseCollector(collector)
         );
 
