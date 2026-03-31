@@ -19,7 +19,7 @@ public class BandShoot extends Command {
   private double m_feederRps = 60;
   private double m_shooterRps = 20;
   private double m_shuttleRps = 30;
-  private double m_yawThreshold = .045;
+  private double m_yawThreshold = .06;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
   private Timer m_spindexerTimer = new Timer();

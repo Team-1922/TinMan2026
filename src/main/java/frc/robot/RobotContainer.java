@@ -114,7 +114,7 @@ public class RobotContainer {
                 Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
-                35, 
+                30, 
                 0
         );
         
@@ -150,12 +150,12 @@ public class RobotContainer {
         );
 
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
-                .withModuleDirection(new Rotation2d(
-                        -DriverController.getLeftY(),
-                        -DriverController.getLeftX()
-                ))
-        ));
+        // DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
+        //         .withModuleDirection(new Rotation2d(
+        //                 -DriverController.getLeftY(),
+        //                 -DriverController.getLeftX()
+        //         ))
+        // ));
 
         DriverController.leftTrigger().whileTrue(new Collect(collector));
         
@@ -187,6 +187,10 @@ public class RobotContainer {
 
         DriverController.x().whileTrue(
                 new ReverseCollector(collector)
+        );
+
+        DriverController.b().whileTrue(
+                new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
         );
 
         // Run SysId routines when holding back/start and X/Y.

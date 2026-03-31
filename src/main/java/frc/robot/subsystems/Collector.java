@@ -87,9 +87,8 @@ public class Collector extends SubsystemBase {
     );
 
     m_pivotMotor.getConfigurator().apply(Constants.Collector.pivotSlot0());
-    m_pivotMotor.getConfigurator().apply(
-        Constants.Collector.kPivotCurrentConfigs
-    );
+    // m_pivotMotor.getConfigurator().apply(
+    //     Constants.Collector.kPivotCurrentConfigs);
     m_pivotMotor.getConfigurator().apply(pivotMotorConfig);
     m_pivotMotor.getConfigurator().apply(
         Constants.Collector.kPivotFeedbackConfig
