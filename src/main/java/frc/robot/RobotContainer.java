@@ -15,12 +15,14 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.RetractCollector;
+import frc.robot.commands.ReverseCollector;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.SpinCollectorBars;
 import frc.robot.commands.Shoot.ShootActions;
@@ -101,6 +103,7 @@ public class RobotContainer {
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
         NamedCommands.registerCommand("Half Collector", new HalfCollect(collector));
         NamedCommands.registerCommand("Spin Collector", new SpinCollectorBars(collector));        
+        NamedCommands.registerCommand("Full Collect", new RetractCollector(collector));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -111,7 +114,7 @@ public class RobotContainer {
                 Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
-                35, 
+                30, 
                 0
         );
         
@@ -147,13 +150,7 @@ public class RobotContainer {
         );
 
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
-                .withModuleDirection(new Rotation2d(
-                        -DriverController.getLeftY(),
-                        -DriverController.getLeftX()
-                ))
-        ));
-
+       
         DriverController.leftTrigger().whileTrue(new Collect(collector));
         
         DriverController.rightTrigger().whileTrue( 
@@ -162,9 +159,6 @@ public class RobotContainer {
                         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)
         ));
 
-        DriverController.x().whileTrue(
-                new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
-        );
 
         DriverController.povDown().whileTrue(
                 new RetractCollector(collector)
@@ -180,6 +174,14 @@ public class RobotContainer {
 
         DriverController.leftBumper().whileTrue(
                 new SpinCollectorBars(collector)
+        );
+
+        DriverController.x().whileTrue(
+                new ReverseCollector(collector)
+        );
+
+        DriverController.b().whileTrue(
+                new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
         );
 
         // Run SysId routines when holding back/start and X/Y.
