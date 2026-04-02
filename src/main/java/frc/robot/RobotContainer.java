@@ -150,13 +150,7 @@ public class RobotContainer {
         );
 
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        // DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
-        //         .withModuleDirection(new Rotation2d(
-        //                 -DriverController.getLeftY(),
-        //                 -DriverController.getLeftX()
-        //         ))
-        // ));
-
+       
         DriverController.leftTrigger().whileTrue(new Collect(collector));
         
         DriverController.rightTrigger().whileTrue( 
@@ -165,9 +159,6 @@ public class RobotContainer {
                         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)
         ));
 
-        // DriverController.x().whileTrue(
-        //         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
-        // );
 
         DriverController.povDown().whileTrue(
                 new RetractCollector(collector)
