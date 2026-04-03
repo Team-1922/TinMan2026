@@ -18,12 +18,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
   private Field2d m_Field2d = new Field2d();
+  private double m_shooterX;
+  private double m_shooterY;
   private double m_deltaX;
   private double m_deltaY;
   private double m_targetYaw;
   private double m_errorYaw;
   private double m_errorX;
   private double m_errorY;
+  private double shooterXRobotFrame = -0.0809625; //in meters
+  private double shooterYRobotFrame = 0.034925; //in meters
   private Pose2d m_hubpose = new Pose2d();
   private Pose2d m_initialRobotPose = new Pose2d();
   private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
@@ -55,11 +59,19 @@ public class Localization extends SubsystemBase {
     m_Field2d.setRobotPose(updatedRobotPose);
     SmartDashboard.putData("Field2d", m_Field2d);
 
-    m_deltaX = m_hubpose.getX() - updatedRobotPose.getX();
-    m_deltaY = m_hubpose.getY() - updatedRobotPose.getY();
+    double updatedYaw = updatedRobotPose.getRotation().getRadians();
+    m_shooterX = updatedRobotPose.getX() 
+      + Math.cos(updatedYaw) * shooterXRobotFrame
+      - Math.sin(updatedYaw) * shooterYRobotFrame;
+    m_shooterY = updatedRobotPose.getY() 
+      + Math.cos(updatedYaw) * shooterYRobotFrame 
+      + Math.sin(updatedYaw) * shooterXRobotFrame;
+
+    m_deltaX = m_hubpose.getX() - m_shooterX;
+    m_deltaY = m_hubpose.getY() - m_shooterY;
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
     m_errorYaw = 
-      MathUtil.angleModulus(m_targetYaw - updatedRobotPose.getRotation().getRadians());
+      MathUtil.angleModulus(m_targetYaw - updatedYaw);
     m_errorX = m_deltaX - Constants.maxTargetDistanceToHub * Math.cos(m_targetYaw);
     m_errorY = m_deltaY - Constants.maxTargetDistanceToHub * Math.sin(m_targetYaw);
     
