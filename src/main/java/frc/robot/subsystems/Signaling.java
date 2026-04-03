@@ -28,7 +28,7 @@ public class Signaling extends SubsystemBase {
   private double m_matchTime;
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
-  private final LEDPattern m_yellow = LEDPattern.solid(Color.kYellow);
+  private final LEDPattern m_yellow = LEDPattern.solid(new Color(255,125,0));
   private final LEDPattern m_blue = LEDPattern.solid(Color.kBlue);
   private final LEDPattern m_red = LEDPattern.solid(Color.kRed);
   private final LEDPattern m_black = LEDPattern.solid(Color.kBlack);
