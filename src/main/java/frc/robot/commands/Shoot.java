@@ -112,7 +112,7 @@ public class Shoot extends Command {
           m_spindexer.setTargetRps(m_spindexerRps);
         }        
       }
-    } else if (m_feeder.getSpeed() > 0) {
+    } else if (m_feeder.getVelocity() > 0) {
       m_feeder.stop();
       m_spindexer.setTargetRps(0);
       m_spindexerTimer.stop();
