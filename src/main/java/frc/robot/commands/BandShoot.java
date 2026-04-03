@@ -84,7 +84,7 @@ public class BandShoot extends Command {
 
     }
 
-      m_shooter.setTargetRps(m_shooterRps);
+    m_shooter.setTargetRps(m_shooterRps);
 
     if (
         !m_requireAlign
