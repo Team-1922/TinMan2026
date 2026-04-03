@@ -22,13 +22,12 @@ public class BandShoot extends Command {
   private double m_yawThreshold = .06;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
-  private Timer m_spindexerTimer = new Timer();
   private final Shooter m_shooter;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
-  private final double m_shooterSpeedThreshold = 2;
-  private final double m_spindexerDelayInSeconds = .15;
+  private final double m_shooterVelocityThreshold = 2;
+  private final double m_feederVelocityThreshold = 1;
   private final double tuningNumber = 4.75; //placeholder
   private final double m_minShooterRps = 20; //placeholder, rps at min distance
 
@@ -85,6 +84,8 @@ public class BandShoot extends Command {
 
     }
 
+      m_shooter.setTargetRps(m_shooterRps);
+
     if (
         !m_requireAlign
         || (
@@ -92,26 +93,21 @@ public class BandShoot extends Command {
           && Math.abs(m_localization.getM_errorYaw()) < m_yawThreshold
         )
     ) {
-      m_shooter.setTargetRps(m_shooterRps);
-      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
+      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterVelocityThreshold) {
         m_isReadyToShoot = true;
       }
 
-      if (m_isReadyToShoot) {
-        if(!m_spindexerTimer.isRunning()) {
-          m_spindexerTimer.restart();
-        }        
+      if (m_isReadyToShoot) {     
 
         m_feeder.setTargetRps(m_feederRps);
 
-        if (m_spindexerTimer.hasElapsed(m_spindexerDelayInSeconds)) {
+        if (m_feeder.getVelocity() >= m_feederRps - m_feederVelocityThreshold) {
           m_spindexer.setTargetRps(m_spindexerRps);
         }        
       }
-    } else if (m_feeder.getSpeed() > 0) {
+    } else if (m_feeder.getVelocity() > 0) {
       m_feeder.stop();
       m_spindexer.setTargetRps(0);
-      m_spindexerTimer.stop();
     }
   }
 
@@ -120,7 +116,6 @@ public class BandShoot extends Command {
   public void end(boolean interrupted) {
     m_shooter.stop();
     m_spindexer.setTargetRps(0);
-    m_spindexerTimer.stop();
     m_feeder.stop();
   }
 
