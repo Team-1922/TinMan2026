@@ -147,7 +147,7 @@ public class TunerConstants {
     private static final int kFrontLeftEncoderId = 9;
     private static final Angle kFrontLeftEncoderOffset =
         switch(Constants.robotType){
-            case TinmanV2 -> Rotations.of(-0.27880859375);
+            case TinmanV2 -> Rotations.of(0.735107  );
             case TinmanV1 -> Rotations.of(0.023193359375);
         };
 
