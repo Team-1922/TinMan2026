@@ -64,19 +64,19 @@ public final class Constants {
         public static final CurrentLimitsConfigs kRollerCurrentConfigs = 
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(20)
+                .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLimit(30)
-                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLowerLimit(60)
                 .withSupplyCurrentLowerTime(.75);
 
         public static final CurrentLimitsConfigs kPivotCurrentConfigs = 
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(20)
+                .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(20)
-                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLimit(60)
+                .withSupplyCurrentLowerLimit(60)
                 .withSupplyCurrentLowerTime(.75);
 
         public static final FeedbackConfigs kPivotFeedbackConfig = new FeedbackConfigs()
@@ -116,10 +116,10 @@ public final class Constants {
         public static final CurrentLimitsConfigs FeederCurrentConfigs = 
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(20)
+                .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(20)
-                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLimit(60)
+                .withSupplyCurrentLowerLimit(60)
                 .withSupplyCurrentLowerTime(.75);
     };
 
@@ -130,10 +130,10 @@ public final class Constants {
         public static final CurrentLimitsConfigs ShooterCurrentConfigs = 
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(20)
+                .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(20)
-                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLimit(60)
+                .withSupplyCurrentLowerLimit(60)
                 .withSupplyCurrentLowerTime(.75);
         public static final double kGearRatio = 1;
 
@@ -163,10 +163,10 @@ public final class Constants {
         public static final CurrentLimitsConfigs SpindedxerCurrentConfigs = 
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(20)
+                .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(20)
-                .withSupplyCurrentLowerLimit(20)
+                .withSupplyCurrentLimit(60)
+                .withSupplyCurrentLowerLimit(60)
                 .withSupplyCurrentLowerTime(.75);
     };
 
