@@ -26,8 +26,8 @@ public class Localization extends SubsystemBase {
   private double m_errorYaw;
   private double m_errorX;
   private double m_errorY;
-  private double shooterXRobotFrame = 0.034925; //in meters
-  private double shooterYRobotFrame = -0.0809625; //in meters
+  private double shooterXRobotFrame = -0.2159; //in meters
+  private double shooterYRobotFrame = 0.19685; //in meters
   private Pose2d m_hubpose = new Pose2d();
   private Pose2d m_initialRobotPose = new Pose2d();
   private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
@@ -62,10 +62,10 @@ public class Localization extends SubsystemBase {
     double updatedYaw = updatedRobotPose.getRotation().getRadians();
     m_shooterX = updatedRobotPose.getX() 
       + Math.cos(updatedYaw) * shooterXRobotFrame
-      + Math.sin(updatedYaw) * shooterYRobotFrame;
+      - Math.sin(updatedYaw) * shooterYRobotFrame;
     m_shooterY = updatedRobotPose.getY() 
       + Math.cos(updatedYaw) * shooterYRobotFrame 
-      - Math.sin(updatedYaw) * shooterXRobotFrame;
+      + Math.sin(updatedYaw) * shooterXRobotFrame;
 
     m_deltaX = m_hubpose.getX() - m_shooterX;
     m_deltaY = m_hubpose.getY() - m_shooterY;
