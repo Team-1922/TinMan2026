@@ -151,7 +151,7 @@ public class TunerConstants {
     private static final int kFrontLeftEncoderId = 9;
     private static final Angle kFrontLeftEncoderOffset =
         switch(Constants.robotType){
-            case TinmanV2 -> Rotations.of(0.735107  );
+            case TinmanV2 -> Rotations.of(-0.279541015625);
             case TinmanV1 -> Rotations.of(0.023193359375);
         };
 
@@ -159,7 +159,7 @@ public class TunerConstants {
     private static final boolean kFrontLeftEncoderInverted = false;
 
     private static final Distance kFrontLeftXPos = Inches.of(12.375);
-    private static final Distance kFrontLeftYPos = Inches.of(9.25);
+    private static final Distance kFrontLeftYPos = Inches.of(9.375);
 
     // Front Right
     private static final int kFrontRightDriveMotorId = 2; 
@@ -167,7 +167,7 @@ public class TunerConstants {
     private static final int kFrontRightEncoderId = 10;
     private static final Angle kFrontRightEncoderOffset =
         switch (Constants.robotType) {
-            case TinmanV2 -> Rotations.of(-0.323974609375);
+            case TinmanV2 -> Rotations.of(-0.316650390625);
             case TinmanV1 -> Rotations.of(-0.410400390625);
         };
 
@@ -175,7 +175,7 @@ public class TunerConstants {
     private static final boolean kFrontRightEncoderInverted = false;
 
     private static final Distance kFrontRightXPos = Inches.of(12.375);
-    private static final Distance kFrontRightYPos = Inches.of(-9.25);
+    private static final Distance kFrontRightYPos = Inches.of(-9.375);
 
 
     // Back Left
@@ -184,14 +184,14 @@ public class TunerConstants {
     private static final int kBackLeftEncoderId = 11;
     private static final Angle kBackLeftEncoderOffset =
         switch (Constants.robotType) {
-            case TinmanV2 -> Rotations.of(0.283935546875);
+            case TinmanV2 -> Rotations.of(0.28369140625);
             case TinmanV1 -> Rotations.of(0.181884765625);
         };
     private static final boolean kBackLeftSteerMotorInverted = true;
     private static final boolean kBackLeftEncoderInverted = false;
 
-    private static final Distance kBackLeftYPos = Inches.of(9.25);
     private static final Distance kBackLeftXPos = Inches.of(-12.375);
+    private static final Distance kBackLeftYPos = Inches.of(9.375);
 
     // Back Right
     private static final int kBackRightDriveMotorId = 4;
@@ -199,7 +199,7 @@ public class TunerConstants {
     private static final int kBackRightEncoderId = 12;
     private static final Angle kBackRightEncoderOffset = 
         switch (Constants.robotType){
-            case TinmanV2 -> Rotations.of(0.425048828125);
+            case TinmanV2 -> Rotations.of(0.429443359375);
             case TinmanV1 -> Rotations.of(-0.161376953125);
         };
 
@@ -207,7 +207,7 @@ public class TunerConstants {
     private static final boolean kBackRightEncoderInverted = false;
 
     private static final Distance kBackRightXPos = Inches.of(-12.375);
-    private static final Distance kBackRightYPos = Inches.of(-9.25);
+    private static final Distance kBackRightYPos = Inches.of(-9.375);
 
     public static final SwerveModuleConstants<TalonFXConfiguration, TalonFXConfiguration, CANcoderConfiguration> FrontLeft = ConstantCreator
             .createModuleConstants(
