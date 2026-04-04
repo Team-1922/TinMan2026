@@ -88,7 +88,7 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.333008)
+                        .withMagnetOffset(-0.33252)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.Clockwise_Positive
