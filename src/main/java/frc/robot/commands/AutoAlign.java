@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -45,13 +48,17 @@ public class AutoAlign extends Command {
   public void execute() {
     double vX = 0;
     double vY = 0;
-    if(m_localization.distFromHub() > Constants.maxTargetDistanceToHub || m_normalAutoAlign
+    if((m_localization.distFromHub() > Constants.maxTargetDistanceToHub || m_normalAutoAlign)
+        && m_localization.getM_errorYaw() > Constants.kyawThreshold
     ){
       vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
       vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
+      double vYaw = m_localization.getM_errorYaw() * m_yawKp;
+      m_drivetrain.Move(vX, vY, vYaw);
+    } else {
+      m_drivetrain.applyRequest( new SwerveDriveBrake());
     }
-    double vYaw = m_localization.getM_errorYaw() * m_yawKp;
-    m_drivetrain.Move(vX, vY, vYaw);
+    
   }
 
   // Called once the command ends or is interrupted.

@@ -36,6 +36,7 @@ public final class Constants {
             case TinmanV2 -> TunerConstants.kCANBus;
             case TinmanV1 ->  CANBus.roboRIO();
         };
+    public static double kyawThreshold = 0.6;
 
     public static class Collector {
         public static final int kRollerLeaderMotorId = 14;
