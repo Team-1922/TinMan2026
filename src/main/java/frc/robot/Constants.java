@@ -22,7 +22,7 @@ import frc.robot.generated.TunerConstants;
 /** Add your docs here. */
 public final class Constants {
 
-    public static final RobotType robotType = RobotType.TinmanV2;
+    public static final RobotType robotType = RobotType.TinmanV1;
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
@@ -32,17 +32,14 @@ public final class Constants {
     public static String rightLimelightName = "limelight-right";
     public static boolean useRightLimelight = true;
     public static String drivebaseCanbusName = "Drivebase";
-    public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
-            case TinmanV2 -> TunerConstants.kCANBus;
-            case TinmanV1 ->  CANBus.roboRIO();
-        };
+    public static final CANBus superstructureCanbus = TunerConstants.kCANBus;
 
     public static class Collector {
         public static final int kRollerLeaderMotorId = 14;
         public static final int kRollerFollowerMotorId = 15;
         public static final int kPivotMotorId = 16;
         public static final int kPivotCanCoderId = 22;
-        public static final double kRollerGearRatio = 2;
+        public static final double kRollerGearRatio = 32/12;
         public static final double krps = 100;
         public static final double kreverseRps = -60;
 
@@ -88,18 +85,18 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.33252)
+                        .withMagnetOffset(-0.49561)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.Clockwise_Positive
                         )
             );
 
-        public static final double kRetractedPosition = 0.354248;
+        public static final double kRetractedPosition = -0.266357;
 
         public static final double kDeployedPosition = 0;
 
-        public static final double kHalfDeployedPosition = 0.206299;
+        public static final double kHalfDeployedPosition = -0.266357;
     };
 
     public static class Feeder {

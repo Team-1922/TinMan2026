@@ -57,7 +57,7 @@ public class Collector extends SubsystemBase {
         .withNeutralMode(NeutralModeValue.Coast);
 
     MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
-        .withInverted(InvertedValue.CounterClockwise_Positive);
+        .withInverted(InvertedValue.Clockwise_Positive);
     
     MotorOutputConfigs rollerFollowerMotorConfig = new MotorOutputConfigs()
         .withInverted(InvertedValue.Clockwise_Positive)
@@ -101,7 +101,8 @@ public class Collector extends SubsystemBase {
   }
 
   public void deploy() {
-    pivotCollector(Constants.Collector.kDeployedPosition);}
+    pivotCollector(Constants.Collector.kDeployedPosition);
+  }
 
   public void retract() {
     pivotCollector(Constants.Collector.kRetractedPosition);
