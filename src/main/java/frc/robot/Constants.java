@@ -66,7 +66,7 @@ public final class Constants {
                 .withStatorCurrentLimitEnable(true)
                 .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(30)
+                .withSupplyCurrentLimit(60)
                 .withSupplyCurrentLowerLimit(60)
                 .withSupplyCurrentLowerTime(.75);
 
