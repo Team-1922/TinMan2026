@@ -25,6 +25,7 @@ public class AutoAlign extends Command {
   double m_yKp = 5;
   double m_yawKp = 3.8;
   double m_alianceSign = 1;
+  private final SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
 
 
   /** Creates a new AutoAlign. */
@@ -56,7 +57,7 @@ public class AutoAlign extends Command {
       double vYaw = m_localization.getM_errorYaw() * m_yawKp;
       m_drivetrain.Move(vX, vY, vYaw);
     } else {
-      m_drivetrain.applyRequest( new SwerveDriveBrake());
+      m_drivetrain.applyRequest(() -> m_brake);
     }
     
   }
