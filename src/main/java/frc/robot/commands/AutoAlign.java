@@ -49,15 +49,27 @@ public class AutoAlign extends Command {
   public void execute() {
     double vX = 0;
     double vY = 0;
-    if((m_localization.distFromHub() > Constants.maxTargetDistanceToHub || m_normalAutoAlign)
-        && m_localization.getM_errorYaw() > Constants.kyawThreshold
-    ){
+    double vYaw = 0;
+    boolean isAligned = true;
+
+    if(
+        m_normalAutoAlign
+        || m_localization.distFromHub() > Constants.maxTargetDistanceToHub
+    ) {
       vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
       vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
-      double vYaw = m_localization.getM_errorYaw() * m_yawKp;
-      m_drivetrain.Move(vX, vY, vYaw);
-    } else {
+      isAligned = false;
+    } 
+
+    if(m_localization.getM_errorYaw() > Constants.kyawThreshold) {
+      vYaw = m_localization.getM_errorYaw() * m_yawKp;
+      isAligned = false;
+    }
+
+    if(isAligned) {
       m_drivetrain.applyRequest(() -> m_brake);
+    } else {
+      m_drivetrain.Move(vX, vY, vYaw);
     }
     
   }
