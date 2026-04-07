@@ -61,13 +61,13 @@ public class AutoAlign extends Command {
       isAligned = false;
     } 
 
-    if(m_localization.getM_errorYaw() > Constants.kyawThreshold) {
+    if(Math.abs(m_localization.getM_errorYaw()) > Constants.kyawThreshold) {
       vYaw = m_localization.getM_errorYaw() * m_yawKp;
       isAligned = false;
     }
 
     if(isAligned) {
-      m_drivetrain.applyRequest(() -> m_brake);
+      m_drivetrain.setControl(m_brake);
     } else {
       m_drivetrain.Move(vX, vY, vYaw);
     }
