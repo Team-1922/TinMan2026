@@ -24,7 +24,7 @@ public class AutoAlign extends Command {
   double m_xKp = 5;
   double m_yKp = 5;
   double m_yawKp = 3.8;
-  double m_alianceSign = 1;
+  double m_allianceSign = 1;
   private final SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
 
 
