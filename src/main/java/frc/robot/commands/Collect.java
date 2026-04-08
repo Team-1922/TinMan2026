@@ -25,15 +25,14 @@ public class Collect extends Command {
   @Override
   public void initialize() {
       m_collector.deploy();
-      m_collector.spinCollectorBars();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    SmartDashboard.putNumber("Collector RPS", m_collectorRps);
-    m_collectorRps = SmartDashboard.getNumber("Collector RPS", m_collectorRps);
-    m_collector.collect(m_collectorRps);
+    // SmartDashboard.putNumber("Collector RPS", m_collectorRps);
+    // m_collectorRps = SmartDashboard.getNumber("Collector RPS", m_collectorRps);
+    m_collector.spinCollectorBars();
   }
 
   // Called once the command ends or is interrupted.
