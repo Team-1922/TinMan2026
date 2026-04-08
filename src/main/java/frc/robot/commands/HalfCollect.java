@@ -16,6 +16,7 @@ public class HalfCollect extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     m_collector = collector;
     addRequirements(m_collector);
+    m_collector.spinCollectorBars();
   }
 
   // Called when the command is initially scheduled.

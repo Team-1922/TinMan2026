@@ -25,6 +25,7 @@ public class Collect extends Command {
   @Override
   public void initialize() {
       m_collector.deploy();
+      m_collector.spinCollectorBars();
   }
 
   // Called every time the scheduler runs while the command is scheduled.

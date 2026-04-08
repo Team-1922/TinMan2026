@@ -25,6 +25,7 @@ public class RetractCollector extends Command {
   @Override
   public void execute() {
     m_collector.retract();
+    m_collector.spinCollectorBars();
   }
 
   // Called once the command ends or is interrupted.
