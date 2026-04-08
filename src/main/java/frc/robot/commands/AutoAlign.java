@@ -4,6 +4,9 @@
 
 package frc.robot.commands;
 
+import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
+import com.ctre.phoenix6.swerve.SwerveRequest;
+
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -21,7 +24,8 @@ public class AutoAlign extends Command {
   double m_xKp = 5;
   double m_yKp = 5;
   double m_yawKp = 3.8;
-  double m_allianceSign = 1;
+  double m_alianceSign = 1;
+  private final SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
 
 
   /** Creates a new AutoAlign. */
@@ -45,13 +49,29 @@ public class AutoAlign extends Command {
   public void execute() {
     double vX = 0;
     double vY = 0;
-    if(m_localization.distFromHub() > Constants.maxTargetDistanceToHub || m_normalAutoAlign
-    ){
+    double vYaw = 0;
+    boolean isAligned = true;
+
+    if(
+        m_normalAutoAlign
+        || m_localization.distFromHub() > Constants.maxTargetDistanceToHub
+    ) {
       vX = m_localization.getM_errorX() * m_xKp * m_allianceSign;
       vY = m_localization.getM_errorY() * m_yKp * m_allianceSign;
+      isAligned = false;
+    } 
+
+    if(Math.abs(m_localization.getM_errorYaw()) > Constants.kyawThreshold) {
+      vYaw = m_localization.getM_errorYaw() * m_yawKp;
+      isAligned = false;
     }
-    double vYaw = m_localization.getM_errorYaw() * m_yawKp;
-    m_drivetrain.Move(vX, vY, vYaw);
+
+    if(isAligned) {
+      m_drivetrain.setControl(m_brake);
+    } else {
+      m_drivetrain.Move(vX, vY, vYaw);
+    }
+    
   }
 
   // Called once the command ends or is interrupted.
