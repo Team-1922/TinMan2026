@@ -39,27 +39,24 @@ public class Spindexer extends SubsystemBase {
 
   
   public void setTargetRps(double rps) {
-    m_rps = rps;
+    m_Spindexer.setControl(
+      m_spindexerDutyCycle.withVelocity(
+        rps * Constants.Spindexer.kGearRatio
+      )
+    );
   }
 
   public void setIdleSpeed() {
-    m_rps = Constants.Spindexer.spindexerIdleSpeed;
+    m_Spindexer.setControl(
+      m_spindexerDutyCycle.withVelocity(
+        Constants.Spindexer.spindexerIdleSpeed * Constants.Spindexer.kGearRatio
+      )
+    );
   }
 
   @Override
   public void periodic() {
     // This method will be called once per scheduler run   
-    if(m_rps != 0) {
-      m_Spindexer.setControl(
-        m_spindexerDutyCycle.withVelocity(
-          m_rps * Constants.Spindexer.kGearRatio
-        )
-      );
-    }
-    else if(m_Spindexer.getVelocity().getValueAsDouble() != 0){
-      m_Spindexer.stopMotor();
-    }
-    
     putDataOnDashboard();
   }
 

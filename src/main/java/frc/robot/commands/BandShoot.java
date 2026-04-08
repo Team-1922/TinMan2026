@@ -21,14 +21,15 @@ public class BandShoot extends Command {
   private double m_yawThreshold = .06;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
+  private boolean m_isTuning = true;
   private final Shooter m_shooter;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
   private final double m_shooterVelocityThreshold = 2;
   private final double m_feederVelocityThreshold = 1;
-  private final double tuningNumber = 4.75; //placeholder
-  private final double m_minShooterRps = 20; //placeholder, rps at min distance
+  private final double KPForRPS = 4.75; 
+  private final double m_minShooterRps = 10.025; //rps at min distance
 
   private ShootActions m_shootAction = ShootActions.Shoot;
   public enum ShootActions {
@@ -69,11 +70,16 @@ public class BandShoot extends Command {
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
-    m_shooterRps = m_minShooterRps + tuningNumber * (distFromHub - 2.1);
+    m_shooterRps = m_minShooterRps + KPForRPS * (distFromHub);
     SmartDashboard.putNumber("Distance From Hub", distFromHub);
-    m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
-    m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
-    m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
+    m_isTuning = SmartDashboard.getBoolean("isTuning", m_isTuning);
+    if(m_isTuning){
+      m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
+      m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
+      m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
+      m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
+      m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
+    }
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;

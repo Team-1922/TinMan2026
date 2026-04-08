@@ -38,7 +38,6 @@ public class Collector extends SubsystemBase {
       Constants.superstructureCanbus
   );
 
-  private double m_rps = 0;
   private final CANcoder m_pivotEncoder = new CANcoder(
       Constants.Collector.kPivotCanCoderId,
       Constants.superstructureCanbus
@@ -124,19 +123,15 @@ public class Collector extends SubsystemBase {
   }
   
   public void collect(double rps) {
-    m_rps = rps;
-    if( m_rps != 0 ) {
-      m_rollerLeaderMotor.setControl(
-          m_collectorDutyCycle.withVelocity(
-              m_rps * Constants.Collector.kRollerGearRatio
-         )
-      );
-    }
+    m_rollerLeaderMotor.setControl(
+      m_collectorDutyCycle.withVelocity(
+        rps * Constants.Collector.kRollerGearRatio
+      )
+    );
     putDataOnDashboard();
   }
 
   public void stopCollector() {
-    m_rps = 0;
     m_rollerLeaderMotor.stopMotor();
   }
 

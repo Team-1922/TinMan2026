@@ -25,6 +25,7 @@ public class Shoot extends Command {
   private final Feeder m_feeder;
   private final Localization m_localization;
   private final double m_shooterSpeedThreshold = 2;
+  private boolean m_isTuning = true;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
   private final double m_spindexerDelayInSeconds = .15;
@@ -70,10 +71,14 @@ public class Shoot extends Command {
   public void execute() {
     double distFromHub = m_localization.distFromHub();
     SmartDashboard.putNumber("Distance From Hub", distFromHub);
-    m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
-    m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
-    m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
-    m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
+    m_isTuning = SmartDashboard.getBoolean("isTuning", m_isTuning);
+    if(m_isTuning){
+      m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
+      m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
+      m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
+      m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
+      m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
+    }
 
     if(m_shootAction == ShootActions.Shuttle) {
         m_shooterRps = m_shuttleRps;

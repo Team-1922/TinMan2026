@@ -63,13 +63,13 @@ public class Signaling extends SubsystemBase {
 
     if(isHubActive()) {
        if(shouldSetColorMask()) {
-          setAlianceColorMask(MaskDirections.Down);
+          setAllianceColorMask(MaskDirections.Down);
       } else {
-        setAlianceColor();
+        setAllianceColor();
       }
     } else {
       if(shouldSetColorMask()) {
-          setAlianceColorMask(MaskDirections.Up);
+          setAllianceColorMask(MaskDirections.Up);
       } else {
         off();
       }
@@ -136,7 +136,7 @@ public class Signaling extends SubsystemBase {
     m_black.applyTo(m_ledBuffer);
   }
 
-  private void setAlianceColor() {
+  private void setAllianceColor() {
     if(m_alliance.get() == Alliance.Red) {
       red();
     } else if(m_alliance.get() == Alliance.Blue) {
@@ -146,7 +146,7 @@ public class Signaling extends SubsystemBase {
     }
   }
 
-  private void setAlianceColorMask(MaskDirections maskDirection) {
+  private void setAllianceColorMask(MaskDirections maskDirection) {
     if(m_alliance.get() == Alliance.Red) {
       redMask(maskDirection);
     } else if(m_alliance.get() == Alliance.Blue) {

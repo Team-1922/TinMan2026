@@ -21,7 +21,7 @@ public class AutoAlign extends Command {
   double m_xKp = 5;
   double m_yKp = 5;
   double m_yawKp = 3.8;
-  double m_alianceSign = 1;
+  double m_allianceSign = 1;
 
 
   /** Creates a new AutoAlign. */
@@ -37,7 +37,7 @@ public class AutoAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_alianceSign = DriverStation.getAlliance().get() == Alliance.Blue ? 1 : -1;
+    m_allianceSign = DriverStation.getAlliance().get() == Alliance.Blue ? 1 : -1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -47,8 +47,8 @@ public class AutoAlign extends Command {
     double vY = 0;
     if(m_localization.distFromHub() > Constants.maxTargetDistanceToHub || m_normalAutoAlign
     ){
-      vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
-      vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
+      vX = m_localization.getM_errorX() * m_xKp * m_allianceSign;
+      vY = m_localization.getM_errorY() * m_yKp * m_allianceSign;
     }
     double vYaw = m_localization.getM_errorYaw() * m_yawKp;
     m_drivetrain.Move(vX, vY, vYaw);
