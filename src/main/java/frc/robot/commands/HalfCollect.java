@@ -16,7 +16,6 @@ public class HalfCollect extends Command {
     // Use addRequirements() here to declare subsystem dependencies.
     m_collector = collector;
     addRequirements(m_collector);
-    m_collector.spinCollectorBars();
   }
 
   // Called when the command is initially scheduled.
@@ -27,6 +26,7 @@ public class HalfCollect extends Command {
   @Override
   public void execute() {
     m_collector.halfCollector();
+    m_collector.spinCollectorBars();
   }
 
   // Called once the command ends or is interrupted.
