@@ -71,7 +71,6 @@ public class AutoAlign extends Command {
     } else {
       m_drivetrain.Move(vX, vY, vYaw);
     }
-    
   }
 
   // Called once the command ends or is interrupted.

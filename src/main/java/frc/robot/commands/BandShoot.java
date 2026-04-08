@@ -20,7 +20,6 @@ public class BandShoot extends Command {
   private double m_shuttleRps = 30;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
-  private boolean m_isTuning = true;
   private final Shooter m_shooter;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
@@ -71,14 +70,6 @@ public class BandShoot extends Command {
     double distFromHub = m_localization.distFromHub();
     m_shooterRps = m_minShooterRps + KPForRPS * (distFromHub);
     SmartDashboard.putNumber("Distance From Hub", distFromHub);
-
-    m_isTuning = SmartDashboard.getBoolean("isTuning", m_isTuning);
-    if(m_isTuning){
-      m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
-      m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
-      m_feederRps = SmartDashboard.getNumber("Feeder RPS", m_feederRps);
-      m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
-    }
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;

@@ -44,7 +44,7 @@ public class Spindexer extends SubsystemBase {
         rps * Constants.Spindexer.kGearRatio
       )
     );
-  }
+  } //motor tries to keep spinning after let go of button
 
   public void setIdleSpeed() {
     m_Spindexer.setControl(
