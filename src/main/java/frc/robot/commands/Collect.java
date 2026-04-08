@@ -30,8 +30,6 @@ public class Collect extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    // SmartDashboard.putNumber("Collector RPS", m_collectorRps);
-    // m_collectorRps = SmartDashboard.getNumber("Collector RPS", m_collectorRps);
     m_collector.spinCollectorBars();
   }
 
