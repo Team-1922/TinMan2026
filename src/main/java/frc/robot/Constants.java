@@ -67,7 +67,7 @@ public final class Constants {
                 .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLimit(60)
-                .withSupplyCurrentLowerLimit(60)
+                .withSupplyCurrentLowerLimit(10)
                 .withSupplyCurrentLowerTime(.75);
 
         public static final CurrentLimitsConfigs kPivotCurrentConfigs = 
@@ -76,7 +76,7 @@ public final class Constants {
                 .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLimit(60)
-                .withSupplyCurrentLowerLimit(60)
+                .withSupplyCurrentLowerLimit(10)
                 .withSupplyCurrentLowerTime(.75);
 
         public static final FeedbackConfigs kPivotFeedbackConfig = new FeedbackConfigs()
@@ -119,7 +119,7 @@ public final class Constants {
                 .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLimit(60)
-                .withSupplyCurrentLowerLimit(60)
+                .withSupplyCurrentLowerLimit(10)
                 .withSupplyCurrentLowerTime(.75);
     };
 
@@ -133,7 +133,7 @@ public final class Constants {
                 .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLimit(60)
-                .withSupplyCurrentLowerLimit(60)
+                .withSupplyCurrentLowerLimit(10)
                 .withSupplyCurrentLowerTime(.75);
         public static final double kGearRatio = 1;
 
@@ -166,7 +166,7 @@ public final class Constants {
                 .withStatorCurrentLimit(60)
                 .withSupplyCurrentLimitEnable(true)
                 .withSupplyCurrentLimit(60)
-                .withSupplyCurrentLowerLimit(60)
+                .withSupplyCurrentLowerLimit(10)
                 .withSupplyCurrentLowerTime(.75);
     };
 
