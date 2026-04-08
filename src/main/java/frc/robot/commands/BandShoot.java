@@ -18,7 +18,6 @@ public class BandShoot extends Command {
   private double m_feederRps = 60;
   private double m_shooterRps = 20;
   private double m_shuttleRps = 30;
-  private double m_yawThreshold = .06;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
   private final Shooter m_shooter;
@@ -55,7 +54,7 @@ public class BandShoot extends Command {
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
     SmartDashboard.putBoolean("Requires Align", m_requireAlign);
-    SmartDashboard.putNumber("Yaw Threshold", m_yawThreshold);
+    SmartDashboard.putNumber("Yaw Threshold", Constants.kyawThreshold);
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
@@ -73,7 +72,7 @@ public class BandShoot extends Command {
     SmartDashboard.putNumber("Distance From Hub", distFromHub);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
-    m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
+    Constants.kyawThreshold = SmartDashboard.getNumber("Yaw Threshold", Constants.kyawThreshold);
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
@@ -89,7 +88,7 @@ public class BandShoot extends Command {
         !m_requireAlign
         || (
           distFromHub < Constants.maxTargetDistanceToHub
-          && Math.abs(m_localization.getM_errorYaw()) < m_yawThreshold
+          && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
         )
     ) {
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterVelocityThreshold) {
