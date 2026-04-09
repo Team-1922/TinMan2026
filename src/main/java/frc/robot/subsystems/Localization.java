@@ -37,14 +37,14 @@ public class Localization extends SubsystemBase {
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
     m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
-    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
-    ? m_blueHubPose2d 
-    : m_redHubPose2d;
   };
  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
+    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
+    ? m_blueHubPose2d 
+    : m_redHubPose2d;
     m_initialRobotPose = m_drivetrain.getPose();
     double yaw = m_initialRobotPose.getRotation().getDegrees();
     

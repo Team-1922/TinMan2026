@@ -23,7 +23,6 @@ public class Feeder extends SubsystemBase {
     Constants.Feeder.kMotorId1, 
     Constants.superstructureCanbus
   );
-  private double m_rps = 0;
   private VelocityDutyCycle m_feederDutyCycle = new VelocityDutyCycle(0)
     .withSlot(0);
 

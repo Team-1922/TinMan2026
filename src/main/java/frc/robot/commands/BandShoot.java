@@ -14,20 +14,20 @@ import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class BandShoot extends Command {
-  private double m_spindexerRps = 45;
-  private double m_feederRps = 60;
-  private double m_shooterRps = 20;
-  private double m_shuttleRps = 30;
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
+    private double m_shooterRps = 20;
   private final Shooter m_shooter;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
   private final double m_shooterVelocityThreshold = 2;
   private final double m_feederVelocityThreshold = 1;
-  private final double KPForRPS = 4.75; 
+  private final double m_kpForRps = 4.75; 
   private final double m_minShooterRps = 10.025; //rps at min distance
+  private final double m_spindexerRps = 45;
+  private final double m_feederRps = 60;
+  private final double m_shuttleRps = 30;
 
   private ShootActions m_shootAction = ShootActions.Shoot;
   public enum ShootActions {
@@ -68,15 +68,20 @@ public class BandShoot extends Command {
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
-    m_shooterRps = m_minShooterRps + KPForRPS * (distFromHub);
+    m_shooterRps = m_minShooterRps + m_kpForRps * (distFromHub);
     SmartDashboard.putNumber("Distance From Hub", distFromHub);
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
     }
+
     if(m_shootAction == ShootActions.JustShoot){
       m_requireAlign = false;
+    }
 
+    if(m_shootAction == ShootActions.Shuttle){
+      m_shooterRps = m_shuttleRps;
+      m_requireAlign = false;
     }
 
     m_shooter.setTargetRps(m_shooterRps);
