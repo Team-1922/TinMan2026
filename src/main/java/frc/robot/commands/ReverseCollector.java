@@ -9,13 +9,12 @@ import frc.robot.subsystems.Collector;
 import edu.wpi.first.wpilibj2.command.Command;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class HalfCollect extends Command {
+public class ReverseCollector extends Command {
   Collector m_collector;
-  /** Creates a new HalfCollect. */
-  public HalfCollect(Collector collector) {
-    // Use addRequirements() here to declare subsystem dependencies.
+  /** Creates a new ReverseCollector. */
+  public ReverseCollector(Collector collector) {
     m_collector = collector;
-    addRequirements(m_collector);
+    // Use addRequirements() here to declare subsystem dependencies.
   }
 
   // Called when the command is initially scheduled.
@@ -25,8 +24,7 @@ public class HalfCollect extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    m_collector.halfCollector();
-    m_collector.spinCollectorBars();
+    m_collector.reverseCollectorBars();
   }
 
   // Called once the command ends or is interrupted.

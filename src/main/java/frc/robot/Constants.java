@@ -27,12 +27,16 @@ public final class Constants {
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
     public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
-    public static String middleLimeLight = "limelight-front";
+    public static final double maxTargetDistanceToHub = Meters.of(4.3).in(Meters);
+    public static String frontLimelightName = "limelight-front";
+    public static String rightLimelightName = "limelight-right";
+    public static boolean useRightLimelight = true;
     public static String drivebaseCanbusName = "Drivebase";
     public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
             case TinmanV2 -> TunerConstants.kCANBus;
             case TinmanV1 ->  CANBus.roboRIO();
         };
+    public static double kyawThreshold = 0.06;
 
     public static class Collector {
         public static final int kRollerLeaderMotorId = 14;
@@ -41,6 +45,7 @@ public final class Constants {
         public static final int kPivotCanCoderId = 22;
         public static final double kRollerGearRatio = 2;
         public static final double krps = 100;
+        public static final double kreverseRps = -60;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
@@ -51,7 +56,7 @@ public final class Constants {
 
         public static Slot0Configs pivotSlot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 2;
+            slot0Configs.kP = 6;
             slot0Configs.kS = 0;
             return slot0Configs;
         }
@@ -84,7 +89,7 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.333008)
+                        .withMagnetOffset(-0.33252)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.Clockwise_Positive
@@ -95,12 +100,12 @@ public final class Constants {
 
         public static final double kDeployedPosition = 0;
 
-        public static final double kHalfDeployedPosition = 0.292969;
+        public static final double kHalfDeployedPosition = 0.206299;
     };
 
     public static class Feeder {
         public static final int kMotorId1 = 18;
-        public static final double kGearRatio = 5;
+        public static final double kGearRatio = 3;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
