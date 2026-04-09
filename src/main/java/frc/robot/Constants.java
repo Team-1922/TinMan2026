@@ -36,6 +36,7 @@ public final class Constants {
             case TinmanV2 -> TunerConstants.kCANBus;
             case TinmanV1 ->  CANBus.roboRIO();
         };
+    public static double kyawThreshold = 0.06;
 
     public static class Collector {
         public static final int kRollerLeaderMotorId = 14;
@@ -88,7 +89,7 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.333008)
+                        .withMagnetOffset(-0.33252)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.Clockwise_Positive
