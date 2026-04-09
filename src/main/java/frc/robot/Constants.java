@@ -32,7 +32,11 @@ public final class Constants {
     public static String rightLimelightName = "limelight-right";
     public static boolean useRightLimelight = true;
     public static String drivebaseCanbusName = "Drivebase";
-    public static final CANBus superstructureCanbus = TunerConstants.kCANBus;
+    public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
+            case TinmanV2 -> TunerConstants.kCANBus;
+            case TinmanV1 ->  CANBus.roboRIO();
+        };
+    public static double kyawThreshold = 0.06;
 
     public static class Collector {
         public static final int kRollerLeaderMotorId = 14;
