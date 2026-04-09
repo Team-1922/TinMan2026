@@ -37,6 +37,9 @@ public class Spindexer extends SubsystemBase {
     m_Spindexer.getConfigurator().apply(Constants.Spindexer.SpindedxerCurrentConfigs);
   }
 
+  public void stopMotor(){
+    m_Spindexer.stopMotor();
+  }
   
   public void setTargetRps(double rps) {
     m_Spindexer.setControl(

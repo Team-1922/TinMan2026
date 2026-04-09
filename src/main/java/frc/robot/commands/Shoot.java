@@ -110,7 +110,7 @@ public class Shoot extends Command {
       }
     } else if (m_feeder.getVelocity() > 0) {
       m_feeder.stop();
-      m_spindexer.setTargetRps(0);
+      m_spindexer.stopMotor();;
       m_spindexerTimer.stop();
     }
   }
@@ -119,7 +119,7 @@ public class Shoot extends Command {
   @Override
   public void end(boolean interrupted) {
     m_shooter.stop();
-    m_spindexer.setTargetRps(0);
+    m_spindexer.stopMotor();;
     m_spindexerTimer.stop();
     m_feeder.stop();
   }
