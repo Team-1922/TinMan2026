@@ -15,19 +15,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "RightToMid"
+                        "pathName": "LeftToMid.0"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Rotate"
+                        "pathName": "Left_rotate"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "SweepRight"
+                        "pathName": "Left_SweepLeft"
                       }
                     }
                   ]
@@ -58,7 +58,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "RightBack"
+            "pathName": "LeftBack"
           }
         },
         {
