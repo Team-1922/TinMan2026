@@ -72,12 +72,13 @@ public class Localization extends SubsystemBase {
     m_errorYaw = MathUtil.angleModulus(m_targetYaw - updatedYaw);
     m_errorX = m_deltaX - Constants.maxTargetDistanceToHub * Math.cos(m_targetYaw);
     m_errorY = m_deltaY - Constants.maxTargetDistanceToHub * Math.sin(m_targetYaw);
-    
+    /* 
     SmartDashboard.putNumber("current_yaw", updatedYaw);
     SmartDashboard.putNumber("target_yaw", m_targetYaw);
     SmartDashboard.putNumber("error_x", m_errorX);
     SmartDashboard.putNumber("error_y", m_errorY);
     SmartDashboard.putNumber("error_yaw", m_errorYaw);
+    */
   }
 
   public double getM_errorX() {
@@ -109,7 +110,7 @@ public class Localization extends SubsystemBase {
       usedLimelight = true;
     }
 
-    SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
+    //SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
   }
 
   private boolean shouldReject(LimelightHelpers.PoseEstimate poseEstimate) {

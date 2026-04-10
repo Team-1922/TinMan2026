@@ -50,11 +50,13 @@ public class BandShoot extends Command {
     m_spindexer = spindexer;
     m_localization = localization;
     m_shootAction = shootAction;
+    /* 
     SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putBoolean("Requires Align", m_requireAlign);
     SmartDashboard.putNumber("Yaw Threshold", Constants.kyawThreshold);
+    */
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
@@ -69,7 +71,7 @@ public class BandShoot extends Command {
   public void execute() {
     double distFromHub = m_localization.distFromHub();
     m_shooterRps = m_minShooterRps + m_kpForRps * (distFromHub);
-    SmartDashboard.putNumber("Distance From Hub", distFromHub);
+    //SmartDashboard.putNumber("Distance From Hub", distFromHub);
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;

@@ -51,11 +51,13 @@ public class Shoot extends Command {
     m_spindexer = spindexer;
     m_localization = localization;
     m_shootAction = shootAction;
+    /* 
     SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
     SmartDashboard.putBoolean("Requires Align", m_requireAlign);
     SmartDashboard.putNumber("Yaw Threshold", m_yawThreshold);
+    */
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
@@ -69,7 +71,7 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
-    SmartDashboard.putNumber("Distance From Hub", distFromHub);
+    //SmartDashboard.putNumber("Distance From Hub", distFromHub);
 
     if(m_shootAction == ShootActions.Shuttle) {
       m_shooterRps = m_shuttleRps;
