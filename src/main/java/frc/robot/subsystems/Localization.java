@@ -18,12 +18,16 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 public class Localization extends SubsystemBase {
   private final CommandSwerveDrivetrain m_drivetrain;
   private Field2d m_Field2d = new Field2d();
+  private double m_shooterX;
+  private double m_shooterY;
   private double m_deltaX;
   private double m_deltaY;
   private double m_targetYaw;
   private double m_errorYaw;
   private double m_errorX;
   private double m_errorY;
+  private double m_shooterXRobotFrame = -0.2159; //in meters
+  private double m_shooterYRobotFrame = 0.19685; //in meters
   private Pose2d m_hubpose = new Pose2d();
   private Pose2d m_initialRobotPose = new Pose2d();
   private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
@@ -55,14 +59,23 @@ public class Localization extends SubsystemBase {
     m_Field2d.setRobotPose(updatedRobotPose);
     SmartDashboard.putData("Field2d", m_Field2d);
 
-    m_deltaX = m_hubpose.getX() - updatedRobotPose.getX();
-    m_deltaY = m_hubpose.getY() - updatedRobotPose.getY();
+    double updatedYaw = updatedRobotPose.getRotation().getRadians();
+    m_shooterX = updatedRobotPose.getX() 
+      + Math.cos(updatedYaw) * m_shooterXRobotFrame
+      - Math.sin(updatedYaw) * m_shooterYRobotFrame;
+    m_shooterY = updatedRobotPose.getY() 
+      + Math.cos(updatedYaw) * m_shooterYRobotFrame 
+      + Math.sin(updatedYaw) * m_shooterXRobotFrame;
+
+    m_deltaX = m_hubpose.getX() - m_shooterX;
+    m_deltaY = m_hubpose.getY() - m_shooterY;
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
     m_errorYaw = 
-      MathUtil.angleModulus(m_targetYaw - updatedRobotPose.getRotation().getRadians());
-    m_errorX = m_deltaX - Constants.targetDistanceToHub * Math.cos(m_targetYaw);
-    m_errorY = m_deltaY - Constants.targetDistanceToHub * Math.sin(m_targetYaw);
+      MathUtil.angleModulus(m_targetYaw - updatedYaw);
+    m_errorX = m_deltaX - Constants.maxTargetDistanceToHub * Math.cos(m_targetYaw);
+    m_errorY = m_deltaY - Constants.maxTargetDistanceToHub * Math.sin(m_targetYaw);
     
+    SmartDashboard.putNumber("current_yaw", updatedYaw);
     SmartDashboard.putNumber("target_yaw", m_targetYaw);
     SmartDashboard.putNumber("error_x", m_errorX);
     SmartDashboard.putNumber("error_y", m_errorY);

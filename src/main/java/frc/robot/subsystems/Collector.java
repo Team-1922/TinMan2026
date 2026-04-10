@@ -87,8 +87,7 @@ public class Collector extends SubsystemBase {
 
     m_pivotMotor.getConfigurator().apply(Constants.Collector.pivotSlot0());
     m_pivotMotor.getConfigurator().apply(
-        Constants.Collector.kPivotCurrentConfigs
-    );
+        Constants.Collector.kPivotCurrentConfigs);
     m_pivotMotor.getConfigurator().apply(pivotMotorConfig);
     m_pivotMotor.getConfigurator().apply(
         Constants.Collector.kPivotFeedbackConfig
@@ -116,13 +115,17 @@ public class Collector extends SubsystemBase {
     collect(Constants.Collector.krps);
   }
 
+  public void reverseCollectorBars() {
+    collect(Constants.Collector.kreverseRps);
+  }
+
   private void pivotCollector(double position) {
     m_pivotMotor.setControl( m_collectorPostionDutyCycle.withPosition(position));
   }
   
   public void collect(double rps) {
     m_rps = rps;
-    if( m_rps > 0) {
+    if( m_rps != 0 ) {
       m_rollerLeaderMotor.setControl(
           m_collectorDutyCycle.withVelocity(
               m_rps * Constants.Collector.kRollerGearRatio

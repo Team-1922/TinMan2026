@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -14,21 +13,21 @@ import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Shoot extends Command {
-  private final Shooter m_shooter;
+public class BandShoot extends Command {
   private double m_spindexerRps = 45;
   private double m_feederRps = 60;
   private double m_shooterRps = 20;
   private double m_shuttleRps = 30;
-  private double m_yawThreshold = .045;
+  private boolean m_isReadyToShoot;
+  private boolean m_requireAlign = true;
+  private final Shooter m_shooter;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
-  private final double m_shooterSpeedThreshold = 2;
-  private boolean m_isReadyToShoot;
-  private boolean m_requireAlign = true;
-  private final double m_spindexerDelayInSeconds = .15;
-  private Timer m_spindexerTimer = new Timer();
+  private final double m_shooterVelocityThreshold = 2;
+  private final double m_feederVelocityThreshold = 1;
+  private final double tuningNumber = 4.75; //placeholder
+  private final double m_minShooterRps = 20; //placeholder, rps at min distance
 
   private ShootActions m_shootAction = ShootActions.Shoot;
   public enum ShootActions {
@@ -37,8 +36,8 @@ public class Shoot extends Command {
     JustShoot
   }
 
-  /** Creates a new Shoot. */
-  public Shoot(
+  /** Creates a new BandShoot. */
+  public BandShoot(
       Shooter shooter,
       Feeder feeder,
       Spindexer spindexer,
@@ -55,7 +54,7 @@ public class Shoot extends Command {
     SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
     SmartDashboard.putBoolean("Requires Align", m_requireAlign);
-    SmartDashboard.putNumber("Yaw Threshold", m_yawThreshold);
+    SmartDashboard.putNumber("Yaw Threshold", Constants.kyawThreshold);
     addRequirements(m_shooter, m_feeder, m_spindexer);
   }
 
@@ -69,53 +68,44 @@ public class Shoot extends Command {
   @Override
   public void execute() {
     double distFromHub = m_localization.distFromHub();
+    m_shooterRps = m_minShooterRps + tuningNumber * (distFromHub - 2.1);
     SmartDashboard.putNumber("Distance From Hub", distFromHub);
-    m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
     m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
-    m_yawThreshold = SmartDashboard.getNumber("Yaw Threshold", m_yawThreshold);
-
-    if(m_shootAction == ShootActions.Shuttle) {
-        m_shooterRps = m_shuttleRps;
-        m_requireAlign = false;
-      }
-
-    if(m_shootAction == ShootActions.JustShoot) {
-      m_requireAlign = false;
-    }
+    Constants.kyawThreshold = SmartDashboard.getNumber("Yaw Threshold", Constants.kyawThreshold);
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
     }
+    if(m_shootAction == ShootActions.JustShoot){
+      m_requireAlign = false;
+
+    }
+
+    m_shooter.setTargetRps(m_shooterRps);
 
     if (
         !m_requireAlign
         || (
-          Math.abs(distFromHub - Constants.targetDistanceToHub)
-          < Constants.autoAlignDistanceThreshold 
-          && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold
+          distFromHub < Constants.maxTargetDistanceToHub
+          && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
         )
     ) {
-      m_shooter.setTargetRps(m_shooterRps);
-      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {
+      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterVelocityThreshold) {
         m_isReadyToShoot = true;
       }
 
-      if (m_isReadyToShoot) {
-        if(!m_spindexerTimer.isRunning()) {
-          m_spindexerTimer.restart();
-        }        
+      if (m_isReadyToShoot) {     
 
         m_feeder.setTargetRps(m_feederRps);
 
-        if (m_spindexerTimer.hasElapsed(m_spindexerDelayInSeconds)) {
+        if (m_feeder.getVelocity() >= m_feederRps - m_feederVelocityThreshold) {
           m_spindexer.setTargetRps(m_spindexerRps);
         }        
       }
     } else if (m_feeder.getVelocity() > 0) {
       m_feeder.stop();
       m_spindexer.setTargetRps(0);
-      m_spindexerTimer.stop();
     }
   }
 
@@ -124,7 +114,6 @@ public class Shoot extends Command {
   public void end(boolean interrupted) {
     m_shooter.stop();
     m_spindexer.setTargetRps(0);
-    m_spindexerTimer.stop();
     m_feeder.stop();
   }
 

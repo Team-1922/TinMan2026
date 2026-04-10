@@ -4,32 +4,28 @@
 
 package frc.robot.commands;
 
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants;
 import frc.robot.subsystems.Collector;
 
-/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
-public class Collect extends Command {
-  /** Creates a new Collect. */
-  Collector m_collector;
-  private double m_collectorRps = Constants.Collector.krps;
+import edu.wpi.first.wpilibj2.command.Command;
 
-  public Collect(Collector collector) {
+/* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
+public class HalfCollect extends Command {
+  Collector m_collector;
+  /** Creates a new HalfCollect. */
+  public HalfCollect(Collector collector) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_collector = collector;
-    addRequirements(collector);
+    addRequirements(m_collector);
   }
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-      m_collector.deploy();
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    m_collector.halfCollector();
     m_collector.spinCollectorBars();
   }
 

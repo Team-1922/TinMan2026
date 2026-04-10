@@ -25,6 +25,8 @@ import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.commands.AutoAlign;
+import frc.robot.commands.RetractCollector;
+import frc.robot.commands.ReverseCollector;
 import frc.robot.commands.Shoot;
 import frc.robot.commands.Shoot.ShootActions;
 import frc.robot.generated.TunerConstants;
@@ -36,6 +38,8 @@ import frc.robot.subsystems.Signaling;
 import frc.robot.subsystems.Spindexer;
 import frc.robot.subsystems.Collector;
 import frc.robot.commands.Collect;
+import frc.robot.commands.HalfCollect;
+import frc.robot.commands.BandShoot;
 
 import com.pathplanner.lib.auto.NamedCommands;
 
@@ -76,34 +80,35 @@ public class RobotContainer {
         NamedCommands.registerCommand(
                 "alignAndShoot",
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization, signaling),
-                        new Shoot(
+                        new AutoAlign(drivetrain, localization, signaling, false),
+                        new BandShoot(
                                 shooter,
                                 feeder,
                                 spindexer,
                                 localization,
-                                ShootActions.Shoot
+                                BandShoot.ShootActions.Shoot
                         )
                 )
         );
         NamedCommands.registerCommand(
                 "shoot", 
-                new Shoot(
+                new BandShoot(
                         shooter,
                         feeder,
                         spindexer,
                         localization,
-                        ShootActions.JustShoot
+                        BandShoot.ShootActions.JustShoot
                 )
         );
         NamedCommands.registerCommand(
                 "autoAlign",
-                new AutoAlign(drivetrain, localization, signaling)
+                new AutoAlign(drivetrain, localization, signaling, false)
         );
         NamedCommands.registerCommand("collect", new Collect(collector));
         NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
         NamedCommands.registerCommand("Half Collector", Commands.run( () -> collector.halfCollector(), collector));
         NamedCommands.registerCommand("Spin Collector", Commands.run( () -> collector.spinCollectorBars(), collector));        
+        NamedCommands.registerCommand("Full Collect", new RetractCollector(collector));
 
         autoChooser = AutoBuilder.buildAutoChooser();
         SmartDashboard.putData("Auto Chooser", autoChooser);
@@ -114,7 +119,7 @@ public class RobotContainer {
                 Units.inchesToMeters(-7.5), 
                 Units.inchesToMeters(20.25), 
                 0, 
-                35, 
+                30, 
                 0
         );
         
@@ -150,24 +155,15 @@ public class RobotContainer {
         );
 
         DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
-        DriverController.b().whileTrue(drivetrain.applyRequest(() -> point
-                .withModuleDirection(new Rotation2d(
-                        -DriverController.getLeftY(),
-                        -DriverController.getLeftX()
-                ))
-        ));
-
+       
         DriverController.leftTrigger().whileTrue(new Collect(collector));
         
         DriverController.rightTrigger().whileTrue( 
                 new ParallelCommandGroup(
-                        new AutoAlign(drivetrain, localization, signaling), 
-                        new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shoot)
+                        new AutoAlign(drivetrain, localization, signaling, false), 
+                        new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)
         ));
 
-        DriverController.x().whileTrue(
-                new Shoot(shooter, feeder, spindexer, localization, ShootActions.JustShoot)
-        );
 
         DriverController.povDown().whileTrue(
              Commands.run ( () -> collector.retract(), collector)
@@ -178,11 +174,27 @@ public class RobotContainer {
         );
         
         DriverController.rightBumper().whileTrue(
-            new Shoot(shooter, feeder, spindexer, localization, ShootActions.Shuttle)
+            new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shuttle)
         );
 
         DriverController.leftBumper().whileTrue(
                 Commands.run( () -> collector.spinCollectorBars(), collector)
+        );
+
+        DriverController.x().whileTrue(
+                new ReverseCollector(collector)
+        );
+
+        DriverController.b().whileTrue(
+                new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
+        );
+
+        DriverController.x().whileTrue(
+                new ReverseCollector(collector)
+        );
+
+        DriverController.b().whileTrue(
+                new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
         );
 
         // Run SysId routines when holding back/start and X/Y.
