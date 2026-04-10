@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.DriverStation;

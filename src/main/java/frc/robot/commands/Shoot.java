@@ -15,20 +15,20 @@ import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class Shoot extends Command {
-  private final Shooter m_shooter;
   private double m_spindexerRps = 45;
   private double m_feederRps = 60;
   private double m_shooterRps = 20;
   private double m_shuttleRps = 30;
   private double m_yawThreshold = .045;
+  private boolean m_isReadyToShoot;
+  private boolean m_requireAlign = true;
+  private Timer m_spindexerTimer = new Timer();
+  private final Shooter m_shooter;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
   private final Localization m_localization;
   private final double m_shooterSpeedThreshold = 2;
-  private boolean m_isReadyToShoot;
-  private boolean m_requireAlign = true;
   private final double m_spindexerDelayInSeconds = .15;
-  private Timer m_spindexerTimer = new Timer();
 
   private ShootActions m_shootAction = ShootActions.Shoot;
   public enum ShootActions {
@@ -39,12 +39,12 @@ public class Shoot extends Command {
 
   /** Creates a new Shoot. */
   public Shoot(
-      Shooter shooter,
-      Feeder feeder,
-      Spindexer spindexer,
-      Localization localization,
-      ShootActions shootAction
-      ) {
+    Shooter shooter,
+    Feeder feeder,
+    Spindexer spindexer,
+    Localization localization,
+    ShootActions shootAction
+  ) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_feeder = feeder;
@@ -72,25 +72,23 @@ public class Shoot extends Command {
     SmartDashboard.putNumber("Distance From Hub", distFromHub);
 
     if(m_shootAction == ShootActions.Shuttle) {
-        m_shooterRps = m_shuttleRps;
-        m_requireAlign = false;
-      }
-
-    if(m_shootAction == ShootActions.JustShoot) {
+      m_shooterRps = m_shuttleRps;
       m_requireAlign = false;
     }
-
-    if(m_shootAction == ShootActions.Shoot) {
+    else if(m_shootAction == ShootActions.JustShoot) {
+      m_requireAlign = false;
+    }
+    else if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
     }
 
     if (
-        !m_requireAlign
-        || (
-          Math.abs(distFromHub - Constants.targetDistanceToHub)
-          < Constants.autoAlignDistanceThreshold 
-          && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold
-        )
+      !m_requireAlign
+      || (
+        Math.abs(distFromHub - Constants.targetDistanceToHub)
+        < Constants.autoAlignDistanceThreshold 
+        && Math.abs(m_localization.getM_errorYaw()) <  m_yawThreshold
+      )
     ) {
       m_shooter.setTargetRps(m_shooterRps);
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterSpeedThreshold) {

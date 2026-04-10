@@ -16,7 +16,7 @@ import frc.robot.subsystems.Localization;
 public class BandShoot extends Command {
   private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
-    private double m_shooterRps = 20;
+  private double m_shooterRps = 20;
   private final Shooter m_shooter;
   private final Spindexer m_spindexer;
   private final Feeder m_feeder;
@@ -24,7 +24,7 @@ public class BandShoot extends Command {
   private final double m_shooterVelocityThreshold = 2;
   private final double m_feederVelocityThreshold = 1;
   private final double m_kpForRps = 4.75; 
-  private final double m_minShooterRps = 10.025; //rps at min distance
+  private final double m_minShooterRps = 10.025; //rps at 0 meters from the center of the hub
   private final double m_spindexerRps = 45;
   private final double m_feederRps = 60;
   private final double m_shuttleRps = 30;
@@ -43,7 +43,7 @@ public class BandShoot extends Command {
       Spindexer spindexer,
       Localization localization,
       ShootActions shootAction
-      ) {
+  ) {
     // Use addRequirements() here to declare subsystem dependencies.
     m_shooter = shooter;
     m_feeder = feeder;
@@ -51,8 +51,8 @@ public class BandShoot extends Command {
     m_localization = localization;
     m_shootAction = shootAction;
     SmartDashboard.putNumber("Shooter RPS", m_shooterRps);
-    SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putNumber("Feeder RPS", m_feederRps);
+    SmartDashboard.putNumber("Spindexer RPS", m_spindexerRps);
     SmartDashboard.putBoolean("Requires Align", m_requireAlign);
     SmartDashboard.putNumber("Yaw Threshold", Constants.kyawThreshold);
     addRequirements(m_shooter, m_feeder, m_spindexer);
@@ -74,12 +74,10 @@ public class BandShoot extends Command {
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
     }
-
-    if(m_shootAction == ShootActions.JustShoot){
+    else if(m_shootAction == ShootActions.JustShoot){
       m_requireAlign = false;
     }
-
-    if(m_shootAction == ShootActions.Shuttle){
+    else if(m_shootAction == ShootActions.Shuttle){
       m_shooterRps = m_shuttleRps;
       m_requireAlign = false;
     }
@@ -87,11 +85,11 @@ public class BandShoot extends Command {
     m_shooter.setTargetRps(m_shooterRps);
 
     if (
-        !m_requireAlign
-        || (
-          distFromHub < Constants.maxTargetDistanceToHub
-          && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
-        )
+      !m_requireAlign
+      || (
+        distFromHub < Constants.maxTargetDistanceToHub
+        && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
+      )
     ) {
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterVelocityThreshold) {
         m_isReadyToShoot = true;

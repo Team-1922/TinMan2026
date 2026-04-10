@@ -21,11 +21,13 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants;
 
-
 public class Signaling extends SubsystemBase {
   /** Creates a new Signaling. */
   private String m_gameData;
   private double m_matchTime;
+  private boolean m_alerted = false;
+  private boolean m_shift1Active = false;
+  private Optional <Alliance> m_alliance;
   private final AddressableLED m_led;
   private final AddressableLEDBuffer m_ledBuffer;
   private final LEDPattern m_yellow = LEDPattern.solid(new Color(255,125,0));
@@ -34,9 +36,6 @@ public class Signaling extends SubsystemBase {
   private final LEDPattern m_black = LEDPattern.solid(Color.kBlack);
   private final CommandXboxController m_DriverController;
   private final Timer m_rumbleTimer = new Timer();
-  private boolean m_alerted = false;
-  private boolean m_shift1Active = false;
-  private Optional <Alliance> m_alliance;
 
   private enum MaskDirections {
     Up,
@@ -63,13 +62,13 @@ public class Signaling extends SubsystemBase {
 
     if(isHubActive()) {
        if(shouldSetColorMask()) {
-          setAllianceColorMask(MaskDirections.Down);
+        setAllianceColorMask(MaskDirections.Down);
       } else {
         setAllianceColor();
       }
     } else {
       if(shouldSetColorMask()) {
-          setAllianceColorMask(MaskDirections.Up);
+        setAllianceColorMask(MaskDirections.Up);
       } else {
         off();
       }
@@ -87,12 +86,12 @@ public class Signaling extends SubsystemBase {
     if(!m_rumbleTimer.isRunning() && !m_alerted) {
         m_rumbleTimer.restart();
         m_DriverController.setRumble(RumbleType.kBothRumble, 1);
-      }
+    }
     if(m_rumbleTimer.hasElapsed(1)) {
         m_rumbleTimer.stop();
         m_DriverController.setRumble(RumbleType.kBothRumble, 0);
         m_alerted = true;
-      }
+    }
   }
 
   private void blue() {
@@ -178,36 +177,35 @@ public class Signaling extends SubsystemBase {
     }
 
     boolean redInactiveFirst = false;
-      switch (m_gameData.charAt(0)) {
-        case 'R' -> redInactiveFirst = true;
-        case 'B' -> redInactiveFirst = false;
-        default -> {
-          return true;
-        }
-      }
-
-      m_shift1Active = switch (m_alliance.get()) {
-        case Red -> !redInactiveFirst;
-        case Blue -> redInactiveFirst;
-      };
-
-      if(m_matchTime > Constants.Signaling.kShift1Start) {
-        return true;
-      } else if (m_matchTime > Constants.Signaling.kShift2Start) {
-        return m_shift1Active;
-      } else if (m_matchTime > Constants.Signaling.kShift3Start) {
-        return !m_shift1Active;
-      } else if (m_matchTime > Constants.Signaling.kShift4Start ) {
-        return m_shift1Active;
-      } else if (m_matchTime > Constants.Signaling.kEndGameStart) {
-        return !m_shift1Active;
-      } else {
+    switch (m_gameData.charAt(0)) {
+      case 'R' -> redInactiveFirst = true;
+      case 'B' -> redInactiveFirst = false;
+      default -> {
         return true;
       }
+    }
+
+    m_shift1Active = switch (m_alliance.get()) {
+      case Red -> !redInactiveFirst;
+      case Blue -> redInactiveFirst;
+    };
+
+    if(m_matchTime > Constants.Signaling.kShift1Start) {
+      return true;
+    } else if (m_matchTime > Constants.Signaling.kShift2Start) {
+      return m_shift1Active;
+    } else if (m_matchTime > Constants.Signaling.kShift3Start) {
+      return !m_shift1Active;
+    } else if (m_matchTime > Constants.Signaling.kShift4Start ) {
+      return m_shift1Active;
+    } else if (m_matchTime > Constants.Signaling.kEndGameStart) {
+      return !m_shift1Active;
+    } else {
+      return true;
+    }
   }
 
   private boolean gameTimeBetween(double minTime, double maxTime) {
     return m_matchTime > minTime && m_matchTime < maxTime;
   }
-
 }
