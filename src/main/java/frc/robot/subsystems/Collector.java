@@ -139,6 +139,7 @@ public class Collector extends SubsystemBase {
 
   public void stopCollector() {
     m_rollerLeaderMotor.stopMotor();
+    m_rps = 0;
   }
 
   private void putDataOnDashboard() {

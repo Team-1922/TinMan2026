@@ -39,6 +39,7 @@ public class Spindexer extends SubsystemBase {
 
   public void stop(){
     m_Spindexer.stopMotor();
+    m_rps = 0;
   }
   
   public void setTargetRps(double rps) {

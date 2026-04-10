@@ -70,6 +70,7 @@ public class Shooter extends SubsystemBase {
 
   public void stop(){
     m_leaderMotor.stopMotor();
+    m_rps = 0;
   }
 
 
