@@ -49,7 +49,7 @@ public class Collector extends SubsystemBase {
   private final PositionDutyCycle m_collectorPostionDutyCycle = 
     new PositionDutyCycle(Constants.Collector.kRetractedPosition);
 
-  private double m_rps;
+  private double m_rps = 0;
 
   /** Creates a new Collector.   */
   public Collector() {
@@ -125,8 +125,9 @@ public class Collector extends SubsystemBase {
   }
   
   public void collect(double rps) {
+    rps = rps * Constants.Collector.kRollerGearRatio;
     if(m_rps != rps){
-      m_rps = rps * Constants.Collector.kRollerGearRatio;
+      m_rps = rps;
       m_rollerLeaderMotor.setControl(
         m_collectorDutyCycle.withVelocity(
           m_rps

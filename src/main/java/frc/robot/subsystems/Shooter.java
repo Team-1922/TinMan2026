@@ -59,9 +59,11 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setTargetRps(double rps) {
-    if(rps != getVelocity()){
+    rps = rps * Constants.Shooter.kGearRatio;
+    if(rps != m_rps){
+      m_rps = rps;
       m_leaderMotor.setControl(m_shooterDutyCycle.withVelocity(
-        rps * Constants.Shooter.kGearRatio
+        m_rps
       ));
     }
   }

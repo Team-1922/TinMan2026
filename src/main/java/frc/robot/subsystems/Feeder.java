@@ -26,6 +26,8 @@ public class Feeder extends SubsystemBase {
   private VelocityDutyCycle m_feederDutyCycle = new VelocityDutyCycle(0)
     .withSlot(0);
 
+  private double m_rps = 0;
+
   public Feeder() {
     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
     .withInverted(InvertedValue.Clockwise_Positive)
@@ -43,10 +45,12 @@ public class Feeder extends SubsystemBase {
   }
 
   public void setTargetRps(double rps) {
-    if(getVelocity() != rps){
+    rps = rps * Constants.Feeder.kGearRatio;
+    if(m_rps != rps){
+      m_rps = rps
       m_Feeder.setControl(
         m_feederDutyCycle.withVelocity(
-          rps * Constants.Feeder.kGearRatio
+          m_rps
         )
       );
     }

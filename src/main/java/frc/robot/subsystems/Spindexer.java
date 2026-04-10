@@ -42,8 +42,9 @@ public class Spindexer extends SubsystemBase {
   }
   
   public void setTargetRps(double rps) {
+    rps = rps * Constants.Spindexer.kGearRatio;
     if(rps != m_rps){
-      m_rps = rps * Constants.Spindexer.kGearRatio;
+      m_rps = rps;
       m_Spindexer.setControl(
         m_spindexerDutyCycle.withVelocity(
           m_rps
