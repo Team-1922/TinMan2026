@@ -43,11 +43,13 @@ public class Feeder extends SubsystemBase {
   }
 
   public void setTargetRps(double rps) {
-    m_Feeder.setControl(
-      m_feederDutyCycle.withVelocity(
-        rps * Constants.Feeder.kGearRatio
-      )
-    );
+    if(getVelocity() != rps){
+      m_Feeder.setControl(
+        m_feederDutyCycle.withVelocity(
+          rps * Constants.Feeder.kGearRatio
+        )
+      );
+    }
   }
 
   public void stop() {

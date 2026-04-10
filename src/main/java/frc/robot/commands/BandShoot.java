@@ -107,7 +107,7 @@ public class BandShoot extends Command {
       }
     } else if (m_feeder.getVelocity() > 0) {
       m_feeder.stop();
-      m_spindexer.stopMotor();;
+      m_spindexer.stop();;
     }
   }
 
@@ -115,7 +115,7 @@ public class BandShoot extends Command {
   @Override
   public void end(boolean interrupted) {
     m_shooter.stop();
-    m_spindexer.stopMotor();;
+    m_spindexer.stop();;
     m_feeder.stop();
   }
 

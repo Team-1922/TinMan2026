@@ -59,14 +59,17 @@ public class Shooter extends SubsystemBase {
   }
 
   public void setTargetRps(double rps) {
-    m_leaderMotor.setControl(m_shooterDutyCycle.withVelocity(
-      rps * Constants.Shooter.kGearRatio
-    ));
+    if(rps != getVelocity()){
+      m_leaderMotor.setControl(m_shooterDutyCycle.withVelocity(
+        rps * Constants.Shooter.kGearRatio
+      ));
+    }
   }
 
   public void stop(){
     m_leaderMotor.stopMotor();
   }
+
 
   @Override
   public void periodic() {
