@@ -47,7 +47,7 @@ public class Feeder extends SubsystemBase {
   public void setTargetRps(double rps) {
     rps = rps * Constants.Feeder.kGearRatio;
     if(m_rps != rps){
-      m_rps = rps;d
+      m_rps = rps;
       m_Feeder.setControl(
         m_feederDutyCycle.withVelocity(
           m_rps
