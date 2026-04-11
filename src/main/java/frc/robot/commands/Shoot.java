@@ -68,7 +68,7 @@ public class Shoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double distFromHub = m_localization.distFromHub();
+    double distFromHub = m_localization.distFromTarget();
     SmartDashboard.putNumber("Distance From Hub", distFromHub);
     m_shooterRps = SmartDashboard.getNumber("Shooter RPS", m_shooterRps);
     m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);

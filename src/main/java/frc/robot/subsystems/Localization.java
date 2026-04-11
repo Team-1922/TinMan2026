@@ -107,6 +107,7 @@ public class Localization extends SubsystemBase {
     SmartDashboard.putNumber("error_x", m_errorX);
     SmartDashboard.putNumber("error_y", m_errorY);
     SmartDashboard.putNumber("error_yaw", m_errorYaw);
+    */
   }
 
   public double getM_errorX() {

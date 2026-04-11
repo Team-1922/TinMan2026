@@ -28,9 +28,6 @@ public class BandShoot extends Command {
   private final double m_feederVelocityThreshold = 1;
   private final double m_kpForRps = 4.75; 
   private final double m_minShooterRps = 10.025; //rps at 0 meters from the center of the target
-  private final double m_spindexerRps = 45;
-  private final double m_feederRps = 60;
-  private final double m_shuttleRps = 30;
 
   private ShootActions m_shootAction = ShootActions.Shoot;
   public enum ShootActions {
@@ -65,6 +62,7 @@ public class BandShoot extends Command {
   @Override
   public void initialize() {
     m_isReadyToShoot = false;
+    m_localization.setTarget();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
