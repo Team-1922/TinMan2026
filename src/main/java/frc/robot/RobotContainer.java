@@ -135,7 +135,7 @@ public class RobotContainer {
 
     DriverController.rightTrigger().whileTrue(
       new ParallelCommandGroup(
-        new AutoAlign(drivetrain, localization, signaling, false),
+        new AutoAlign(drivetrain, localization, signaling, true),
         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)));
 
     DriverController.povDown().whileTrue(

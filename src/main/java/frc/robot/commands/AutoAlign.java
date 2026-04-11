@@ -50,7 +50,7 @@ public class AutoAlign extends Command {
     double vY = 0;
     double vYaw = 0;
     boolean isAligned = true;
-    if (m_normalAutoAlign && m_localization.hasTarget()) {
+    if (!m_normalAutoAlign || !m_localization.hasTarget()) {
       return;
     }
 

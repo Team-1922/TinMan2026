@@ -50,10 +50,11 @@ public class Localization extends SubsystemBase {
   public void setTarget(){
     if(m_shooterX < m_blueHubX) {
       if(DriverStation.getAlliance().get() == Alliance.Blue){
+        SmartDashboard.putString("target", "blue_hub");
         m_targetPose = new Pose2d(m_blueHubX, m_hubY,null);
         m_hasTarget = true;
       } else {
-        m_targetPose = new Pose2d(null, null, null);
+        SmartDashboard.putString("target", "none");
         m_hasTarget = false;
       }
     } else if(m_shooterX > m_redHubX) {
@@ -61,7 +62,6 @@ public class Localization extends SubsystemBase {
         m_targetPose = new Pose2d(m_redHubX, m_hubY, null);
         m_hasTarget = true;
       } else {
-        m_targetPose = new Pose2d(null, null, null);
         m_hasTarget = false;
       }
     } else if(m_shooterY > m_hubY) {
@@ -85,6 +85,7 @@ public class Localization extends SubsystemBase {
  
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("hasTarget", m_hasTarget);
     // This method will be called once per scheduler run
     m_initialRobotPose = m_drivetrain.getPose();
     double yaw = m_initialRobotPose.getRotation().getDegrees();

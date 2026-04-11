@@ -69,7 +69,7 @@ public class BandShoot extends Command {
   @Override
   public void execute() {
     //SmartDashboard.putNumber("Distance From target", distFromTarget);
-    if (m_localization.hasTarget()) {
+    if (!m_localization.hasTarget()) {
       return;
     }
 
