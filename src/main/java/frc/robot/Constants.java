@@ -43,7 +43,7 @@ public final class Constants {
         public static final int kRollerFollowerMotorId = 15;
         public static final int kPivotMotorId = 16;
         public static final int kPivotCanCoderId = 22;
-        public static final double kRollerGearRatio = 2;
+        public static final double kRollerGearRatio = 32/12;
         public static final double krps = 100;
         public static final double kreverseRps = -60;
 
@@ -83,24 +83,24 @@ public final class Constants {
         public static final FeedbackConfigs kPivotFeedbackConfig = new FeedbackConfigs()
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
             .withFeedbackRemoteSensorID(kPivotCanCoderId)
-            .withRotorToSensorRatio(48)
+            .withRotorToSensorRatio(125)
             .withSensorToMechanismRatio(1);
 
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.33252)
+                        .withMagnetOffset(-0.807373)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.Clockwise_Positive
                         )
             );
 
-        public static final double kRetractedPosition = 0.354248;
+        public static final double kRetractedPosition = -0.366455;
 
         public static final double kDeployedPosition = 0;
 
-        public static final double kHalfDeployedPosition = 0.206299;
+        public static final double kHalfDeployedPosition = -0.301514;
     };
 
     public static class Feeder {
