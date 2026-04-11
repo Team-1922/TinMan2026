@@ -23,9 +23,10 @@ public class Feeder extends SubsystemBase {
     Constants.Feeder.kMotorId1, 
     Constants.superstructureCanbus
   );
-  private double m_rps = 0;
   private VelocityDutyCycle m_feederDutyCycle = new VelocityDutyCycle(0)
     .withSlot(0);
+
+  private double m_rps = 0;
 
   public Feeder() {
     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
@@ -44,15 +45,20 @@ public class Feeder extends SubsystemBase {
   }
 
   public void setTargetRps(double rps) {
-    m_Feeder.setControl(
-      m_feederDutyCycle.withVelocity(
-        rps * Constants.Feeder.kGearRatio
-      )
-    );
+    rps = rps * Constants.Feeder.kGearRatio;
+    if(m_rps != rps){
+      m_rps = rps;
+      m_Feeder.setControl(
+        m_feederDutyCycle.withVelocity(
+          m_rps
+        )
+      );
+    }
   }
 
   public void stop() {
     m_Feeder.stopMotor();
+    m_rps = 0;
   }
 
   public double getVelocity(){

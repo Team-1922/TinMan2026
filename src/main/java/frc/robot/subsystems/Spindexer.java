@@ -37,13 +37,21 @@ public class Spindexer extends SubsystemBase {
     m_Spindexer.getConfigurator().apply(Constants.Spindexer.SpindedxerCurrentConfigs);
   }
 
+  public void stop(){
+    m_Spindexer.stopMotor();
+    m_rps = 0;
+  }
   
   public void setTargetRps(double rps) {
-    m_Spindexer.setControl(
-      m_spindexerDutyCycle.withVelocity(
-        rps * Constants.Spindexer.kGearRatio
-      )
-    );
+    rps = rps * Constants.Spindexer.kGearRatio;
+    if(rps != m_rps){
+      m_rps = rps;
+      m_Spindexer.setControl(
+        m_spindexerDutyCycle.withVelocity(
+          m_rps
+        )
+      );
+    }
   } //motor tries to keep spinning after let go of button
 
   public void setIdleSpeed() {
