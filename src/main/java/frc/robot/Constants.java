@@ -22,6 +22,7 @@ import frc.robot.generated.TunerConstants;
 public final class Constants {
 
   public static final RobotType robotType = RobotType.TinmanV2;
+  public static final AtAnExpo atAnExpo = AtAnExpo.NotAtExpo;
 
   public static String frontLimelightName = "limelight-front";
   public static String rightLimelightName = "limelight-right";
@@ -163,6 +164,11 @@ public final class Constants {
   public enum RobotType {
     TinmanV2,
     TinmanV1
+  }
+
+  public enum AtAnExpo {
+    AtExpo,
+    NotAtExpo
   }
 
   public static class Signaling {
