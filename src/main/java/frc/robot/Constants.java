@@ -79,7 +79,7 @@ public final class Constants {
         public static final FeedbackConfigs kPivotFeedbackConfig = new FeedbackConfigs()
             .withFeedbackSensorSource(FeedbackSensorSourceValue.RemoteCANcoder)
             .withFeedbackRemoteSensorID(kPivotCanCoderId)
-            .withRotorToSensorRatio(48)
+            .withRotorToSensorRatio(125)
             .withSensorToMechanismRatio(1);
 
         public static final CANcoderConfiguration kPivotCanCoderConfig =
