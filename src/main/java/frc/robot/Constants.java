@@ -28,6 +28,10 @@ public final class Constants {
   public static String rightLimelightName = "limelight-right";
   public static String drivebaseCanbusName = "Drivebase";
   public static boolean useRightLimelight = true;
+  public static final double kdriveSpeedScaler = switch (atAnExpo) {
+    case NotAtExpo -> 1;
+    case AtExpo -> .25;
+  };
   public static final double kyawThreshold = 0.06;
   public static final double autoAlignDistanceThreshold = Meters.of(.1).in(Meters);
   public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
