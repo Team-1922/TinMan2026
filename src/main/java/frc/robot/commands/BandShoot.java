@@ -61,14 +61,20 @@ public class BandShoot extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {}
+  public void initialize() {
+    m_localization.setTarget();
+  }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double distFromHub = m_localization.distFromHub();
-    m_shooterRps = m_minShooterRps + m_kpForRps * (distFromHub);
-    //SmartDashboard.putNumber("Distance From Hub", distFromHub);
+    //SmartDashboard.putNumber("Distance From target", distFromTarget);
+    if (!m_localization.hasTarget()) {
+      return;
+    }
+
+    double distFromTarget = m_localization.distFromTarget();
+    m_shooterRps = m_minShooterRps + m_kpForRps * (distFromTarget);
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
@@ -85,8 +91,8 @@ public class BandShoot extends Command {
 
     if (
       !m_requireAlign
-      || (
-        distFromHub < Constants.maxTargetDistanceToHub
+      || ( 
+        distFromTarget < Constants.maxTargetDistanceToTarget
         && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
       )
     ) {

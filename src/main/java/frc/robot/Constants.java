@@ -30,7 +30,7 @@ public final class Constants {
   public static final double kyawThreshold = 0.06;
   public static final double autoAlignDistanceThreshold = Meters.of(.1).in(Meters);
   public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
-  public static final double maxTargetDistanceToHub = Meters.of(4.3).in(Meters);
+  public static final double maxTargetDistanceToTarget = Meters.of(4.3).in(Meters);
   public static final CANBus superstructureCanbus = switch (Constants.robotType) {
     case TinmanV2 -> TunerConstants.kCANBus;
     case TinmanV1 -> CANBus.roboRIO();
