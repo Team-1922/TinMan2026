@@ -22,6 +22,7 @@ public class Localization extends SubsystemBase {
   //all of these distances are in meters
   private final CommandSwerveDrivetrain m_drivetrain;
   private Field2d m_Field2d = new Field2d();
+  private boolean m_hasTarget = false;
   private double m_shooterX;
   private double m_shooterY;
   private double m_deltaX;
@@ -37,8 +38,8 @@ public class Localization extends SubsystemBase {
   private final double m_hubY = 4.035;
   private final double m_blueHubX = 4.625594;
   private final double m_redHubX = 11.915394;
-  private final double m_shuttleYOffset = 1; //placeholder
-  private final double m_shuttleXOffset = 1.0668; //placeholder
+  private final double m_shuttleYOffset = 1.6256; 
+  private final double m_shuttleXOffset = 1.0668; 
   
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
@@ -50,26 +51,34 @@ public class Localization extends SubsystemBase {
     if(m_shooterX < m_blueHubX) {
       if(DriverStation.getAlliance().get() == Alliance.Blue){
         m_targetPose = new Pose2d(m_blueHubX, m_hubY,null);
+        m_hasTarget = true;
       } else {
         m_targetPose = new Pose2d(null, null, null);
+        m_hasTarget = false;
       }
     } else if(m_shooterX > m_redHubX) {
       if(DriverStation.getAlliance().get() == Alliance.Red){
         m_targetPose = new Pose2d(m_redHubX, m_hubY, null);
+        m_hasTarget = true;
       } else {
         m_targetPose = new Pose2d(null, null, null);
+        m_hasTarget = false;
       }
     } else if(m_shooterY > m_hubY) {
       if(DriverStation.getAlliance().get() == Alliance.Blue){
         m_targetPose = new Pose2d(m_blueHubX - m_shuttleXOffset, m_hubY + m_shuttleYOffset,null);
+        m_hasTarget = true;
       } else {
         m_targetPose = new Pose2d(m_redHubX + m_shuttleXOffset, m_hubY + m_shuttleYOffset,null);
+        m_hasTarget = true;
       }
     } else {
       if(DriverStation.getAlliance().get() == Alliance.Blue){
         m_targetPose = new Pose2d(m_blueHubX - m_shuttleXOffset, m_hubY - m_shuttleYOffset,null);
+        m_hasTarget = true;
       } else {
         m_targetPose = new Pose2d(m_redHubX + m_shuttleXOffset, m_hubY - m_shuttleYOffset,null);
+        m_hasTarget = true;
       }
     }
   }
@@ -94,6 +103,7 @@ public class Localization extends SubsystemBase {
     m_shooterX = updatedRobotPose.getX() 
       + Math.cos(updatedYaw) * m_shooterXRobotFrame
       - Math.sin(updatedYaw) * m_shooterYRobotFrame;
+      
     m_shooterY = updatedRobotPose.getY() 
       + Math.cos(updatedYaw) * m_shooterYRobotFrame 
       + Math.sin(updatedYaw) * m_shooterXRobotFrame;
@@ -127,6 +137,10 @@ public class Localization extends SubsystemBase {
 
   public double distFromTarget() {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
+  }
+
+  public boolean hasTarget(){
+   return m_hasTarget;
   }
 
   private void processLimelight(String limelightName, double yaw) {
