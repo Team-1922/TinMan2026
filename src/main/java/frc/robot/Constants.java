@@ -24,19 +24,19 @@ public final class Constants {
 
     public static final RobotType robotType = RobotType.TinmanV2;
 
-    public static final double autoAlignDistanceThreshold = 
-        Meters.of(.1).in(Meters);
-    public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
-    public static final double maxTargetDistanceToHub = Meters.of(4.3).in(Meters);
-    public static String frontLimelightName = "limelight-front";
-    public static String rightLimelightName = "limelight-right";
-    public static boolean useRightLimelight = true;
-    public static String drivebaseCanbusName = "Drivebase";
-    public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
-            case TinmanV2 -> TunerConstants.kCANBus;
-            case TinmanV1 ->  CANBus.roboRIO();
-        };
-    public static double kyawThreshold = 0.06;
+  public static String frontLimelightName = "limelight-front";
+  public static String rightLimelightName = "limelight-right";
+  public static String drivebaseCanbusName = "Drivebase";
+  public static boolean useRightLimelight = true;
+  public static final double kyawThreshold = 0.06;
+  public static final double autoAlignDistanceThreshold = Meters.of(.1).in(Meters);
+  public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
+  public static final double maxTargetDistanceToTarget = Meters.of(4.3).in(Meters);
+  public static final CANBus superstructureCanbus = switch (Constants.robotType) {
+    case TinmanV2 -> TunerConstants.kCANBus;
+    case TinmanV1 -> CANBus.roboRIO();
+  };
+ 
 
     public static class Collector {
         public static final int kRollerLeaderMotorId = 14;

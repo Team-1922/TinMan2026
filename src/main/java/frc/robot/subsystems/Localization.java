@@ -16,6 +16,7 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Localization extends SubsystemBase {
+  //all of these distances are in meters
   private final CommandSwerveDrivetrain m_drivetrain;
   private Field2d m_Field2d = new Field2d();
   private double m_shooterX;
@@ -26,26 +27,53 @@ public class Localization extends SubsystemBase {
   private double m_errorYaw;
   private double m_errorX;
   private double m_errorY;
-  private double m_shooterXRobotFrame = -0.2159; //in meters
-  private double m_shooterYRobotFrame = 0.19685; //in meters
-  private Pose2d m_hubpose = new Pose2d();
+  private double m_shooterXRobotFrame = -0.2159;
+  private double m_shooterYRobotFrame = 0.19685;
+  private Pose2d m_targetPose = new Pose2d();
   private Pose2d m_initialRobotPose = new Pose2d();
-  private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
-  private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
+  private final double m_hubY = 4.035;
+  private final double m_blueHubX = 4.625594;
+  private final double m_redHubX = 11.915394;
+  private final double m_shuttleYOffset = 1; //placeholder
+  private final double m_shuttleXOffset = 1; //placeholder
   
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
     m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   };
+
+  public void setTarget(){
+    if(m_shooterX < m_blueHubX) {
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        m_targetPose = new Pose2d(m_blueHubX, m_hubY,null);
+      } else {
+        m_targetPose = new Pose2d(null, null, null);
+      }
+    } else if(m_shooterX > m_redHubX) {
+      if(DriverStation.getAlliance().get() == Alliance.Red){
+        m_targetPose = new Pose2d(m_redHubX, m_hubY, null);
+      } else {
+        m_targetPose = new Pose2d(null, null, null);
+      }
+    } else if(m_shooterY > m_hubY) {
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        m_targetPose = new Pose2d(m_blueHubX - m_shuttleXOffset, m_hubY + m_shuttleYOffset,null);
+      } else {
+        m_targetPose = new Pose2d(m_redHubX + m_shuttleXOffset, m_hubY + m_shuttleYOffset,null);
+      }
+    } else {
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        m_targetPose = new Pose2d(m_blueHubX - m_shuttleXOffset, m_hubY - m_shuttleYOffset,null);
+      } else {
+        m_targetPose = new Pose2d(m_redHubX + m_shuttleXOffset, m_hubY - m_shuttleYOffset,null);
+      }
+    }
+  }
  
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
-    ? m_blueHubPose2d 
-    : m_redHubPose2d;
-
     m_initialRobotPose = m_drivetrain.getPose();
     double yaw = m_initialRobotPose.getRotation().getDegrees();
     
@@ -67,14 +95,13 @@ public class Localization extends SubsystemBase {
       + Math.cos(updatedYaw) * m_shooterYRobotFrame 
       + Math.sin(updatedYaw) * m_shooterXRobotFrame;
 
-    m_deltaX = m_hubpose.getX() - m_shooterX;
-    m_deltaY = m_hubpose.getY() - m_shooterY;
+    m_deltaX = m_targetPose.getX() - m_shooterX;
+    m_deltaY = m_targetPose.getY() - m_shooterY;
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
-    m_errorYaw = 
-      MathUtil.angleModulus(m_targetYaw - updatedYaw);
-    m_errorX = m_deltaX - Constants.maxTargetDistanceToHub * Math.cos(m_targetYaw);
-    m_errorY = m_deltaY - Constants.maxTargetDistanceToHub * Math.sin(m_targetYaw);
-    
+    m_errorYaw = MathUtil.angleModulus(m_targetYaw - updatedYaw);
+    m_errorX = m_deltaX - Constants.maxTargetDistanceToTarget * Math.cos(m_targetYaw);
+    m_errorY = m_deltaY - Constants.maxTargetDistanceToTarget * Math.sin(m_targetYaw);
+    /* 
     SmartDashboard.putNumber("current_yaw", updatedYaw);
     SmartDashboard.putNumber("target_yaw", m_targetYaw);
     SmartDashboard.putNumber("error_x", m_errorX);
@@ -94,7 +121,7 @@ public class Localization extends SubsystemBase {
     return m_errorYaw;
   }
 
-  public double distFromHub() {
+  public double distFromTarget() {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
   }
 

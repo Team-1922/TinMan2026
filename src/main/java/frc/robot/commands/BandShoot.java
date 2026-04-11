@@ -26,8 +26,11 @@ public class BandShoot extends Command {
   private final Localization m_localization;
   private final double m_shooterVelocityThreshold = 2;
   private final double m_feederVelocityThreshold = 1;
-  private final double tuningNumber = 4.75; //placeholder
-  private final double m_minShooterRps = 20; //placeholder, rps at min distance
+  private final double m_kpForRps = 4.75; 
+  private final double m_minShooterRps = 10.025; //rps at 0 meters from the center of the target
+  private final double m_spindexerRps = 45;
+  private final double m_feederRps = 60;
+  private final double m_shuttleRps = 30;
 
   private ShootActions m_shootAction = ShootActions.Shoot;
   public enum ShootActions {
@@ -67,12 +70,9 @@ public class BandShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    double distFromHub = m_localization.distFromHub();
-    m_shooterRps = m_minShooterRps + tuningNumber * (distFromHub - 2.1);
-    SmartDashboard.putNumber("Distance From Hub", distFromHub);
-    m_spindexerRps = SmartDashboard.getNumber("Spindexer RPS", m_spindexerRps);
-    m_requireAlign = SmartDashboard.getBoolean("Requires Align", m_requireAlign);
-    Constants.kyawThreshold = SmartDashboard.getNumber("Yaw Threshold", Constants.kyawThreshold);
+    double distFromTarget = m_localization.distFromTarget();
+    m_shooterRps = m_minShooterRps + m_kpForRps * (distFromTarget);
+    //SmartDashboard.putNumber("Distance From target", distFromTarget);
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
@@ -85,11 +85,11 @@ public class BandShoot extends Command {
     m_shooter.setTargetRps(m_shooterRps);
 
     if (
-        !m_requireAlign
-        || (
-          distFromHub < Constants.maxTargetDistanceToHub
-          && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
-        )
+      !m_requireAlign
+      || (
+        distFromTarget < Constants.maxTargetDistanceToTarget
+        && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
+      )
     ) {
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterVelocityThreshold) {
         m_isReadyToShoot = true;
