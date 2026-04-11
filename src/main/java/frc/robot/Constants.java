@@ -22,7 +22,7 @@ import frc.robot.generated.TunerConstants;
 /** Add your docs here. */
 public final class Constants {
 
-    public static final RobotType robotType = RobotType.TinmanV1;
+    public static final RobotType robotType = RobotType.TinmanV2;
 
     public static final double autoAlignDistanceThreshold = 
         Meters.of(.1).in(Meters);
@@ -89,18 +89,18 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.768555)
+                        .withMagnetOffset(-0.807373)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.Clockwise_Positive
                         )
             );
 
-        public static final double kRetractedPosition = -0.216797;
+        public static final double kRetractedPosition = -0.366455;
 
         public static final double kDeployedPosition = 0;
 
-        public static final double kHalfDeployedPosition = -0.216797;
+        public static final double kHalfDeployedPosition = -0.301514;
     };
 
     public static class Feeder {
