@@ -14,7 +14,6 @@ import frc.robot.subsystems.Localization;
 
 /* You should consider using the more terse Command factories API instead https://docs.wpilib.org/en/stable/docs/software/commandbased/organizing-command-based.html#defining-commands */
 public class BandShoot extends Command {
-  private boolean m_isReadyToShoot;
   private boolean m_requireAlign = true;
   private double m_shooterRps = 20;
   private final Shooter m_shooter;
@@ -62,9 +61,7 @@ public class BandShoot extends Command {
 
   // Called when the command is initially scheduled.
   @Override
-  public void initialize() {
-    m_isReadyToShoot = false;
-  }
+  public void initialize() {}
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
@@ -93,11 +90,8 @@ public class BandShoot extends Command {
         && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
       )
     ) {
-      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterVelocityThreshold) {
-        m_isReadyToShoot = true;
-      }
 
-      if (m_isReadyToShoot) {     
+      if (m_shooter.getVelocity() >= m_shooterRps - m_shooterVelocityThreshold) {     
 
         m_feeder.setTargetRps(m_feederRps);
 
@@ -107,7 +101,7 @@ public class BandShoot extends Command {
       }
     } else if (m_feeder.getVelocity() > 0) {
       m_feeder.stop();
-      m_spindexer.stop();;
+      m_spindexer.stop();
     }
   }
 
@@ -115,7 +109,7 @@ public class BandShoot extends Command {
   @Override
   public void end(boolean interrupted) {
     m_shooter.stop();
-    m_spindexer.stop();;
+    m_spindexer.stop();
     m_feeder.stop();
   }
 
