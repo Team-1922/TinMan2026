@@ -45,7 +45,6 @@ public class Localization extends SubsystemBase {
     m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
     ? m_blueHubPose2d 
     : m_redHubPose2d;
-
     m_initialRobotPose = m_drivetrain.getPose();
     double yaw = m_initialRobotPose.getRotation().getDegrees();
     
@@ -70,16 +69,16 @@ public class Localization extends SubsystemBase {
     m_deltaX = m_hubpose.getX() - m_shooterX;
     m_deltaY = m_hubpose.getY() - m_shooterY;
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
-    m_errorYaw = 
-      MathUtil.angleModulus(m_targetYaw - updatedYaw);
+    m_errorYaw = MathUtil.angleModulus(m_targetYaw - updatedYaw);
     m_errorX = m_deltaX - Constants.maxTargetDistanceToHub * Math.cos(m_targetYaw);
     m_errorY = m_deltaY - Constants.maxTargetDistanceToHub * Math.sin(m_targetYaw);
-    
+    /* 
     SmartDashboard.putNumber("current_yaw", updatedYaw);
     SmartDashboard.putNumber("target_yaw", m_targetYaw);
     SmartDashboard.putNumber("error_x", m_errorX);
     SmartDashboard.putNumber("error_y", m_errorY);
     SmartDashboard.putNumber("error_yaw", m_errorYaw);
+    */
   }
 
   public double getM_errorX() {
@@ -105,12 +104,13 @@ public class Localization extends SubsystemBase {
     if(!shouldReject(poseEstimate)) {
       m_drivetrain.addVisionMeasurement(
         poseEstimate.pose,
-        poseEstimate.timestampSeconds);
+        poseEstimate.timestampSeconds
+      );
 
       usedLimelight = true;
     }
 
-    SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
+    //SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
   }
 
   private boolean shouldReject(LimelightHelpers.PoseEstimate poseEstimate) {
@@ -120,15 +120,13 @@ public class Localization extends SubsystemBase {
     ) > 720
       || poseEstimate == null
       || poseEstimate.tagCount <= 1
-      || Math.sqrt(
-           Math.pow(
-             m_Field2d.getRobotPose().getX() - m_initialRobotPose.getX(),
-             2
-           ) +
-           Math.pow(
-             m_Field2d.getRobotPose().getY() - m_initialRobotPose.getY(),
-             2
-           )
+      || Math.pow(
+           m_Field2d.getRobotPose().getX() - m_initialRobotPose.getX(),
+           2
+         ) +
+         Math.pow(
+           m_Field2d.getRobotPose().getY() - m_initialRobotPose.getY(),
+           2
          ) > 1 ;//If the vision believes we are more than 1m from where the odometry thinks we are we should assume that it's wrong
   }
 }

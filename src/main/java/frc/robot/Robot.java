@@ -24,12 +24,14 @@ public class Robot extends LoggedRobot {
 
     private final RobotContainer m_robotContainer;
     private final Signaling m_signaling;
+    private final boolean m_doHoots = false;
 
     /* log and replay timestamp and joystick data */
+    
     private final HootAutoReplay m_timeAndJoystickReplay = new HootAutoReplay()
             .withTimestampReplay()
             .withJoystickReplay();
-
+    
     public Robot() {
         Logger.recordMetadata("ProjectName", "MyProject"); // Set a metadata value
         m_robotContainer = new RobotContainer();
@@ -53,7 +55,9 @@ public class Robot extends LoggedRobot {
 
     @Override
     public void robotPeriodic() {
+       if (m_doHoots){ 
         m_timeAndJoystickReplay.update();
+       }
         if(DriverStation.isEnabled()) {
             LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 4);
 
