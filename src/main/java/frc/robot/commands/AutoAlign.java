@@ -4,7 +4,6 @@
 
 package frc.robot.commands;
 
-import com.ctre.phoenix6.swerve.SwerveRequest.SwerveDriveBrake;
 import com.ctre.phoenix6.swerve.SwerveRequest;
 
 import edu.wpi.first.wpilibj.DriverStation;
@@ -24,7 +23,7 @@ public class AutoAlign extends Command {
   double m_xKp = 5;
   double m_yKp = 5;
   double m_yawKp = 3.8;
-  double m_alianceSign = 1;
+  double m_allianceSign = 1;
   private final SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
 
 
@@ -41,7 +40,7 @@ public class AutoAlign extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    m_alianceSign = DriverStation.getAlliance().get() == Alliance.Blue ? 1 : -1;
+    m_allianceSign = DriverStation.getAlliance().get() == Alliance.Blue ? 1 : -1;
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -56,8 +55,8 @@ public class AutoAlign extends Command {
         m_normalAutoAlign
         || m_localization.distFromTarget() > Constants.maxTargetDistanceToTarget
     ) {
-      vX = m_localization.getM_errorX() * m_xKp * m_alianceSign;
-      vY = m_localization.getM_errorY() * m_yKp * m_alianceSign;
+      vX = m_localization.getM_errorX() * m_xKp * m_allianceSign;
+      vY = m_localization.getM_errorY() * m_yKp * m_allianceSign;
       isAligned = false;
     } 
 
@@ -71,7 +70,6 @@ public class AutoAlign extends Command {
     } else {
       m_drivetrain.Move(vX, vY, vYaw);
     }
-    
   }
 
   // Called once the command ends or is interrupted.

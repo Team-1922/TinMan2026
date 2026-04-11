@@ -133,12 +133,13 @@ public class Localization extends SubsystemBase {
     if(!shouldReject(poseEstimate)) {
       m_drivetrain.addVisionMeasurement(
         poseEstimate.pose,
-        poseEstimate.timestampSeconds);
+        poseEstimate.timestampSeconds
+      );
 
       usedLimelight = true;
     }
 
-    SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
+    //SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
   }
 
   private boolean shouldReject(LimelightHelpers.PoseEstimate poseEstimate) {
@@ -148,15 +149,13 @@ public class Localization extends SubsystemBase {
     ) > 720
       || poseEstimate == null
       || poseEstimate.tagCount <= 1
-      || Math.sqrt(
-           Math.pow(
-             m_Field2d.getRobotPose().getX() - m_initialRobotPose.getX(),
-             2
-           ) +
-           Math.pow(
-             m_Field2d.getRobotPose().getY() - m_initialRobotPose.getY(),
-             2
-           )
+      || Math.pow(
+           m_Field2d.getRobotPose().getX() - m_initialRobotPose.getX(),
+           2
+         ) +
+         Math.pow(
+           m_Field2d.getRobotPose().getY() - m_initialRobotPose.getY(),
+           2
          ) > 1 ;//If the vision believes we are more than 1m from where the odometry thinks we are we should assume that it's wrong
   }
 }
