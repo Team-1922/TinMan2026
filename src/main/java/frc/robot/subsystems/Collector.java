@@ -101,7 +101,8 @@ public class Collector extends SubsystemBase {
   }
 
   public void deploy() {
-    pivotCollector(Constants.Collector.kDeployedPosition);}
+    pivotCollector(Constants.Collector.kDeployedPosition);
+  }
 
   public void retract() {
     pivotCollector(Constants.Collector.kRetractedPosition);
