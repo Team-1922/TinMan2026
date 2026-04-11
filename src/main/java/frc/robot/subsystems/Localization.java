@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -35,7 +38,7 @@ public class Localization extends SubsystemBase {
   private final double m_blueHubX = 4.625594;
   private final double m_redHubX = 11.915394;
   private final double m_shuttleYOffset = 1; //placeholder
-  private final double m_shuttleXOffset = 1; //placeholder
+  private final double m_shuttleXOffset = 1.0668; //placeholder
   
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
