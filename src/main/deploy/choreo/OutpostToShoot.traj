@@ -14,7 +14,7 @@
  },
  "params":{
   "waypoints":[
-    {"x":{"exp":"0.5415983338356019 m", "val":0.5415983338356019}, "y":{"exp":"0.6836923956871033 m", "val":0.6836923956871033}, "heading":{"exp":"-1.5960704920807363 rad", "val":-1.5960704920807365}, "intervals":34, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
+    {"x":{"exp":"0.5415983338356019 m", "val":0.5415983338356019}, "y":{"exp":"0.6836923956871033 m", "val":0.6836923956871033}, "heading":{"exp":"-1.5960704920807363 rad", "val":-1.5960704920807365}, "intervals":35, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false},
     {"x":{"exp":"1.524303913116455 m", "val":1.524303913116455}, "y":{"exp":"1.7969449758529663 m", "val":1.7969449758529663}, "heading":{"exp":"0.6435011680867189 rad", "val":0.6435011680867189}, "intervals":40, "split":false, "fixTranslation":true, "fixHeading":true, "overrideIntervals":false}],
   "constraints":[
     {"from":"first", "to":null, "data":{"type":"StopPoint", "props":{}}, "enabled":true},
@@ -38,7 +38,7 @@
    },
    "mass":57.787667938000006,
    "inertia":6.0,
-   "gearing":7.125,
+   "gearing":5.902777777777778,
    "radius":0.0508,
    "vmax":471.23889803846896,
    "tmax":1.2,
