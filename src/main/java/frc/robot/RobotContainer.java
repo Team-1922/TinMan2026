@@ -64,7 +64,7 @@ public class RobotContainer {
     NamedCommands.registerCommand(
       "alignAndShoot",
       new ParallelCommandGroup(
-        new AutoAlign(drivetrain, localization, signaling, false),
+        new AutoAlign(drivetrain, localization, signaling, true),
         new BandShoot(
           shooter,
           feeder,
@@ -81,7 +81,7 @@ public class RobotContainer {
         BandShoot.ShootActions.JustShoot));
     NamedCommands.registerCommand(
       "autoAlign",
-      new AutoAlign(drivetrain, localization, signaling, false));
+      new AutoAlign(drivetrain, localization, signaling, true));
     NamedCommands.registerCommand("collect", new Collect(collector));
     NamedCommands.registerCommand("zero", drivetrain.runOnce(drivetrain::seedFieldCentric));
     NamedCommands.registerCommand("Half Collector", new HalfCollect(collector));
