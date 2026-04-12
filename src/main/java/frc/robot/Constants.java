@@ -89,14 +89,14 @@ public final class Constants {
 
     public static final CANcoderConfiguration kPivotCanCoderConfig = new CANcoderConfiguration().withMagnetSensor(
       new MagnetSensorConfigs()
-        .withMagnetOffset(-0.807373)
+        .withMagnetOffset(-0.785645)
         .withAbsoluteSensorDiscontinuityPoint(0.9)
         .withSensorDirection(
           SensorDirectionValue.Clockwise_Positive));
 
-    public static final double kRetractedPosition = -0.366455;
+    public static final double kRetractedPosition = -0.320557;
     public static final double kDeployedPosition = 0;
-    public static final double kHalfDeployedPosition = -0.301514;
+    public static final double kHalfDeployedPosition = -0.235840;
   };
 
   public static class Feeder {
