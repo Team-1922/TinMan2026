@@ -57,7 +57,7 @@ public class Collector extends SubsystemBase {
       .withNeutralMode(NeutralModeValue.Coast);
 
     MotorOutputConfigs pivotMotorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.CounterClockwise_Positive);
+      .withInverted(InvertedValue.Clockwise_Positive);
     
     MotorOutputConfigs rollerFollowerMotorConfig = new MotorOutputConfigs()
       .withInverted(InvertedValue.Clockwise_Positive)

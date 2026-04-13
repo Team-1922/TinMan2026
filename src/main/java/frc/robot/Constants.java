@@ -96,18 +96,19 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(-0.33252)
+                        .withMagnetOffset(0.812256)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
-                                SensorDirectionValue.Clockwise_Positive
+                                SensorDirectionValue.CounterClockwise_Positive
                         )
             );
 
-        public static final double kRetractedPosition = 0.354248;
+        public static final double kRetractedPosition = 0.373779;
+
 
         public static final double kDeployedPosition = 0;
 
-        public static final double kHalfDeployedPosition = 0.206299;
+        public static final double kHalfDeployedPosition = 0.260986;
     };
 
     public static class Feeder {
@@ -138,9 +139,9 @@ public final class Constants {
         public static final CurrentLimitsConfigs ShooterCurrentConfigs = 
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(60)
+                .withStatorCurrentLimit(25)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(60)
+                .withSupplyCurrentLimit(25)
                 .withSupplyCurrentLowerLimit(10)
                 .withSupplyCurrentLowerTime(.75);
         public static final double kGearRatio = 1;
