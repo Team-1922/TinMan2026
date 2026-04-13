@@ -14,6 +14,7 @@ import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
@@ -117,7 +118,7 @@ public class RobotContainer {
       // Drivetrain will execute this command periodically
 
       drivetrain.applyRequest(() -> drive
-        .withVelocityX(-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler) // Drive forward with negative Y (forward)
+        .withVelocityX(-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * drivetrain.slowDrivetrain()) // Drive forward with negative Y (forward)
         .withVelocityY(-DriverController.getLeftX() * MaxSpeed* Constants.kdriveSpeedScaler) // Drive left with negative X (left)
         .withRotationalRate(-DriverController.getRightX() * MaxAngularRate* Constants.kdriveSpeedScaler) // Drive counterclockwise with negative
                                                                             // X (left)
@@ -129,7 +130,7 @@ public class RobotContainer {
     RobotModeTriggers.disabled().whileTrue(
       drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-    DriverController.a().whileTrue(drivetrain.applyRequest(() -> brake));
+    DriverController.povRight().whileTrue(drivetrain.applyRequest(() -> brake));
 
     DriverController.leftTrigger().whileTrue(new Collect(collector));
 
@@ -155,6 +156,14 @@ public class RobotContainer {
 
     DriverController.b().whileTrue(
       new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot));
+
+    DriverController.a().whileTrue(
+      Commands.run( () -> drivetrain.slowedSpeed(Constants.slowedSpeed))
+    );
+
+    DriverController.a().whileFalse(
+      Commands.run( () -> drivetrain.slowedSpeed(Constants.normalSpeed))
+    );
 
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
