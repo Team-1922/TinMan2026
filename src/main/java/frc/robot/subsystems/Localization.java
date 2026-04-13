@@ -4,6 +4,9 @@
 
 package frc.robot.subsystems;
 
+import static edu.wpi.first.units.Units.Inches;
+import static edu.wpi.first.units.Units.Meters;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
@@ -16,8 +19,10 @@ import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 public class Localization extends SubsystemBase {
+  //all of these distances are in meters
   private final CommandSwerveDrivetrain m_drivetrain;
   private Field2d m_Field2d = new Field2d();
+  private boolean m_hasTarget = false;
   private double m_shooterX;
   private double m_shooterY;
   private double m_deltaX;
@@ -26,26 +31,62 @@ public class Localization extends SubsystemBase {
   private double m_errorYaw;
   private double m_errorX;
   private double m_errorY;
-  private double m_shooterXRobotFrame = -0.2159; //in meters
-  private double m_shooterYRobotFrame = 0.19685; //in meters
-  private Pose2d m_hubpose = new Pose2d();
+  private double m_shooterXRobotFrame = -0.2159;
+  private double m_shooterYRobotFrame = 0.19685;
+  private Pose2d m_targetPose = new Pose2d();
   private Pose2d m_initialRobotPose = new Pose2d();
-  private final Pose2d m_blueHubPose2d = new Pose2d(4.625594, 4.035, null);
-  private final Pose2d m_redHubPose2d = new Pose2d(11.915394, 4.035, null);
+  private final double m_hubY = 4.035;
+  private final double m_blueHubX = 4.625594;
+  private final double m_redHubX = 11.915394;
+  private final double m_shuttleYOffset = 1.6256; 
+  private final double m_shuttleXOffset = 1.0668; 
   
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
     m_drivetrain = drivetrain;
     m_drivetrain.setVisionMeasurementStdDevs(VecBuilder.fill(.7,.7,9999999));
   };
+
+  public void setTarget(){
+    if(m_shooterX < m_blueHubX) {
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        SmartDashboard.putString("target", "blue_hub");
+        m_targetPose = new Pose2d(m_blueHubX, m_hubY,null);
+        m_hasTarget = true;
+      } else {
+        SmartDashboard.putString("target", "none");
+        m_hasTarget = false;
+      }
+    } else if(m_shooterX > m_redHubX) {
+      if(DriverStation.getAlliance().get() == Alliance.Red){
+        m_targetPose = new Pose2d(m_redHubX, m_hubY, null);
+        m_hasTarget = true;
+      } else {
+        m_hasTarget = false;
+      }
+    } else if(m_shooterY > m_hubY) {
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        m_targetPose = new Pose2d(m_blueHubX - m_shuttleXOffset, m_hubY + m_shuttleYOffset,null);
+        m_hasTarget = true;
+      } else {
+        m_targetPose = new Pose2d(m_redHubX + m_shuttleXOffset, m_hubY + m_shuttleYOffset,null);
+        m_hasTarget = true;
+      }
+    } else {
+      if(DriverStation.getAlliance().get() == Alliance.Blue){
+        m_targetPose = new Pose2d(m_blueHubX - m_shuttleXOffset, m_hubY - m_shuttleYOffset,null);
+        m_hasTarget = true;
+      } else {
+        m_targetPose = new Pose2d(m_redHubX + m_shuttleXOffset, m_hubY - m_shuttleYOffset,null);
+        m_hasTarget = true;
+      }
+    }
+  }
  
   @Override
   public void periodic() {
+    SmartDashboard.putBoolean("hasTarget", m_hasTarget);
     // This method will be called once per scheduler run
-    m_hubpose = DriverStation.getAlliance().get() == Alliance.Blue 
-    ? m_blueHubPose2d 
-    : m_redHubPose2d;
-
     m_initialRobotPose = m_drivetrain.getPose();
     double yaw = m_initialRobotPose.getRotation().getDegrees();
     
@@ -63,23 +104,24 @@ public class Localization extends SubsystemBase {
     m_shooterX = updatedRobotPose.getX() 
       + Math.cos(updatedYaw) * m_shooterXRobotFrame
       - Math.sin(updatedYaw) * m_shooterYRobotFrame;
+      
     m_shooterY = updatedRobotPose.getY() 
       + Math.cos(updatedYaw) * m_shooterYRobotFrame 
       + Math.sin(updatedYaw) * m_shooterXRobotFrame;
 
-    m_deltaX = m_hubpose.getX() - m_shooterX;
-    m_deltaY = m_hubpose.getY() - m_shooterY;
+    m_deltaX = m_targetPose.getX() - m_shooterX;
+    m_deltaY = m_targetPose.getY() - m_shooterY;
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
-    m_errorYaw = 
-      MathUtil.angleModulus(m_targetYaw - updatedYaw);
-    m_errorX = m_deltaX - Constants.maxTargetDistanceToHub * Math.cos(m_targetYaw);
-    m_errorY = m_deltaY - Constants.maxTargetDistanceToHub * Math.sin(m_targetYaw);
-    
+    m_errorYaw = MathUtil.angleModulus(m_targetYaw - updatedYaw);
+    m_errorX = m_deltaX - Constants.maxTargetDistanceToTarget * Math.cos(m_targetYaw);
+    m_errorY = m_deltaY - Constants.maxTargetDistanceToTarget * Math.sin(m_targetYaw);
+    /* 
     SmartDashboard.putNumber("current_yaw", updatedYaw);
     SmartDashboard.putNumber("target_yaw", m_targetYaw);
     SmartDashboard.putNumber("error_x", m_errorX);
     SmartDashboard.putNumber("error_y", m_errorY);
     SmartDashboard.putNumber("error_yaw", m_errorYaw);
+    */
   }
 
   public double getM_errorX() {
@@ -94,8 +136,12 @@ public class Localization extends SubsystemBase {
     return m_errorYaw;
   }
 
-  public double distFromHub() {
+  public double distFromTarget() {
     return Math.sqrt(m_deltaX * m_deltaX + m_deltaY * m_deltaY);
+  }
+
+  public boolean hasTarget(){
+   return m_hasTarget;
   }
 
   private void processLimelight(String limelightName, double yaw) {
@@ -105,12 +151,13 @@ public class Localization extends SubsystemBase {
     if(!shouldReject(poseEstimate)) {
       m_drivetrain.addVisionMeasurement(
         poseEstimate.pose,
-        poseEstimate.timestampSeconds);
+        poseEstimate.timestampSeconds
+      );
 
       usedLimelight = true;
     }
 
-    SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
+    //SmartDashboard.putBoolean("Using" + limelightName + " vision", usedLimelight);
   }
 
   private boolean shouldReject(LimelightHelpers.PoseEstimate poseEstimate) {
@@ -120,15 +167,13 @@ public class Localization extends SubsystemBase {
     ) > 720
       || poseEstimate == null
       || poseEstimate.tagCount <= 1
-      || Math.sqrt(
-           Math.pow(
-             m_Field2d.getRobotPose().getX() - m_initialRobotPose.getX(),
-             2
-           ) +
-           Math.pow(
-             m_Field2d.getRobotPose().getY() - m_initialRobotPose.getY(),
-             2
-           )
+      || Math.pow(
+           m_Field2d.getRobotPose().getX() - m_initialRobotPose.getX(),
+           2
+         ) +
+         Math.pow(
+           m_Field2d.getRobotPose().getY() - m_initialRobotPose.getY(),
+           2
          ) > 1 ;//If the vision believes we are more than 1m from where the odometry thinks we are we should assume that it's wrong
   }
 }

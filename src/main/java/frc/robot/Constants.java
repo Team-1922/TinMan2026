@@ -18,34 +18,38 @@ import com.ctre.phoenix6.signals.SensorDirectionValue;
 
 import frc.robot.generated.TunerConstants;
 
-
 /** Add your docs here. */
 public final class Constants {
 
-    public static final RobotType robotType = RobotType.TinmanV2;
+  public static final RobotType robotType = RobotType.TinmanV2;
+  public static final AtAnExpo atAnExpo = AtAnExpo.NotAtExpo;
 
-    public static final double autoAlignDistanceThreshold = 
-        Meters.of(.1).in(Meters);
-    public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
-    public static final double maxTargetDistanceToHub = Meters.of(4.3).in(Meters);
-    public static String frontLimelightName = "limelight-front";
-    public static String rightLimelightName = "limelight-right";
-    public static boolean useRightLimelight = true;
-    public static String drivebaseCanbusName = "Drivebase";
-    public static final CANBus superstructureCanbus =  switch(Constants.robotType) {
-            case TinmanV2 -> TunerConstants.kCANBus;
-            case TinmanV1 ->  CANBus.roboRIO();
-        };
-    public static double kyawThreshold = 0.06;
+  public static String frontLimelightName = "limelight-front";
+  public static String rightLimelightName = "limelight-right";
+  public static String drivebaseCanbusName = "Drivebase";
+  public static boolean useRightLimelight = true;
+  public static final double kdriveSpeedScaler = switch (atAnExpo) {
+    case NotAtExpo -> 1;
+    case AtExpo -> .25;
+  };
+  public static final double kyawThreshold = 0.06;
+  public static final double autoAlignDistanceThreshold = Meters.of(.1).in(Meters);
+  public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
+  public static final double maxTargetDistanceToTarget = Meters.of(4.3).in(Meters);
+  public static final CANBus superstructureCanbus = switch (Constants.robotType) {
+    case TinmanV2 -> TunerConstants.kCANBus;
+    case TinmanV1 -> CANBus.roboRIO();
+  };
+ 
 
-    public static class Collector {
-        public static final int kRollerLeaderMotorId = 14;
-        public static final int kRollerFollowerMotorId = 15;
-        public static final int kPivotMotorId = 16;
-        public static final int kPivotCanCoderId = 22;
-        public static final double kRollerGearRatio = 2;
-        public static final double krps = 100;
-        public static final double kreverseRps = -60;
+  public static class Collector {
+    public static final int kRollerLeaderMotorId = 14;
+    public static final int kRollerFollowerMotorId = 15;
+    public static final int kPivotMotorId = 16;
+    public static final int kPivotCanCoderId = 22;
+    public static final double kRollerGearRatio = 2;
+    public static final double krps = 100;
+    public static final double kreverseRps = -60;
 
         public static Slot0Configs slot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
@@ -177,18 +181,8 @@ public final class Constants {
         TinmanV1
     }
 
-    public static class Signaling {
-        public static double kShiftChangeWarningTime = 5;
-
-        public static double kShift1Start = 130;
-        public static double kShift2Start = 105;
-        public static double kShift3Start = 80;
-        public static double kShift4Start = 55;
-        public static double kEndGameStart = 30;
-
-        public static double kShift1StartOffset = kShift1Start + kShiftChangeWarningTime;
-        public static double kShift2StartOffset = kShift2Start + kShiftChangeWarningTime;
-        public static double kShift3StartOffset = kShift3Start + kShiftChangeWarningTime;
-        public static double kShift4StartOffset = kShift4Start + kShiftChangeWarningTime;
+    public enum AtAnExpo{
+        AtExpo,
+        NotAtExpo
     }
 }

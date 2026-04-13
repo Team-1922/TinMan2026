@@ -19,18 +19,19 @@ import frc.robot.Constants;
 
 public class Feeder extends SubsystemBase {
   /** Creates a new Feeder. */
- private final TalonFX m_Feeder = new TalonFX(
-      Constants.Feeder.kMotorId1, 
-      Constants.superstructureCanbus
+  private final TalonFX m_Feeder = new TalonFX(
+    Constants.Feeder.kMotorId1, 
+    Constants.superstructureCanbus
   );
- private double m_rps = 0;
- private VelocityDutyCycle m_feederDutyCycle = new VelocityDutyCycle(0)
-      .withSlot(0);
+  private VelocityDutyCycle m_feederDutyCycle = new VelocityDutyCycle(0)
+    .withSlot(0);
+
+  private double m_rps = 0;
 
   public Feeder() {
     MotorOutputConfigs motorConfig = new MotorOutputConfigs()
-      .withInverted(InvertedValue.Clockwise_Positive)
-      .withNeutralMode(NeutralModeValue.Coast);
+    .withInverted(InvertedValue.Clockwise_Positive)
+    .withNeutralMode(NeutralModeValue.Coast);
     
     m_Feeder.getConfigurator().apply(motorConfig);
     m_Feeder.getConfigurator().apply(Constants.Feeder.FeederCurrentConfigs);
@@ -40,23 +41,24 @@ public class Feeder extends SubsystemBase {
   @Override
   public void periodic() {
     // This method will be called once per scheduler run
-    if(m_rps > 0) {    
-      m_Feeder.setControl(
-          m_feederDutyCycle.withVelocity(
-              m_rps * Constants.Feeder.kGearRatio
-          )
-      );
-    }
     putDataOnDashboard();
   }
 
   public void setTargetRps(double rps) {
-    m_rps = rps;
+    rps = rps * Constants.Feeder.kGearRatio;
+    if(m_rps != rps){
+      m_rps = rps;
+      m_Feeder.setControl(
+        m_feederDutyCycle.withVelocity(
+          m_rps
+        )
+      );
+    }
   }
 
   public void stop() {
-    m_rps = 0;
     m_Feeder.stopMotor();
+    m_rps = 0;
   }
 
   public double getVelocity(){
@@ -67,6 +69,6 @@ public class Feeder extends SubsystemBase {
     double motorTemp = m_Feeder.getDeviceTemp().getValue().magnitude();
 
     SmartDashboard.putNumber("Motor Temps/Feeder", Celsius.of(motorTemp).in(Fahrenheit));
-    SmartDashboard.putNumber("Feeder Motor RPS", m_rps * Constants.Feeder.kGearRatio);
+    SmartDashboard.putNumber("Feeder Motor RPS", m_Feeder.getVelocity().getValueAsDouble() * Constants.Feeder.kGearRatio);
   }
 }
