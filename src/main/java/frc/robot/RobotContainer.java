@@ -145,9 +145,6 @@ public class RobotContainer {
     DriverController.povLeft().whileTrue(
       new HalfCollect(collector));
 
-    DriverController.rightBumper().whileTrue(
-      new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shuttle));
-
     DriverController.leftBumper().whileTrue(
       new SpinCollectorBars(collector));
 
@@ -157,11 +154,11 @@ public class RobotContainer {
     DriverController.b().whileTrue(
       new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot));
 
-    DriverController.a().whileTrue(
+    DriverController.rightBumper().whileTrue(
       Commands.run( () -> drivetrain.slowedSpeed(Constants.slowedSpeed))
     );
 
-    DriverController.a().whileFalse(
+    DriverController.rightBumper().whileFalse(
       Commands.run( () -> drivetrain.slowedSpeed(Constants.normalSpeed))
     );
 
