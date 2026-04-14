@@ -33,6 +33,7 @@ public final class Constants {
     case AtExpo -> .25;
   };
   public static final double kyawThreshold = 0.06;
+  public static final double kshooterYawThreshold = 0.08;
   public static final double autoAlignDistanceThreshold = Meters.of(.1).in(Meters);
   public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
   public static final double maxTargetDistanceToTarget = Meters.of(4.3).in(Meters);
