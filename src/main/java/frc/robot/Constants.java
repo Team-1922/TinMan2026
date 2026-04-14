@@ -41,6 +41,9 @@ public final class Constants {
     case TinmanV2 -> TunerConstants.kCANBus;
     case TinmanV1 -> CANBus.roboRIO();
   };
+
+  public static final double slowedSpeed = .75;
+  public static final double normalSpeed = 1;
  
 
   public static class Collector {
