@@ -360,14 +360,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         setControl(m_fieldCentricSwerveRequest); 
     }
 
-    public double slowedSpeed(double slowSpeed) {
-        return slowSpeed;
-    }
-
-    public double slowDrivetrain() {
-        return slowedSpeed(kNumConfigAttempts);
-    }
-
 private void autoBuildConfig() {
     // Load the RobotConfig from the GUI settings. You should probably
     // store this in your Constants file
