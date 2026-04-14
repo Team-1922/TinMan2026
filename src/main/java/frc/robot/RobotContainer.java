@@ -42,6 +42,7 @@ public class RobotContainer {
                                                                                       // speed
   private double MaxAngularRate = RotationsPerSecond.of(0.75).in(RadiansPerSecond); // 3/4 of a rotation per second
                                                                                               // max angular velocity
+  private double collectingSpeedScalar = 1;
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -118,9 +119,9 @@ public class RobotContainer {
       // Drivetrain will execute this command periodically
 
       drivetrain.applyRequest(() -> drive
-        .withVelocityX(-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * drivetrain.slowDrivetrain()) // Drive forward with negative Y (forward)
-        .withVelocityY(-DriverController.getLeftX() * MaxSpeed* Constants.kdriveSpeedScaler) // Drive left with negative X (left)
-        .withRotationalRate(-DriverController.getRightX() * MaxAngularRate* Constants.kdriveSpeedScaler) // Drive counterclockwise with negative
+        .withVelocityX(-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * drivetrain.slowDrivetrain() * collectingSpeedScalar) // Drive forward with negative Y (forward)
+        .withVelocityY(-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar) // Drive left with negative X (left)
+        .withRotationalRate(-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler) // Drive counterclockwise with negative
                                                                             // X (left)
       ));
 
@@ -148,21 +149,18 @@ public class RobotContainer {
     DriverController.rightBumper().whileTrue(
       new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shuttle));
 
-    DriverController.leftBumper().whileTrue(
-      new SpinCollectorBars(collector));
-
     DriverController.x().whileTrue(
       new ReverseCollector(collector));
 
     DriverController.b().whileTrue(
       new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot));
 
-    DriverController.a().whileTrue(
-      Commands.run( () -> drivetrain.slowedSpeed(Constants.slowedSpeed))
+    DriverController.leftBumper().whileTrue(
+       Commands.run( () -> collectingSpeedScalar = .2)
     );
 
-    DriverController.a().whileFalse(
-      Commands.run( () -> drivetrain.slowedSpeed(Constants.normalSpeed))
+    DriverController.leftBumper().whileFalse(
+      Commands.run( () -> collectingSpeedScalar = 1)
     );
 
     // Run SysId routines when holding back/start and X/Y.
