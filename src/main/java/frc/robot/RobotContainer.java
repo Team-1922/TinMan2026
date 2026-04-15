@@ -118,11 +118,12 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
 
-      drivetrain.applyRequest(() -> drive
-        .withVelocityX(-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar) // Drive forward with negative Y (forward)
-        .withVelocityY(-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar) // Drive left with negative X (left)
-        .withRotationalRate(-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler) // Drive counterclockwise with negative
+      Commands.run( () -> drivetrain.Move(
+                      (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar), // Drive forward with negative Y (forward)
+                      (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar), // Drive left with negative X (left)
+                      (-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler) // Drive counterclockwise with negative
                                                                             // X (left)
+                      )
       ));
 
     // Idle while the robot is disabled. This ensures the configured
