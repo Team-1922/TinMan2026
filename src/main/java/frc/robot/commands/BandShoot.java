@@ -93,17 +93,15 @@ public class BandShoot extends Command {
       !m_requireAlign
       || ( 
         distFromTarget < Constants.maxTargetDistanceToTarget
-        && Math.abs(m_localization.getM_errorYaw()) < Constants.kyawThreshold
+        && Math.abs(m_localization.getM_errorYaw()) < Constants.kshooterYawThreshold
       )
     ) {
 
       if (m_shooter.getVelocity() >= m_shooterRps - m_shooterVelocityThreshold) {     
 
         m_feeder.setTargetRps(m_feederRps);
+        m_spindexer.setTargetRps(m_spindexerRps);
 
-        if (m_feeder.getVelocity() >= m_feederRps - m_feederVelocityThreshold) {
-          m_spindexer.setTargetRps(m_spindexerRps);
-        }        
       }
     } else if (m_feeder.getVelocity() > 0) {
       m_feeder.stop();
