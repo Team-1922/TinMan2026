@@ -60,6 +60,10 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     private final SwerveRequest.SysIdSwerveSteerGains m_steerCharacterization = new SwerveRequest.SysIdSwerveSteerGains();
     private final SwerveRequest.SysIdSwerveRotation m_rotationCharacterization = new SwerveRequest.SysIdSwerveRotation();
 
+    private double m_xVelocity = 0;
+    private double m_yVelocity = 0;
+    private double m_rotationalRate = 0;
+
     /*
      * SysId routine for characterizing translation. This is used to find PID gains
      * for the drive motors.
@@ -352,12 +356,26 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
     return getState().Pose;
   }
   
-    public void Move(double xVelocity, double yVelocity, double rotationalRate) {
+    public void Move1(double xVelocity, double yVelocity, double rotationalRate) {
         m_fieldCentricSwerveRequest
             .withVelocityX(xVelocity)
             .withVelocityY(yVelocity)
             .withRotationalRate(rotationalRate);
+            m_xVelocity = xVelocity;
+            m_yVelocity = yVelocity;
+            m_rotationalRate = rotationalRate;
         setControl(m_fieldCentricSwerveRequest); 
+    }
+
+    public void Move2(double xVelocity, double yVelocity, double rotationalRate) {
+        xVelocity = xVelocity + m_xVelocity;
+        yVelocity = yVelocity + m_yVelocity;
+        rotationalRate = rotationalRate + m_rotationalRate;
+        m_fieldCentricSwerveRequest
+            .withVelocityX(xVelocity)
+            .withVelocityY(yVelocity)
+            .withRotationalRate(rotationalRate);
+        setControl(m_fieldCentricSwerveRequest);
     }
 
 private void autoBuildConfig() {

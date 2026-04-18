@@ -118,7 +118,7 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
 
-      Commands.run( () -> drivetrain.Move(
+      Commands.run( () -> drivetrain.Move2(
                       (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar), // Drive forward with negative Y (forward)
                       (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar), // Drive left with negative X (left)
                       (-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler) // Drive counterclockwise with negative

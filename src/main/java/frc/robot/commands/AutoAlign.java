@@ -24,6 +24,7 @@ public class AutoAlign extends Command {
   double m_yKp = 5;
   double m_yawKp = 3.8;
   double m_allianceSign = 1;
+  double m_vYaw = 0;
   private final SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
 
 
@@ -48,7 +49,6 @@ public class AutoAlign extends Command {
   public void execute() {
     double vX = 0;
     double vY = 0;
-    double vYaw = 0;
     boolean isAligned = true;
     if (!m_normalAutoAlign || !m_localization.hasTarget()) {
       return;
@@ -63,20 +63,22 @@ public class AutoAlign extends Command {
     } 
 
     if(Math.abs(m_localization.getM_errorYaw()) > Constants.kyawThreshold) {
-      vYaw = m_localization.getM_errorYaw() * m_yawKp;
+      m_vYaw = m_localization.getM_errorYaw() * m_yawKp;
       isAligned = false;
     }
 
     if(isAligned) {
       m_drivetrain.setControl(m_brake);
     } else {
-      m_drivetrain.Move(vX, vY, vYaw);
+      m_drivetrain.Move1(vX, vY, m_vYaw);
     }
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drivetrain.Move1(0, 0, m_vYaw);
+  }
 
   // Returns true when the command should end.
   @Override
