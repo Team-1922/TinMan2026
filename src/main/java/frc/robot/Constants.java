@@ -140,9 +140,9 @@ public final class Constants {
         public static final CurrentLimitsConfigs ShooterCurrentConfigs = 
             new CurrentLimitsConfigs()
                 .withStatorCurrentLimitEnable(true)
-                .withStatorCurrentLimit(25)
+                .withStatorCurrentLimit(20)
                 .withSupplyCurrentLimitEnable(true)
-                .withSupplyCurrentLimit(25)
+                .withSupplyCurrentLimit(20)
                 .withSupplyCurrentLowerLimit(10)
                 .withSupplyCurrentLowerTime(.75);
         public static final double kGearRatio = 1;

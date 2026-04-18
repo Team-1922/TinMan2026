@@ -22,8 +22,8 @@ public class BandShoot extends Command {
   private final Localization m_localization;
   private final double m_shooterVelocityThreshold = 2;
   private final double m_feederVelocityThreshold = 1;
-  private final double m_kpForRps = 4.75; 
-  private final double m_minShooterRps = 10.025; //rps at 0 meters from the center of the hub
+  private final double m_kpForRps = 4.25; 
+  private final double m_minShooterRps = 9; //rps at 0 meters from the center of the hub
   private final double m_spindexerRps = 45;
   private final double m_feederRps = 60;
   private final double m_shuttleRps = 30;
@@ -68,19 +68,20 @@ public class BandShoot extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-    //SmartDashboard.putNumber("Distance From target", distFromTarget);
     if (!m_localization.hasTarget()) {
       return;
     }
 
     double distFromTarget = m_localization.distFromTarget();
-    m_shooterRps = m_minShooterRps + m_kpForRps * (distFromTarget);
+    SmartDashboard.putNumber("Distance From target", distFromTarget);
+    m_shooterRps = m_minShooterRps + (m_kpForRps * (distFromTarget));
 
     if(m_shootAction == ShootActions.Shoot) {
       m_requireAlign = true;
     }
     else if(m_shootAction == ShootActions.JustShoot){
       m_requireAlign = false;
+
     }
     else if(m_shootAction == ShootActions.Shuttle){
       m_shooterRps = m_shuttleRps;
