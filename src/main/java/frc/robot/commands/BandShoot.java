@@ -73,7 +73,7 @@ public class BandShoot extends Command {
     }
 
     double distFromTarget = m_localization.distFromTarget();
-    SmartDashboard.putNumber("Distance From target", distFromTarget);
+    //SmartDashboard.putNumber("Distance From target", distFromTarget);
     m_shooterRps = m_minShooterRps + (m_kpForRps * (distFromTarget));
 
     if(m_shootAction == ShootActions.Shoot) {
