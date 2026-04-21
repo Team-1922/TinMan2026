@@ -31,7 +31,6 @@ public class AutoAlign extends Command {
   /** Creates a new AutoAlign. */
   public AutoAlign(CommandSwerveDrivetrain drivetrain, Localization localization, Signaling signaling, Boolean normalAutoAlign) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivetrain);
     m_drivetrain = drivetrain;
     m_localization = localization;
     m_signaling = signaling;
@@ -67,9 +66,7 @@ public class AutoAlign extends Command {
       isAligned = false;
     }
 
-    if(isAligned) {
-      m_drivetrain.setControl(m_brake);
-    } else {
+    if(!isAligned) {
       m_drivetrain.Move1(vX, vY, m_vYaw);
     }
   }

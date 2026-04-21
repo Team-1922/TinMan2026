@@ -361,14 +361,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
         m_xVelocity = xVelocity;
         m_yVelocity = yVelocity;
         m_rotationalRate = rotationalRate;
-        m_fieldCentricSwerveRequest
-            .withVelocityX(xVelocity)
-            .withVelocityY(yVelocity)
-            .withRotationalRate(rotationalRate)
-            .withDeadband(Constants.kmaxSpeed * 0.12)
-            .withRotationalDeadband(Constants.kmaxAngularRate * 0.12)
-            .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
-        setControl(m_fieldCentricSwerveRequest);
     }
 
     public void Move2(double xVelocity, double yVelocity, double rotationalRate) {

@@ -44,7 +44,9 @@ public class RobotContainer {
                                                                                               // max angular velocity
   private double m_collectingSpeedScalar = 1;
 
-  private double m_shootRotatinalScaler = 1;
+  private double m_shootRotationalScaler = 1;
+
+  private double m_autoAlignSpeed = 1;
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -121,9 +123,9 @@ public class RobotContainer {
       // Drivetrain will execute this command periodically
 
       Commands.run( () -> drivetrain.Move2(
-                      (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar), // Drive forward with negative Y (forward)
-                      (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar), // Drive left with negative X (left)
-                      ((-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler * m_shootRotatinalScaler)) // Drive counterclockwise with X (left)
+                      (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive forward with negative Y (forward)
+                      (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive left with negative X (left)
+                      ((-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler * m_shootRotationalScaler)) // Drive counterclockwise with X (left)
                       ) , drivetrain
       ));
 
@@ -166,11 +168,19 @@ public class RobotContainer {
     );
 
     DriverController.rightTrigger().whileTrue(
-       Commands.run( () -> m_shootRotatinalScaler = 0)
+       Commands.run( () -> m_shootRotationalScaler = 0)
     );
 
     DriverController.rightTrigger().whileFalse(
-      Commands.run( () -> m_shootRotatinalScaler = 1)
+      Commands.run( () -> m_shootRotationalScaler = 1)
+    );
+
+     DriverController.rightTrigger().whileTrue(
+       Commands.run( () -> m_autoAlignSpeed = .25)
+    );
+
+    DriverController.rightTrigger().whileFalse(
+      Commands.run( () -> m_autoAlignSpeed = 1)
     );
 
     // Run SysId routines when holding back/start and X/Y.
