@@ -42,7 +42,9 @@ public class RobotContainer {
                                                                                       // speed
   private double MaxAngularRate = RotationsPerSecond.of(1).in(RadiansPerSecond); // 1 rotation per second
                                                                                               // max angular velocity
-  private double collectingSpeedScalar = 1;
+  private double m_collectingSpeedScalar = 1;
+
+  private double m_shootRotatinalScaler = 1;
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -119,11 +121,10 @@ public class RobotContainer {
       // Drivetrain will execute this command periodically
 
       Commands.run( () -> drivetrain.Move2(
-                      (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar), // Drive forward with negative Y (forward)
-                      (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar), // Drive left with negative X (left)
-                      (-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler) // Drive counterclockwise with negative
-                                                                            // X (left)
-                      )
+                      (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar), // Drive forward with negative Y (forward)
+                      (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar), // Drive left with negative X (left)
+                      ((-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler * m_shootRotatinalScaler)) // Drive counterclockwise with X (left)
+                      ) , drivetrain
       ));
 
     // Idle while the robot is disabled. This ensures the configured
@@ -157,11 +158,19 @@ public class RobotContainer {
       new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot));
 
     DriverController.leftBumper().whileTrue(
-       Commands.run( () -> collectingSpeedScalar = .2)
+       Commands.run( () -> m_collectingSpeedScalar = .2)
     );
 
     DriverController.leftBumper().whileFalse(
-      Commands.run( () -> collectingSpeedScalar = 1)
+      Commands.run( () -> m_collectingSpeedScalar = 1)
+    );
+
+    DriverController.rightTrigger().whileTrue(
+       Commands.run( () -> m_shootRotatinalScaler = 0)
+    );
+
+    DriverController.rightTrigger().whileFalse(
+      Commands.run( () -> m_shootRotatinalScaler = 1)
     );
 
     // Run SysId routines when holding back/start and X/Y.
