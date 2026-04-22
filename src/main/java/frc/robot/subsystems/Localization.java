@@ -109,8 +109,13 @@ public class Localization extends SubsystemBase {
       + Math.cos(updatedYaw) * m_shooterYRobotFrame 
       + Math.sin(updatedYaw) * m_shooterXRobotFrame;
 
-    m_deltaX = m_targetPose.getX() - m_shooterX;
-    m_deltaY = m_targetPose.getY() - m_shooterY;
+    double timeOfFlight = 1;
+
+    double xOffset = m_drivetrain.getFieldRelativeSpeeds().vxMetersPerSecond * timeOfFlight;
+    double yOffset = m_drivetrain.getFieldRelativeSpeeds().vyMetersPerSecond * timeOfFlight;
+    
+    m_deltaX = m_targetPose.getX() - m_shooterX - xOffset;
+    m_deltaY = m_targetPose.getY() - m_shooterY - yOffset;
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
     m_errorYaw = MathUtil.angleModulus(m_targetYaw - updatedYaw);
     m_errorX = m_deltaX - Constants.maxTargetDistanceToTarget * Math.cos(m_targetYaw);
