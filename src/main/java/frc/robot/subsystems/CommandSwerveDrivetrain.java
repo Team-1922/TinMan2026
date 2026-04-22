@@ -372,7 +372,6 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
             .withVelocityY(yVelocity)
             .withRotationalRate(rotationalRate)
             .withDeadband(Constants.kmaxSpeed * 0.12)
-            .withRotationalDeadband(Constants.kmaxAngularRate * 0.12)
             .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
         setControl(m_fieldCentricSwerveRequest);
     }

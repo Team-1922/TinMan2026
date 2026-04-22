@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import edu.wpi.first.math.MathUtil;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.RetractCollector;
 import frc.robot.commands.ReverseCollector;
@@ -125,7 +126,7 @@ public class RobotContainer {
       Commands.run( () -> drivetrain.Move2(
                       (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive forward with negative Y (forward)
                       (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive left with negative X (left)
-                      ((-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler * m_shootRotationalScaler)) // Drive counterclockwise with X (left)
+                    MathUtil.applyDeadband((-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler * m_shootRotationalScaler), .12) // Drive counterclockwise with X (left)
                       ) , drivetrain
       ));
 

@@ -22,9 +22,9 @@ public class AutoAlign extends Command {
   Boolean m_normalAutoAlign;
   double m_xKp = 5;
   double m_yKp = 5;
-  double m_yawKp = 3.8;
+  double m_yawKp = 5;
   double m_allianceSign = 1;
-  double m_vYaw = 0;
+ 
   private final SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
 
 
@@ -46,6 +46,7 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double vYaw = 0;
     double vX = 0;
     double vY = 0;
     boolean isAligned = true;
@@ -62,13 +63,11 @@ public class AutoAlign extends Command {
     } 
 
     if(Math.abs(m_localization.getM_errorYaw()) > Constants.kyawThreshold) {
-      m_vYaw = m_localization.getM_errorYaw() * m_yawKp;
+      vYaw = m_localization.getM_errorYaw() * m_yawKp;
       isAligned = false;
     }
 
-    if(!isAligned) {
-      m_drivetrain.Move1(vX, vY, m_vYaw);
-    }
+      m_drivetrain.Move1(vX, vY, vYaw);
   }
 
   // Called once the command ends or is interrupted.
