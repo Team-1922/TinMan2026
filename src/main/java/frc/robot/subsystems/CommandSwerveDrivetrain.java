@@ -354,20 +354,22 @@ public class CommandSwerveDrivetrain extends TunerSwerveDrivetrain implements Su
   }
 
   public ChassisSpeeds getFieldRelativeSpeeds(){
-    return ChassisSpeeds.fromRobotRelativeSpeeds(getRobotRelativeSpeeds(), getPose().getRotation());
+    return ChassisSpeeds.fromRobotRelativeSpeeds(
+        getRobotRelativeSpeeds(), getPose().getRotation()
+    );
   }
 
   public Pose2d getPose() {
     return getState().Pose;
   }
   
-    public void Move1(double xVelocity, double yVelocity, double rotationalRate) {
+    public void addAutoAlignMovement(double xVelocity, double yVelocity, double rotationalRate) {
         m_xVelocity = xVelocity;
         m_yVelocity = yVelocity;
         m_rotationalRate = rotationalRate;
     }
 
-    public void Move2(double xVelocity, double yVelocity, double rotationalRate) {
+    public void move(double xVelocity, double yVelocity, double rotationalRate) {
         xVelocity = xVelocity + m_xVelocity;
         yVelocity = yVelocity + m_yVelocity;
         rotationalRate = rotationalRate + m_rotationalRate;

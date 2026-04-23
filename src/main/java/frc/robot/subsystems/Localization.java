@@ -109,15 +109,7 @@ public class Localization extends SubsystemBase {
       + Math.cos(updatedYaw) * m_shooterYRobotFrame 
       + Math.sin(updatedYaw) * m_shooterXRobotFrame;
 
-    double timeOfFlight = 1;
-
-      if(distFromTarget() <= 1.5){
-          timeOfFlight = .75;
-      } else if (distFromTarget() >= 2.2){
-          timeOfFlight = 1.1;
-      } else if (distFromTarget() >= 3.0){
-        timeOfFlight = 1.27;
-      }
+    double timeOfFlight = distFromTarget() / 2;
 
     double xOffset = m_drivetrain.getFieldRelativeSpeeds().vxMetersPerSecond * timeOfFlight;
     double yOffset = m_drivetrain.getFieldRelativeSpeeds().vyMetersPerSecond * timeOfFlight;
@@ -126,8 +118,10 @@ public class Localization extends SubsystemBase {
     m_deltaY = m_targetPose.getY() - m_shooterY - yOffset;
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
     m_errorYaw = MathUtil.angleModulus(m_targetYaw - updatedYaw);
-    m_errorX = m_deltaX - Constants.maxTargetDistanceToTarget * Math.cos(m_targetYaw);
-    m_errorY = m_deltaY - Constants.maxTargetDistanceToTarget * Math.sin(m_targetYaw);
+    m_errorX = 
+      m_deltaX - Constants.maxTargetDistanceToTarget * Math.cos(m_targetYaw);
+    m_errorY = 
+      m_deltaY - Constants.maxTargetDistanceToTarget * Math.sin(m_targetYaw);
     /* 
     SmartDashboard.putNumber("current_yaw", updatedYaw);
     SmartDashboard.putNumber("target_yaw", m_targetYaw);
