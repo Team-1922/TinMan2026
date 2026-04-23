@@ -36,9 +36,22 @@
           }
         },
         {
-          "type": "named",
+          "type": "parallel",
           "data": {
-            "name": "alignAndShoot"
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "alignAndShoot"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Half Collector"
+                }
+              }
+            ]
           }
         }
       ]
