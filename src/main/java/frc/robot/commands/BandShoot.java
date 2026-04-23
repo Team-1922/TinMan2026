@@ -24,7 +24,7 @@ public class BandShoot extends Command {
   private final double m_feederVelocityThreshold = 1;
   private final double m_kpForRps = 4.25; 
   private final double m_minShooterRps = 10.0; //rps at 0 meters from the center of the hub
-  private final double m_spindexerRps = 45/4;
+  private final double m_spindexerRps = 11.25;
   private final double m_feederRps = 60;
   private final double m_shuttleRps = 30;
 
