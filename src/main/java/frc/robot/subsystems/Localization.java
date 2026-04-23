@@ -35,6 +35,8 @@ public class Localization extends SubsystemBase {
   private double m_shooterYRobotFrame = 0.19685;
   private Pose2d m_targetPose = new Pose2d();
   private Pose2d m_initialRobotPose = new Pose2d();
+  private final double m_kPForTOF = .25;
+  private final double m_minTOF = .65;
   private final double m_hubY = 4.035;
   private final double m_blueHubX = 4.625594;
   private final double m_redHubX = 11.915394;
@@ -109,7 +111,7 @@ public class Localization extends SubsystemBase {
       + Math.cos(updatedYaw) * m_shooterYRobotFrame 
       + Math.sin(updatedYaw) * m_shooterXRobotFrame;
 
-    double timeOfFlight = distFromTarget() / 2;
+    double timeOfFlight = (m_kPForTOF * distFromTarget()) + m_minTOF;
 
     double xOffset = m_drivetrain.getFieldRelativeSpeeds().vxMetersPerSecond * timeOfFlight;
     double yOffset = m_drivetrain.getFieldRelativeSpeeds().vyMetersPerSecond * timeOfFlight;
