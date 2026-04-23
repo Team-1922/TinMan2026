@@ -110,6 +110,15 @@ public class RobotContainer {
       0,
       0,
       -90);
+
+  LimelightHelpers.setCameraPose_RobotSpace(
+    Constants.backLimelightName, 
+    Units.inchesToMeters(3/4),
+    Units.inchesToMeters(7 + 3/8),
+    Units.inchesToMeters(20.25),
+    0,
+    15,
+    0);    
   }
 
   private void configureBindings() {

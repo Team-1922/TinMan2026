@@ -91,6 +91,7 @@ public class Localization extends SubsystemBase {
     double yaw = m_initialRobotPose.getRotation().getDegrees();
     
     processLimelight(Constants.frontLimelightName, yaw);
+    processLimelight(Constants.backLimelightName, yaw);
     
     if(Constants.useRightLimelight) {
       processLimelight(Constants.rightLimelightName, yaw);

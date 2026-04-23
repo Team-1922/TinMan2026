@@ -79,6 +79,7 @@ public class Robot extends LoggedRobot {
         m_signaling.yellow();
 
         LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 1);
+        LimelightHelpers.SetIMUMode(Constants.backLimelightName, 4);
 
         if(Constants.useRightLimelight) {
             LimelightHelpers.SetIMUMode(Constants.rightLimelightName, 1);
