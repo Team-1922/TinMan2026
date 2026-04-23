@@ -81,6 +81,7 @@ public class BandShoot extends Command {
     }
     else if(m_shootAction == ShootActions.JustShoot){
       m_requireAlign = false;
+
     }
     else if(m_shootAction == ShootActions.Shuttle){
       m_shooterRps = m_shuttleRps;
