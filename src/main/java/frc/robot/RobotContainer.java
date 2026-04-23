@@ -126,8 +126,8 @@ public class RobotContainer {
       Commands.run( () -> drivetrain.Move2(
                       (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive forward with negative Y (forward)
                       (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive left with negative X (left)
-                    MathUtil.applyDeadband((-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler * m_shootRotationalScaler), .12) // Drive counterclockwise with X (left)
-                      ) , drivetrain
+                      (MathUtil.applyDeadband(-DriverController.getRightX(), .15)) * MaxAngularRate * Constants.kdriveSpeedScaler * m_shootRotationalScaler), // Drive counterclockwise with X (left)
+                      drivetrain
       ));
 
     // Idle while the robot is disabled. This ensures the configured
@@ -146,13 +146,16 @@ public class RobotContainer {
         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)));
 
     DriverController.povDown().whileTrue(
-      new RetractCollector(collector));
+      new RetractCollector(collector)
+    );
 
     DriverController.povLeft().whileTrue(
-      new HalfCollect(collector));
+      new HalfCollect(collector)
+    );
 
     DriverController.rightBumper().whileTrue(
-      new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shuttle));
+      new HalfCollect(collector)
+    );
 
     DriverController.x().whileTrue(
       new ReverseCollector(collector));
@@ -177,7 +180,7 @@ public class RobotContainer {
     );
 
      DriverController.rightTrigger().whileTrue(
-       Commands.run( () -> m_autoAlignSpeed = .25)
+       Commands.run( () -> m_autoAlignSpeed = .125)
     );
 
     DriverController.rightTrigger().whileFalse(

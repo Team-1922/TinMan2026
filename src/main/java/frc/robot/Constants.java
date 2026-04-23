@@ -69,7 +69,7 @@ public final class Constants {
 
         public static Slot0Configs pivotSlot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 6;
+            slot0Configs.kP = 3;
             slot0Configs.kS = 0;
             return slot0Configs;
         }
@@ -109,12 +109,12 @@ public final class Constants {
                         )
             );
 
-        public static final double kRetractedPosition = 0.373779;
+        public static final double kRetractedPosition = 0.35;
 
 
         public static final double kDeployedPosition = 0;
 
-        public static final double kHalfDeployedPosition = 0.260986;
+        public static final double kHalfDeployedPosition = 0.22;
     };
 
     public static class Feeder {

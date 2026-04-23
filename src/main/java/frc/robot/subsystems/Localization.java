@@ -111,6 +111,14 @@ public class Localization extends SubsystemBase {
 
     double timeOfFlight = 1;
 
+      if(distFromTarget() <= 1.5){
+          timeOfFlight = .75;
+      } else if (distFromTarget() >= 2.2){
+          timeOfFlight = 1.1;
+      } else if (distFromTarget() >= 3.0){
+        timeOfFlight = 1.27;
+      }
+
     double xOffset = m_drivetrain.getFieldRelativeSpeeds().vxMetersPerSecond * timeOfFlight;
     double yOffset = m_drivetrain.getFieldRelativeSpeeds().vyMetersPerSecond * timeOfFlight;
     
