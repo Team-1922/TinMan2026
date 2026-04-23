@@ -29,9 +29,11 @@ public final class Constants {
   public static String drivebaseCanbusName = "Drivebase";
   public static boolean useRightLimelight = true;
 
-  public static double kmaxAngularRate = RotationsPerSecond.of(1).in(RadiansPerSecond); // 1 rotation per second max angular velocity
+  public static double kmaxAngularRate = 
+    RotationsPerSecond.of(1).in(RadiansPerSecond); // 1 rotation per second max angular velocity
 
-  public static double kmaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+  public static double kmaxSpeed = 
+    1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
 
   public static final double kdriveSpeedScaler = switch (atAnExpo) {
     case NotAtExpo -> 1;

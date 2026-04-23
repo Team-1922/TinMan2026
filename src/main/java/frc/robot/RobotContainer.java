@@ -45,8 +45,6 @@ public class RobotContainer {
                                                                                               // max angular velocity
   private double m_collectingSpeedScalar = 1;
 
-  private double m_shootRotationalScaler = 1;
-
   private double m_autoAlignSpeed = 1;
 
   /* Setting up bindings for necessary control of the swerve drive platform */
@@ -123,10 +121,10 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
 
-      Commands.run( () -> drivetrain.Move2(
+      Commands.run( () -> drivetrain.move(
                       (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive forward with negative Y (forward)
                       (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive left with negative X (left)
-                      (MathUtil.applyDeadband(-DriverController.getRightX(), .15)) * MaxAngularRate * Constants.kdriveSpeedScaler * m_shootRotationalScaler), // Drive counterclockwise with X (left)
+                      (MathUtil.applyDeadband(-DriverController.getRightX(), .15)) * MaxAngularRate * Constants.kdriveSpeedScaler), // Drive counterclockwise with X (left)
                       drivetrain
       ));
 
@@ -169,14 +167,6 @@ public class RobotContainer {
 
     DriverController.leftBumper().whileFalse(
       Commands.run( () -> m_collectingSpeedScalar = 1)
-    );
-
-    DriverController.rightTrigger().whileTrue(
-       Commands.run( () -> m_shootRotationalScaler = 0)
-    );
-
-    DriverController.rightTrigger().whileFalse(
-      Commands.run( () -> m_shootRotationalScaler = 1)
     );
 
      DriverController.rightTrigger().whileTrue(

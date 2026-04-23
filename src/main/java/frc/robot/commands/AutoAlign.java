@@ -67,13 +67,13 @@ public class AutoAlign extends Command {
       isAligned = false;
     }
 
-      m_drivetrain.Move1(vX, vY, vYaw);
+      m_drivetrain.addAutoAlignMovement(vX, vY, vYaw);
   }
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
-    m_drivetrain.Move1(0, 0, 0);
+    m_drivetrain.addAutoAlignMovement(0, 0, 0);
   }
 
   // Returns true when the command should end.
