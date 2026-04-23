@@ -60,6 +60,7 @@ public class Robot extends LoggedRobot {
        }
         if(DriverStation.isEnabled()) {
             LimelightHelpers.SetIMUMode(Constants.frontLimelightName, 4);
+            LimelightHelpers.SetIMUMode(Constants.backLimelightName, 4);
 
             if(Constants.useRightLimelight) {
                 LimelightHelpers.SetIMUMode(Constants.rightLimelightName, 4);
