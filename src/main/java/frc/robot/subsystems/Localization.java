@@ -35,6 +35,8 @@ public class Localization extends SubsystemBase {
   private double m_shooterYRobotFrame = 0.19685;
   private Pose2d m_targetPose = new Pose2d();
   private Pose2d m_initialRobotPose = new Pose2d();
+  private final double m_kPForTOF = .25;
+  private final double m_minTOF = .65;
   private final double m_hubY = 4.035;
   private final double m_blueHubX = 4.625594;
   private final double m_redHubX = 11.915394;
@@ -109,12 +111,19 @@ public class Localization extends SubsystemBase {
       + Math.cos(updatedYaw) * m_shooterYRobotFrame 
       + Math.sin(updatedYaw) * m_shooterXRobotFrame;
 
-    m_deltaX = m_targetPose.getX() - m_shooterX;
-    m_deltaY = m_targetPose.getY() - m_shooterY;
+    double timeOfFlight = (m_kPForTOF * distFromTarget()) + m_minTOF;
+
+    double xOffset = m_drivetrain.getFieldRelativeSpeeds().vxMetersPerSecond * timeOfFlight;
+    double yOffset = m_drivetrain.getFieldRelativeSpeeds().vyMetersPerSecond * timeOfFlight;
+    
+    m_deltaX = m_targetPose.getX() - m_shooterX - xOffset;
+    m_deltaY = m_targetPose.getY() - m_shooterY - yOffset;
     m_targetYaw = Math.atan2(m_deltaY, m_deltaX);
     m_errorYaw = MathUtil.angleModulus(m_targetYaw - updatedYaw);
-    m_errorX = m_deltaX - Constants.maxTargetDistanceToTarget * Math.cos(m_targetYaw);
-    m_errorY = m_deltaY - Constants.maxTargetDistanceToTarget * Math.sin(m_targetYaw);
+    m_errorX = 
+      m_deltaX - Constants.maxTargetDistanceToTarget * Math.cos(m_targetYaw);
+    m_errorY = 
+      m_deltaY - Constants.maxTargetDistanceToTarget * Math.sin(m_targetYaw);
     /* 
     SmartDashboard.putNumber("current_yaw", updatedYaw);
     SmartDashboard.putNumber("target_yaw", m_targetYaw);

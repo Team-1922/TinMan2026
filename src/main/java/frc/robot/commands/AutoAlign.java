@@ -22,15 +22,15 @@ public class AutoAlign extends Command {
   Boolean m_normalAutoAlign;
   double m_xKp = 5;
   double m_yKp = 5;
-  double m_yawKp = 3.8;
+  double m_yawKp = 5;
   double m_allianceSign = 1;
+ 
   private final SwerveRequest.SwerveDriveBrake m_brake = new SwerveRequest.SwerveDriveBrake();
 
 
   /** Creates a new AutoAlign. */
   public AutoAlign(CommandSwerveDrivetrain drivetrain, Localization localization, Signaling signaling, Boolean normalAutoAlign) {
     // Use addRequirements() here to declare subsystem dependencies.
-    addRequirements(drivetrain);
     m_drivetrain = drivetrain;
     m_localization = localization;
     m_signaling = signaling;
@@ -46,9 +46,9 @@ public class AutoAlign extends Command {
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
+    double vYaw = 0;
     double vX = 0;
     double vY = 0;
-    double vYaw = 0;
     boolean isAligned = true;
     if (!m_normalAutoAlign || !m_localization.hasTarget()) {
       return;
@@ -67,16 +67,14 @@ public class AutoAlign extends Command {
       isAligned = false;
     }
 
-    if(isAligned) {
-      m_drivetrain.setControl(m_brake);
-    } else {
-      m_drivetrain.Move(vX, vY, vYaw);
-    }
+      m_drivetrain.addAutoAlignMovement(vX, vY, vYaw);
   }
 
   // Called once the command ends or is interrupted.
   @Override
-  public void end(boolean interrupted) {}
+  public void end(boolean interrupted) {
+    m_drivetrain.addAutoAlignMovement(0, 0, 0);
+  }
 
   // Returns true when the command should end.
   @Override

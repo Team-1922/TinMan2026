@@ -28,11 +28,18 @@ public final class Constants {
   public static String rightLimelightName = "limelight-right";
   public static String drivebaseCanbusName = "Drivebase";
   public static boolean useRightLimelight = true;
+
+  public static double kmaxAngularRate = 
+    RotationsPerSecond.of(1).in(RadiansPerSecond); // 1 rotation per second max angular velocity
+
+  public static double kmaxSpeed = 
+    1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+
   public static final double kdriveSpeedScaler = switch (atAnExpo) {
     case NotAtExpo -> 1;
     case AtExpo -> .25;
   };
-  public static final double kyawThreshold = 0.06;
+  public static final double kyawThreshold = 0.05;
   public static final double kshooterYawThreshold = 0.08;
   public static final double autoAlignDistanceThreshold = Meters.of(.1).in(Meters);
   public static final double targetDistanceToHub = Meters.of(2.1).in(Meters);
@@ -64,7 +71,7 @@ public final class Constants {
 
         public static Slot0Configs pivotSlot0() {
             Slot0Configs slot0Configs = new Slot0Configs();
-            slot0Configs.kP = 6;
+            slot0Configs.kP = 3;
             slot0Configs.kS = 0;
             return slot0Configs;
         }
@@ -97,7 +104,7 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(0.801758)
+                        .withMagnetOffset(0.813477)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.CounterClockwise_Positive
@@ -107,7 +114,8 @@ public final class Constants {
         public static final double kRetractedPosition = 0.376221;
 
 
-        public static final double kDeployedPosition = 0.017334 ;
+        public static final double kDeployedPosition = 0.0
+         ;
 
         public static final double kHalfDeployedPosition = 0.250000;
     };
