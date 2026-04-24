@@ -75,7 +75,15 @@ public class RobotContainer {
           feeder,
           spindexer,
           localization,
-          BandShoot.ShootActions.Shoot)));
+          BandShoot.ShootActions.Shoot),
+          Commands.run( () -> drivetrain.move(
+                      0, 
+                      0, 
+                      0),
+                      drivetrain)
+                      
+        )
+      );
     NamedCommands.registerCommand(
       "shoot",
       new BandShoot(
