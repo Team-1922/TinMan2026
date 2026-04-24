@@ -41,7 +41,7 @@ public class Localization extends SubsystemBase {
   private final double m_blueHubX = 4.625594;
   private final double m_redHubX = 11.915394;
   private final double m_shuttleYOffset = 1.6256; 
-  private final double m_shuttleXOffset = 1.0668; 
+  private final double m_shuttleXOffset = 1.5668; 
   
   /** Creates a new Localization. */
   public Localization(CommandSwerveDrivetrain drivetrain) {
