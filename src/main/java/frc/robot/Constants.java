@@ -26,6 +26,7 @@ public final class Constants {
 
   public static String frontLimelightName = "limelight-front";
   public static String rightLimelightName = "limelight-right";
+  public static String backLimelightName = "limelight-back";
   public static String drivebaseCanbusName = "Drivebase";
   public static boolean useRightLimelight = true;
 
@@ -114,10 +115,12 @@ public final class Constants {
         public static final double kRetractedPosition = 0.376221;
 
 
+
         public static final double kDeployedPosition = 0.0
          ;
 
-        public static final double kHalfDeployedPosition = 0.250000;
+        public static final double kHalfDeployedPosition = 0.260000;
+
     };
 
     public static class Feeder {
