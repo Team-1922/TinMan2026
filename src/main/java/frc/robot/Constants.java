@@ -97,7 +97,7 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(0.801758)
+                        .withMagnetOffset(0.813477)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.CounterClockwise_Positive
@@ -107,7 +107,7 @@ public final class Constants {
         public static final double kRetractedPosition = 0.376221;
 
 
-        public static final double kDeployedPosition = 0.017334 ;
+        public static final double kDeployedPosition = 0;
 
         public static final double kHalfDeployedPosition = 0.250000;
     };
