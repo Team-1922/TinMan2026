@@ -30,9 +30,11 @@ public final class Constants {
   public static String drivebaseCanbusName = "Drivebase";
   public static boolean useRightLimelight = true;
 
-  public static double kmaxAngularRate = RotationsPerSecond.of(1).in(RadiansPerSecond); // 1 rotation per second max angular velocity
+  public static double kmaxAngularRate = 
+    RotationsPerSecond.of(1).in(RadiansPerSecond); // 1 rotation per second max angular velocity
 
-  public static double kmaxSpeed = 1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
+  public static double kmaxSpeed = 
+    1.0 * TunerConstants.kSpeedAt12Volts.in(MetersPerSecond); // kSpeedAt12Volts desired top speed
 
   public static final double kdriveSpeedScaler = switch (atAnExpo) {
     case NotAtExpo -> 1;
@@ -103,7 +105,7 @@ public final class Constants {
         public static final CANcoderConfiguration kPivotCanCoderConfig =
             new CANcoderConfiguration().withMagnetSensor(
                     new MagnetSensorConfigs()
-                        .withMagnetOffset(0.801758)
+                        .withMagnetOffset(0.813477)
                         .withAbsoluteSensorDiscontinuityPoint(0.9)
                         .withSensorDirection(
                                 SensorDirectionValue.CounterClockwise_Positive
@@ -114,7 +116,8 @@ public final class Constants {
 
 
 
-        public static final double kDeployedPosition = 0.017334 ;
+        public static final double kDeployedPosition = 0.0
+         ;
 
         public static final double kHalfDeployedPosition = 0.260000;
 

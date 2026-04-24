@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.RobotModeTriggers;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
+import edu.wpi.first.math.MathUtil;
 import frc.robot.commands.AutoAlign;
 import frc.robot.commands.RetractCollector;
 import frc.robot.commands.ReverseCollector;
@@ -42,7 +43,9 @@ public class RobotContainer {
                                                                                       // speed
   private double MaxAngularRate = RotationsPerSecond.of(1).in(RadiansPerSecond); // 1 rotation per second
                                                                                               // max angular velocity
-  private double collectingSpeedScalar = 1;
+  private double m_collectingSpeedScalar = 1;
+
+  private double m_autoAlignSpeed = 1;
 
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
@@ -127,11 +130,11 @@ public class RobotContainer {
     drivetrain.setDefaultCommand(
       // Drivetrain will execute this command periodically
 
-      drivetrain.applyRequest(() -> drive
-        .withVelocityX(-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar) // Drive forward with negative Y (forward)
-        .withVelocityY(-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * collectingSpeedScalar) // Drive left with negative X (left)
-        .withRotationalRate(-DriverController.getRightX() * MaxAngularRate * Constants.kdriveSpeedScaler) // Drive counterclockwise with negative
-                                                                            // X (left)
+      Commands.run( () -> drivetrain.move(
+                      (-DriverController.getLeftY() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive forward with negative Y (forward)
+                      (-DriverController.getLeftX() * MaxSpeed * Constants.kdriveSpeedScaler * m_collectingSpeedScalar * m_autoAlignSpeed), // Drive left with negative X (left)
+                      (MathUtil.applyDeadband(-DriverController.getRightX(), .15)) * MaxAngularRate * Constants.kdriveSpeedScaler), // Drive counterclockwise with X (left)
+                      drivetrain
       ));
 
     // Idle while the robot is disabled. This ensures the configured
@@ -150,13 +153,16 @@ public class RobotContainer {
         new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shoot)));
 
     DriverController.povDown().whileTrue(
-      new RetractCollector(collector));
+      new RetractCollector(collector)
+    );
 
     DriverController.povLeft().whileTrue(
-      new HalfCollect(collector));
+      new HalfCollect(collector)
+    );
 
     DriverController.rightBumper().whileTrue(
-      new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.Shuttle));
+      new HalfCollect(collector)
+    );
 
     DriverController.x().whileTrue(
       new ReverseCollector(collector));
@@ -165,11 +171,19 @@ public class RobotContainer {
       new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot));
 
     DriverController.leftBumper().whileTrue(
-       Commands.run( () -> collectingSpeedScalar = .2)
+       Commands.run( () -> m_collectingSpeedScalar = .2)
     );
 
     DriverController.leftBumper().whileFalse(
-      Commands.run( () -> collectingSpeedScalar = 1)
+      Commands.run( () -> m_collectingSpeedScalar = 1)
+    );
+
+     DriverController.rightTrigger().whileTrue(
+       Commands.run( () -> m_autoAlignSpeed = .125)
+    );
+
+    DriverController.rightTrigger().whileFalse(
+      Commands.run( () -> m_autoAlignSpeed = 1)
     );
 
     // Run SysId routines when holding back/start and X/Y.
