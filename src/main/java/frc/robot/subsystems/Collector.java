@@ -97,6 +97,9 @@ public class Collector extends SubsystemBase {
 
   @Override
   public void periodic() {
+    if(m_pivotMotor.getMotorVoltage().getValueAsDouble() > 3.5){
+      m_pivotMotor.stopMotor();
+    }
     // This method will be called once per scheduler run
   }
 
