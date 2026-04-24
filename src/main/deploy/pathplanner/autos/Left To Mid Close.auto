@@ -21,19 +21,19 @@
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "LeftToMid"
+                        "pathName": "LeftToMid_Close"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left_rotate"
+                        "pathName": "Left_rotate_Close"
                       }
                     },
                     {
                       "type": "path",
                       "data": {
-                        "pathName": "Left_SweepLeft"
+                        "pathName": "Left_SweepLeft_Close"
                       }
                     }
                   ]
@@ -64,7 +64,13 @@
         {
           "type": "path",
           "data": {
-            "pathName": "LeftBack"
+            "pathName": "Left_Return_Rotate"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "LeftBack_close"
           }
         },
         {
