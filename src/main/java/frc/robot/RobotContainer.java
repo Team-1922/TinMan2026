@@ -54,6 +54,7 @@ public class RobotContainer {
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final Telemetry logger = new Telemetry(MaxSpeed);
   public final CommandXboxController DriverController = new CommandXboxController(0);
+  public final CommandXboxController TestController = new CommandXboxController(1);
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.createDrivetrain();
   public final Shooter shooter = new Shooter();
   public final Spindexer spindexer = new Spindexer();
@@ -151,7 +152,7 @@ public class RobotContainer {
     RobotModeTriggers.disabled().whileTrue(
       drivetrain.applyRequest(() -> idle).ignoringDisable(true));
 
-    DriverController.povRight().whileTrue(drivetrain.applyRequest(() -> brake));
+    //DriverController.povRight().whileTrue(drivetrain.applyRequest(() -> brake));
 
     DriverController.leftTrigger().whileTrue(new Collect(collector));
 
@@ -193,7 +194,14 @@ public class RobotContainer {
     DriverController.rightTrigger().whileFalse(
       Commands.run( () -> m_autoAlignSpeed = 1)
     );
-
+    DriverController.povRight().whileTrue(
+      new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
+      );
+/* 
+    TestController.rightTrigger().whileTrue(
+      new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
+    );
+*/
     // Run SysId routines when holding back/start and X/Y.
     // Note that each routine should be run exactly once in a single log.
     DriverController.back().and(DriverController.y()).whileTrue(drivetrain.sysIdDynamic(Direction.kForward));

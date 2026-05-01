@@ -32,7 +32,8 @@ public class BandShoot extends Command {
   public enum ShootActions {
     Shoot,
     Shuttle,
-    JustShoot
+    JustShoot,
+    TestShoot
   }
 
   /** Creates a new BandShoot. */
@@ -85,6 +86,10 @@ public class BandShoot extends Command {
     }
     else if(m_shootAction == ShootActions.Shuttle){
       m_shooterRps = m_shuttleRps;
+      m_requireAlign = false;
+    }
+    else if(m_shootAction == ShootActions.TestShoot){
+      m_shooterRps = 5;
       m_requireAlign = false;
     }
 
