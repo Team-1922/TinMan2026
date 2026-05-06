@@ -89,7 +89,7 @@ public class BandShoot extends Command {
       m_requireAlign = false;
     }
     else if(m_shootAction == ShootActions.TestShoot){
-      m_shooterRps = 5;
+      m_shooterRps = 15;
       m_requireAlign = false;
     }
 

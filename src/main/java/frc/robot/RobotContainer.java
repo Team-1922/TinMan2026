@@ -195,7 +195,7 @@ public class RobotContainer {
       Commands.run( () -> m_autoAlignSpeed = 1)
     );
     DriverController.povRight().whileTrue(
-      new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.JustShoot)
+      new BandShoot(shooter, feeder, spindexer, localization, BandShoot.ShootActions.TestShoot)
       );
 /* 
     TestController.rightTrigger().whileTrue(
