@@ -62,9 +62,9 @@ public class TunerConstants {
     private static final TalonFXConfiguration driveInitialConfigs = new TalonFXConfiguration()
             .withCurrentLimits(
                 new CurrentLimitsConfigs()
-                        .withStatorCurrentLimit(Amps.of(20))
+                        .withStatorCurrentLimit(Amps.of(15))
                         .withStatorCurrentLimitEnable(true)
-                        .withSupplyCurrentLimit(20)
+                        .withSupplyCurrentLimit(15)
                         .withSupplyCurrentLimitEnable(true)
             );
 
@@ -89,6 +89,14 @@ public class TunerConstants {
                         .withMountPosePitch(-0.16280674934387207)
                         .withMountPoseRoll(-1.3543552160263062)
                 );
+//                       //
+//                       //
+//                       //
+//   LOOK AT DEVICE ID 2 //
+//                       //
+//                       //
+//                       //
+
 
     // CAN bus that the devices are located on;
     // All swerve devices must share the same CAN bus
@@ -167,7 +175,7 @@ public class TunerConstants {
     private static final int kFrontRightEncoderId = 10;
     private static final Angle kFrontRightEncoderOffset =
         switch (Constants.robotType) {
-            case TinmanV2 -> Rotations.of(-0.316650390625);
+            case TinmanV2 -> Rotations.of(-0.33740234375);
             case TinmanV1 -> Rotations.of(-0.410400390625);
         };
 
@@ -199,7 +207,7 @@ public class TunerConstants {
     private static final int kBackRightEncoderId = 12;
     private static final Angle kBackRightEncoderOffset = 
         switch (Constants.robotType){
-            case TinmanV2 -> Rotations.of(0.429443359375);
+            case TinmanV2 -> Rotations.of(0.42626953125);
             case TinmanV1 -> Rotations.of(-0.161376953125);
         };
 

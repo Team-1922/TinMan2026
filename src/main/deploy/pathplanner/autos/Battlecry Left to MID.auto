@@ -56,9 +56,22 @@
           }
         },
         {
-          "type": "path",
+          "type": "deadline",
           "data": {
-            "pathName": "LeftBack"
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "LeftBack"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "collect"
+                }
+              }
+            ]
           }
         },
         {
@@ -151,6 +164,12 @@
                       }
                     }
                   ]
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "collect"
                 }
               }
             ]
